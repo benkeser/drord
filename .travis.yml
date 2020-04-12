@@ -1,0 +1,46 @@
+branches:
+  only:
+  - master
+
+env:
+  global:
+  - RGL_USE_NULL=TRUE
+
+language: r
+sudo: required
+cache: packages
+
+warnings_are_errors: true
+r_check_args: '--as-cran'
+
+r:
+  - oldrel
+  - release
+  - devel
+
+# Install nlopt package to help nloptr install.
+addons:
+  apt:
+    packages:
+      - libnlopt-dev
+
+before_install:
+  - Rscript -e 'update.packages(ask = FALSE)'
+
+r_packages:
+  - devtools
+  - covr
+  - sessioninfo
+  - data.table
+
+r_github_packages:
+  - r-lib/covr
+  - r-lib/sessioninfo
+
+after_success:
+  - Rscript -e 'covr::codecov()'
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
