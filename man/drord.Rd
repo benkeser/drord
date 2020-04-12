@@ -11,9 +11,6 @@ drord(out, treat, covar, out_levels = order(unique(out)),
   test = c("perm", "wald"), nboot = 10000, nperm = 10000,
   est_dist = FALSE, ...)
 }
-\arguments{
-\item{...}{}
-}
 \description{
 Obtain estimates of ...
 }

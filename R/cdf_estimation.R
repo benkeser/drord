@@ -1,7 +1,7 @@
 #' Obtain estimates of ...
 #' 
 #' @param ...
-#' 
+#' @export
 #'@examples 
 #' n <- 200
 #' covar <- data.frame(x1 = runif(n), x2 = runif(n))
