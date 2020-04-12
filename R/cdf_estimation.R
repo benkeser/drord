@@ -74,7 +74,7 @@ drord <- function(
 		                                  out_form = out_form,
 		                                  treat = treat, ci = ci, 
 		                                  out = out, alpha = alpha,
-		                                  nboot = nboot, 
+		                                  nboot = nboot, covar = covar, 
 		                                  out_levels = out_levels)
 	}else{
 		logodds_est <- NULL

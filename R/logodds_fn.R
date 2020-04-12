@@ -1,5 +1,5 @@
 
-estimate_ci_logodds <- function(logodds_est, cdf_est, out_form, 
+estimate_ci_logodds <- function(logodds_est, cdf_est, out_form, covar, 
                                 treat_prob_est, treat, treat_form, out, ci, 
                                 alpha = 0.05, nboot, out_levels, ...){
 	# get ci
