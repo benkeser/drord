@@ -83,7 +83,7 @@ for more information and further examples.
 # load packages
 library(drtmle)
 #> drtmle: TMLE with doubly robust inference
-#> Version: 1.0.5
+#> Version: 1.0.4.9001
 library(SuperLearner)
 #> Loading required package: nnls
 #> Super Learner
@@ -172,13 +172,13 @@ fit2 <- adaptive_iptw(Y = Y, A = A, W = W, a_0 = c(0, 1),
 fit2
 #> $est
 #>            
-#> 0 0.1739449
-#> 1 0.2425360
+#> 0 0.1741983
+#> 1 0.2420712
 #> 
 #> $cov
 #>              0            1
-#> 0 8.560329e-04 8.966488e-05
-#> 1 8.966488e-05 2.244440e-02
+#> 0 8.533203e-04 8.986878e-05
+#> 1 8.986878e-05 2.203778e-02
 
 # compute a confidence interval for margin means
 ci_fit2 <- ci(fit2)
@@ -187,7 +187,7 @@ ci_fit2
 #> $iptw_tmle
 #>     est    cil   ciu
 #> 0 0.174  0.117 0.231
-#> 1 0.243 -0.051 0.536
+#> 1 0.242 -0.049 0.533
 
 # compute a confidence interval for the ate
 ci_ate2 <- ci(fit2, contrast = c(-1, 1))
@@ -195,7 +195,7 @@ ci_ate2 <- ci(fit2, contrast = c(-1, 1))
 ci_ate2
 #> $iptw_tmle
 #>                   est    cil   ciu
-#> E[Y(1)]-E[Y(0)] 0.069 -0.229 0.367
+#> E[Y(1)]-E[Y(0)] 0.068 -0.227 0.363
 ```
 
 -----
