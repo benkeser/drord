@@ -1,7 +1,7 @@
 
 estimate_ci_mannwhitney <- function(
     mannwhitney_est, cdf_est, pmf_est, treat_prob_est, treat_form, out_form,
-    treat, ci, out, alpha, nboot, out_levels 
+    treat, ci, out, alpha, nboot, out_levels, covar
 ){
 	n <- length(out)
 	if("wald" %in% ci){

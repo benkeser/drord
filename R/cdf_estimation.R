@@ -92,7 +92,8 @@ drord <- function(
                                   out_form = out_form,
                                   treat = treat, ci = ci, 
                                   out = out, alpha = alpha,
-                                  nboot = nboot, out_levels = out_levels)
+                                  nboot = nboot, out_levels = out_levels,
+                                  covar = covar)
 	}else{
 		mannwhitney_est <- NULL
 		mannwhitney_ci <- NULL
