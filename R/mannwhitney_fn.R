@@ -85,12 +85,14 @@ jack_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form
 
 one_boot_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
-	mannwhitney_boot_est <- get_one_mannwhitney(treat = treat[boot_idx],
+	mannwhitney_boot_est <- tryCatch({get_one_mannwhitney(treat = treat[boot_idx],
 	                                covar = covar[boot_idx, , drop = FALSE],
 	                                out = out[boot_idx],
 	                                treat_form = treat_form,
 	                                out_levels = out_levels,
-	                                out_form = out_form)
+	                                out_form = out_form)}, error = function(e){
+		NA
+	})
 	return(mannwhitney_boot_est)
 }
 

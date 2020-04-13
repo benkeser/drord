@@ -153,13 +153,15 @@ jack_wmean <- function(treat, covar, out, treat_form, out_levels, out_form, out_
 
 one_boot_wmean <- function(treat, covar, out, treat_form, out_levels, out_form, out_weights){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
-	wmean_boot_est <- get_one_wmean(treat = treat[boot_idx],
+	wmean_boot_est <- tryCatch({get_one_wmean(treat = treat[boot_idx],
 	                                covar = covar[boot_idx, , drop = FALSE],
 	                                out = out[boot_idx],
 	                                treat_form = treat_form,
 	                                out_levels = out_levels,
 	                                out_form = out_form,
-	                                out_weights = out_weights)
+	                                out_weights = out_weights)}, error = function(e){
+		list(rep(NA, 3))
+	})
 	return(wmean_boot_est)
 }
 get_one_wmean <- function(treat, covar, treat_form,

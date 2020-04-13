@@ -105,17 +105,20 @@ jack_logodds <- function(treat, covar, out, treat_form, out_levels, out_form){
 
 one_boot_logodds <- function(treat, covar, out, treat_form, out_levels, out_form){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
-	logodds_boot_est <- get_one_logodds(treat = treat[boot_idx],
+	logodds_boot_est <- tryCatch({get_one_logodds(treat = treat[boot_idx],
 	                                covar = covar[boot_idx, , drop = FALSE],
 	                                out = out[boot_idx],
 	                                treat_form = treat_form,
 	                                out_levels = out_levels,
-	                                out_form = out_form)
+	                                out_form = out_form)}, error = function(e){
+		rep(NA, 3)
+	})
 	return(logodds_boot_est)
 }
 
 get_one_logodds <- function(treat, covar, treat_form,
                             out, out_levels, out_form){
+
 	# obtain estimate of treatment probabilities
 	treat_prob_est <- estimate_treat_prob(treat = treat,
 	                                      covar = covar,
