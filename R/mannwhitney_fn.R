@@ -146,7 +146,7 @@ estimate_mannwhitney <- function(cdf_est, pmf_est){
 	
 	# get marginal PDF
 	f_1 <- colMeans(pmf_est[[1]])
-	f_0 <- colMeans(pmf_est[[1]])
+	f_0 <- colMeans(pmf_est[[2]])
 
 	# F(k-1 | A = 0), k = 0, ..., K
 	F_0_kminus1 <- c(0, F_0[-K])
