@@ -160,7 +160,7 @@ one_boot_wmean <- function(treat, covar, out, treat_form, out_levels, out_form, 
 	                                out_levels = out_levels,
 	                                out_form = out_form,
 	                                out_weights = out_weights)}, error = function(e){
-		list(rep(NA, 3))
+		rep(NA, 3)
 	})
 	return(wmean_boot_est)
 }
