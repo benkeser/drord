@@ -32,6 +32,7 @@ drord <- function(
   nboot = 1e4,
   nperm = 1e4, # not implemented yet
   est_dist = FALSE, # temporary to make sims go faster under time crunch
+  stratify = FALSE, 
   ...
 ){
 	# obtain estimate of treatment probabilities
@@ -42,7 +43,8 @@ drord <- function(
 	# obtain estimate of conditional PMF for each treatment level
 	pmf_est <- estimate_pmf(out = out, treat = treat, 
 	                        covar = covar, out_levels = out_levels,
-	                        out_form = out_form, treat_prob_est = treat_prob_est)
+	                        out_form = out_form, treat_prob_est = treat_prob_est,
+	                        stratify = stratify)
   	
   	# map into estimates of CDF
 	cdf_est <- estimate_cdf(pmf_est = pmf_est)
