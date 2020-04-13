@@ -84,13 +84,25 @@ fit_trt_spec_reg <- function(
 		
 		if(use_polr){
 			suppressWarnings( # weights throw unneeded warnings 
-				fm_trt <- MASS::polr(
+				fm_trt <- tryCatch({MASS::polr(
 			      formula = stats::as.formula(paste0("factor(out) ~", out_form)),
 			      data = data.frame(out = out, 
 			                        covar, 
 			                        wt = 1/trt_spec_prob_est)[treat == trt_level, , drop = FALSE],
 			      weights = wt
-			    )
+			    )}, error = function(e){
+			    	mod_mat <- model.matrix(stats::as.formula(paste0("factor(out) ~", out_form)),
+			    	                        data = data.frame(out = out, covar)[1:2,])
+			    	n_par <- (dim(mod_mat)[2] - 1) + (length(out_levels) - 1)
+					MASS::polr(
+				      formula = stats::as.formula(paste0("factor(out) ~", out_form)),
+				      data = data.frame(out = out, 
+				                        covar, 
+				                        wt = 1/trt_spec_prob_est)[treat == trt_level, , drop = FALSE],
+				      weights = wt, 
+				      start = c(rep(-1, length(out_levels) - 1), rep(0, dim(mod_mat)[2]-1))
+			    	)
+			    }
 		    )
 		 	pmf_treat <- predict(fm_trt, 
 		                      newdata = data.frame(out = out, covar,
