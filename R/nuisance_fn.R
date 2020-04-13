@@ -102,7 +102,7 @@ fit_trt_spec_reg <- function(
 				      weights = wt, 
 				      start = c(rep(-1, length(out_levels) - 1), rep(0, dim(mod_mat)[2]-1))
 			    	)
-			    }
+			    })
 		    )
 		 	pmf_treat <- predict(fm_trt, 
 		                      newdata = data.frame(out = out, covar,
