@@ -32,7 +32,7 @@ estimate_wmean <- function(pmf_est, treat, out, out_levels, out_weights,
 
 estimate_cond_mean <- function(trt_spec_pmf_est, ordered_out_levels, ordered_out_weights){
 	rslt <- apply(trt_spec_pmf_est, 1, function(pmf){
-		sum(ordered_out_levels * ordered_out_weights * pmf)
+		sum(ordered_out_levels * ordered_out_weights * pmf) / sum(ordered_out_weights * pmf)
 	})
 	return(rslt)
 }
