@@ -205,7 +205,7 @@ evaluate_marg_cdf_ptwise_ci <- function(marg_cdf_est, marg_cdf_eif, alpha){
 	# do on logistic scale
 	ptwise_ci <- mapply(pt_est = marg_cdf_est, cov_est = marg_cdf_cov, 
 	       				FUN = compute_trt_spec_marg_cdf_ptwise_ci, 
-	       				MoreArgs = list(alpha = alpha), SIMPLIFY = FALSE)
+	       				MoreArgs = list(alpha = alpha, cdf = TRUE), SIMPLIFY = FALSE)
     return(ptwise_ci)
 }
 
@@ -216,16 +216,21 @@ evaluate_marg_pmf_ptwise_ci <- function(marg_pmf_est, marg_pmf_eif, alpha){
 	# do on logistic scale
 	ptwise_ci <- mapply(pt_est = marg_pmf_est, cov_est = marg_pmf_cov, 
 	       				FUN = compute_trt_spec_marg_cdf_ptwise_ci, 
-	       				MoreArgs = list(alpha = alpha), SIMPLIFY = FALSE)
+	       				MoreArgs = list(alpha = alpha, cdf = FALSE), SIMPLIFY = FALSE)
     return(ptwise_ci)
 }
 
 #' this function could be renamed as it's used for both CDF and PMF
-compute_trt_spec_marg_cdf_ptwise_ci <- function(pt_est, cov_est, alpha){
+compute_trt_spec_marg_cdf_ptwise_ci <- function(pt_est, cov_est, alpha, cdf = TRUE){
 	 K <- length(pt_est)
 	 # remove largest value
-	 pt_est <- pt_est[-K]
-	 cov_est <- cov_est[1:(K-1), 1:(K-1)]
+	 if(cdf){
+	 	pt_est <- pt_est[-K]
+	 	cov_est <- cov_est[1:(K-1), 1:(K-1)]
+	 }else{
+	 	pt_est <- pt_est
+	 	cov_est <- cov_est
+	 }
 	 # put on logistic scale
 	 gradient <- diag(1 / (pt_est - pt_est^2))
 	 cov_est_logistic <- t(gradient) %*% cov_est %*% gradient

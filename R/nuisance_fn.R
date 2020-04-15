@@ -92,7 +92,7 @@ fit_trt_spec_reg <- function(
 			      weights = wt
 			    )}, error = function(e){
 			    	mod_mat <- model.matrix(stats::as.formula(paste0("factor(out) ~", out_form)),
-			    	                        data = data.frame(out = out, covar)[1:2,])
+			    	                        data = data.frame(out = out, covar))
 			    	n_par <- (dim(mod_mat)[2] - 1) + (length(out_levels) - 1)
 					MASS::polr(
 				      formula = stats::as.formula(paste0("factor(out) ~", out_form)),
@@ -151,27 +151,52 @@ fit_trt_spec_reg <- function(
 		 	pmf_treat <- pmf_treat_new[ , order(as.numeric(colnames(pmf_treat_new)))]
 		}
 	}else{
-		if(dim(covar)[2] > 1){
-			stop("stratified estimator only implemented for single covariate")
-		}
-		covar_levels <- unique(covar[,1])
-		pmf_treat <- matrix(NA, ncol = length(out_levels), nrow = length(out))
-		ct <- 0
-		for(o_lev in out_levels[-length(out_levels)]){
-			ct <- ct + 1
-			for(covar_lev in covar_levels){
-				# check that some have this level
-				obs_level <- sum(covar[,1] == covar_lev)
-				if(obs_level > 0){
-					pmf_treat[covar[,1] == covar_lev, ct] <- mean(out[treat == trt_level & covar[,1] == covar_lev] == o_lev)
-				}else{
-					# if no one observed, just replace with global mean
-					# would be better probably to put a kernel thing here... for later.
-					pmf_treat[covar[,1] == covar_lev, ct] <- mean(out[treat == trt_level] == o_lev)
+		if(out_form != "1"){
+			if(dim(covar)[2] > 1){
+				stop("stratified estimator only implemented for single covariate")
+			}
+			covar_levels <- unique(covar[,1])
+			pmf_treat <- matrix(NA, ncol = length(out_levels), nrow = length(out))
+			ct <- 0
+			for(o_lev in out_levels[-length(out_levels)]){
+				ct <- ct + 1
+				for(covar_lev in covar_levels){
+					# check that some have this level
+					obs_level <- sum(covar[,1] == covar_lev)
+					if(obs_level > 0){
+						pmf_treat[covar[,1] == covar_lev, ct] <- mean(out[treat == trt_level & covar[,1] == covar_lev] == o_lev)
+					}else{
+						# if no one observed, just replace with global mean
+						# would be better probably to put a kernel thing here... for later.
+						pmf_treat[covar[,1] == covar_lev, ct] <- mean(out[treat == trt_level] == o_lev)
+					}
 				}
 			}
+			pmf_treat[,ncol(pmf_treat)] <- 1 - rowSums(pmf_treat[,1:(ncol(pmf_treat) - 1)])
+		}else{
+			if(dim(covar)[2] > 1){
+				stop("stratified estimator only implemented for single covariate")
+			}
+			covar_levels <- unique(covar[,1])
+			pmf_treat <- matrix(NA, ncol = length(out_levels), nrow = length(out))
+			ct <- 0
+			for(o_lev in out_levels[-length(out_levels)]){
+				ct <- ct + 1
+				for(covar_lev in covar_levels){
+					# check that some have this level
+					# !!! lazy coding
+					obs_level <- 0
+					if(obs_level > 0){
+						pmf_treat[covar[,1] == covar_lev, ct] <- mean(out[treat == trt_level & covar[,1] == covar_lev] == o_lev)
+					}else{
+						# if no one observed, just replace with global mean
+						# would be better probably to put a kernel thing here... for later.
+						pmf_treat[covar[,1] == covar_lev, ct] <- mean(out[treat == trt_level] == o_lev)
+					}
+				}
+			}
+			pmf_treat[,ncol(pmf_treat)] <- 1 - rowSums(pmf_treat[,1:(ncol(pmf_treat) - 1)])
 		}
-		pmf_treat[,ncol(pmf_treat)] <- 1 - rowSums(pmf_treat[,1:(ncol(pmf_treat) - 1)])
 	}
 	return(pmf_treat)
 }
