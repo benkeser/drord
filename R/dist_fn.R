@@ -52,8 +52,8 @@ estimate_ci_marg_dist <- function(marg_cdf_est,
 		                                                  marg_cdf_eif = marg_cdf_eif,
 		                                                  alpha = alpha)
 		# simultaneous CI
-		marg_cdf_simul_wald_ci <- evaluate_marg_dist_simul_ci(marg_cdf_est = marg_cdf_est,
-	                                                    marg_cdf_eif = marg_cdf_eif,
+		marg_cdf_simul_wald_ci <- evaluate_marg_dist_simul_ci(marg_dist_est = marg_cdf_est,
+	                                                    marg_dist_eif = marg_cdf_eif,
 	                                                    alpha = alpha, 
 	                                                    remove_last = TRUE)
 
@@ -66,8 +66,8 @@ estimate_ci_marg_dist <- function(marg_cdf_est,
 		                                                  marg_pmf_eif = marg_pmf_eif,
 		                                                  alpha = alpha)
 		# simultaneous CI
-		marg_pmf_simul_wald_ci <- evaluate_marg_dist_simul_ci(marg_cdf_est = marg_pmf_est,
-	                                                    marg_cdf_eif = marg_pmf_eif,
+		marg_pmf_simul_wald_ci <- evaluate_marg_dist_simul_ci(marg_dist_est = marg_pmf_est,
+	                                                    marg_dist_eif = marg_pmf_eif,
 	                                                    alpha = alpha, 
 	                                                    remove_last = FALSE)
 

@@ -55,8 +55,6 @@
 #' @param ci A vector of \code{characters} indicating which confidence intervals
 #' should be computed (\code{"bca"} and/or \code{"wald"}) 
 #' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
-#' @param test A vector of \code{characters} indicating which test should be performed
-#' (currently limited to \code{"wald"}). 
 #' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
 #' intervals. 
 #' @param return_models If \code{TRUE} the fitted working proportional odds models
@@ -94,9 +92,8 @@ drord <- function(
   out_model = c("polr", "vglm", "clm"),
   treat_form = "1",
   param = c("weighted_mean", "log_odds", "mann_whitney"),
-  ci = c("bca", "wald"),
+  ci = "wald",
   alpha = 0.05, 
-  test = c("wald"),
   nboot = 1e4,
   return_models = TRUE, 
   est_dist = TRUE, 
@@ -136,7 +133,7 @@ drord <- function(
 		wmean_est <- estimate_wmean(
           pmf_est = pmf_est, treat = treat, out = out, out_levels = out_levels, 
           out_weights = out_weights, treat_prob_est = treat_prob_est, 
-          return_cov = "wald" %in% ci | "wald" %in% test
+          return_cov = "wald" %in% ci
         )
         wmean_ci <- estimate_ci_wmean(out = out, treat = treat,
                                       covar = covar, wmean_est = wmean_est,

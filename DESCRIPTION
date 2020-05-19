@@ -13,7 +13,8 @@ Depends:
 Imports:
     MASS,
     VGAM,
-    ordinal
+    ordinal,
+    ggplot2
 Suggests:
     testthat,
     knitr,

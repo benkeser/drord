@@ -4,8 +4,8 @@
 \alias{plot.drord}
 \title{Print the output of a \code{"drord"} object.}
 \usage{
-\method{print}{drord}(x, treat_labels = c(1, 0), dist = "pmf",
-  outcome_labels = if (dist == "pmf") {     x$out_levels } else {    
+\method{plot}{drord}(x, treat_labels = c(1, 0), dist = "pmf",
+  out_labels = if (dist == "pmf") {     x$out_levels } else {    
   x$out_levels[-length(x$out_levels)] }, ...)
 }
 \arguments{
@@ -15,7 +15,7 @@
 
 \item{dist}{Which distribution to plot. Valid options are \code{"cdf"} or \code{"pmf"}.}
 
-\item{outcome_labels}{Labels for the ordered outcome levels. If \code{dist = "cdf"}, the
+\item{out_labels}{Labels for the ordered outcome levels. If \code{dist = "cdf"}, the
 highest level of outcome will be dropped.}
 
 \item{...}{Other arguments (not used)}

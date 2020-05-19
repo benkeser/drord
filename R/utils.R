@@ -57,26 +57,26 @@ print.drord <- function(x, ci = "bca", digits = 3, ...) {
   }
 
   print(rout)
-  return(invisible(tmp))
+  return(invisible(rout))
 }
 
 #' Print the output of a \code{"drord"} object.
 #'
 #' @param x A \code{"drord"} object.
 #' @param treat_labels Labels for the treatment variables (treat = 1 followed by treat = 0).
-#' @param outcome_labels Labels for the ordered outcome levels. If \code{dist = "cdf"}, the
+#' @param out_labels Labels for the ordered outcome levels. If \code{dist = "cdf"}, the
 #' highest level of outcome will be dropped. 
 #' @param dist Which distribution to plot. Valid options are \code{"cdf"} or \code{"pmf"}.
 #' @param ... Other arguments (not used)
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_bar scale_y_continuous geom_errorbar 
-#' @importFrom ggplot2 theme_bw ggtitle
+#' @importFrom ggplot2 theme_bw ggtitle position_dodge
 #' @importFrom ggsci scale_color_nejm
-#' @method print drord
+#' @method plot drord
 plot.drord <- function(x, 
                        treat_labels = c(1, 0),                        
                        dist = "pmf",
-                       outcome_labels = if(dist == "pmf"){
+                       out_labels = if(dist == "pmf"){
                                           x$out_levels 
                                         }else{
                                           x$out_levels[-length(x$out_levels)]
@@ -84,18 +84,18 @@ plot.drord <- function(x,
                        ...){
   stopifnot(x$est_dist)
   if(dist == "pmf"){
-    stopifnot(length(outcome_labels) == length(x$out_levels))
+    stopifnot(length(out_labels) == length(x$out_levels))
   }else{
-    stopifnot(length(outcome_labels) == length(x$out_levels) - 1)
+    stopifnot(length(out_labels) == length(x$out_levels) - 1)
   }
   stopifnot(length(treat_labels) == 2)
 
-  n_grp <- length(outcome_labels)
+  n_grp <- length(out_labels)
   suppressWarnings(
     plot_data <- data.frame(
       Proportion = c(x[[dist]]$est[[1]][1:n_grp], x[[dist]]$est[[2]][1:n_grp]),
       Intervention = c(rep(treat_labels[1], n_grp), rep(treat_labels[2], n_grp)), 
-      Outcome = rep(outcome_labels, 2),
+      Outcome = rep(out_labels, 2),
       ptwise_cil = c(x[[dist]]$ci$wald[[1]]$ptwise[,1], x[[dist]]$ci$wald[[2]]$ptwise[,1]),
       ptwise_ciu = c(x[[dist]]$ci$wald[[1]]$ptwise[,2], x[[dist]]$ci$wald[[2]]$ptwise[,2]),
       simul_cil = c(x[[dist]]$ci$wald[[1]]$simul[,1], x[[dist]]$ci$wald[[2]]$simul[,1]),
@@ -104,17 +104,17 @@ plot.drord <- function(x,
   )
 
   plot_data$Outcome <- factor(plot_data$Outcome, 
-                              levels = outcome_labels, ordered = TRUE)
+                              levels = out_labels, ordered = TRUE)
   plot_data$Intervention <- factor(plot_data$Intervention)
   bar_plot <- ggplot2::ggplot(plot_data, 
                               ggplot2::aes(x = Outcome, y = Proportion, 
                                            fill = Intervention)) + 
-              ggplot2::geom_bar(stat = "identity", position = position_dodge()) + 
+              ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) + 
               ggplot2::scale_y_continuous(limits = c(0,1)) + 
-              ggplot2::geom_errorbar(position = position_dodge(0.8), 
+              ggplot2::geom_errorbar(position = ggplot2::position_dodge(0.8), 
                                      ggplot2::aes(ymin = ptwise_cil, ymax = ptwise_ciu),
                                      width = 0.125) + 
-              ggplot2::geom_errorbar(position = position_dodge(1.1), 
+              ggplot2::geom_errorbar(position = ggplot2::position_dodge(1.1), 
                                      aes(ymin = simul_cil, ymax = simul_ciu),
                                      width = 0.125, colour = "gray50") + 
               ggplot2::theme_bw()

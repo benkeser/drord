@@ -1,15 +1,15 @@
 
-# R/`drtmle`
+# R/`drord`
 
 [![Travis-CI Build
-Status](https://travis-ci.org/benkeser/drtmle.svg?branch=master)](https://travis-ci.org/benkeser/drtmle)
+Status](https://travis-ci.org/benkeser/drord.svg?branch=master)](https://travis-ci.org/benkeser/drord)
 [![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/benkeser/drtmle?branch=master&svg=true)](https://ci.appveyor.com/project/benkeser/drtmle)
+Status](https://ci.appveyor.com/api/projects/status/github/benkeser/drord?branch=master&svg=true)](https://ci.appveyor.com/project/benkeser/drord)
 [![Coverage
-Status](https://img.shields.io/codecov/c/github/benkeser/drtmle/master.svg)](https://codecov.io/github/benkeser/drtmle?branch=master)
-[![CRAN](http://www.r-pkg.org/badges/version/drtmle)](http://www.r-pkg.org/pkg/drtmle)
+Status](https://img.shields.io/codecov/c/github/benkeser/drord/master.svg)](https://codecov.io/github/benkeser/drord?branch=master)
+[![CRAN](http://www.r-pkg.org/badges/version/drord)](http://www.r-pkg.org/pkg/drord)
 [![CRAN
-downloads](https://cranlogs.r-pkg.org/badges/drtmle)](https://CRAN.R-project.org/package=drtmle)
+downloads](https://cranlogs.r-pkg.org/badges/drord)](https://CRAN.R-project.org/package=drord)
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
@@ -17,8 +17,7 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/75324341.svg)](https://zenodo.org/badge/latestdoi/75324341)
 
-> Nonparametric estimators of the average treatment effect with
-> doubly-robust confidence intervals and hypothesis tests
+> Doubly robust estimators of treatment effects for ordinal outcomes
 
 **Author:** [David
 Benkeser](https://www.sph.emory.edu/faculty/profile/#!dbenkes)
@@ -27,214 +26,137 @@ Benkeser](https://www.sph.emory.edu/faculty/profile/#!dbenkes)
 
 ## Description
 
-`drtmle` is an R package that computes marginal means of an outcome
-under fixed levels of a treatment. The package computes targeted minimum
-loss-based (TMLE) estimators that are doubly robust, not only with
-respect to consistency, but also with respect to asymptotic normality,
-as discussed in [Benkeser, et al.
-(2017)](https://academic.oup.com/biomet/article-abstract/104/4/863/4554445).
-This property facilitates construction of doubly-robust confidence
-intervals and hypothesis tests.
-
-The package additionally includes methods for computing valid confidence
-intervals for an inverse probability of treatment weighted (IPTW)
-estimator of the average treatment effect when the propensity score is
-estimated via super learning, as discussed in [van der Laan
-(2014)](https://www.degruyter.com/downloadpdf/j/ijb.2014.10.issue-1/ijb-2012-0038/ijb-2012-0038.pdf).
+`drord` is an R package that computes estimates of effect parameters
+that are useful for evaluating efficacy of treatments on ordinal
+outcomes. The estimators implemented in the package are doubly robust,
+in that they are based on working models for the probability of
+treatment as a function of covariates (i.e., the propensity score) and
+for the CDF of the outcome as a function of covariates in each treatment
+arm. The latter working model is implemented via proportional odds
+models that are fit in each treatment arm separately. Estimates based on
+these two working models are combined to quantify the effects of the
+treatment on the ordinal outcome in three different ways: - Difference
+in (weighted) means: The outcome levels are treated numerically, with
+each level possibly assigned a weight. The effect is defined as the
+difference in average outcomes. - Log odds ratio: The comparison
+describes the average log-odds (treatment level 1 versus 0) of the
+cumulative probability for each level of the outcome. See [D{'i}az et
+al. (2015)](https://doi.org/10.1111/biom.12450) for further discussion
+of this parameter. - Mann-Whitney: The probability that a
+randomly-selected individual receiving treatment 1 will have a larger
+outcome value than a randomly selected individual receiving treatment 0
+(with ties assigned weight 1/2). See [Vermeulen et al.
+(2014)](https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6386) for
+further discussion.
 
 -----
 
 ## Installation
 
+<!-- 
 Install the current stable release from
 [CRAN](https://cran.r-project.org/) via
 
-``` r
-install.packages("drtmle")
+
+```r
+install.packages("drord")
 ```
+-->
 
 A developmental release may be installed from GitHub via
 [`devtools`](https://www.rstudio.com/products/rpackages/devtools/) with:
 
 ``` r
-devtools::install_github("benkeser/drtmle")
+devtools::install_github("benkeser/drord")
 ```
 
 -----
 
 ## Usage
 
-### Doubly-robust inference for the average treatment effect
-
-Suppose the data consist of a vector of baseline covariates (`W`), a
-multi-level treatment assignment (`A`), and a continuous or
-binary-valued outcome (`Y`). The function `drtmle` may be used to
-estimate \(E[E(Y \mid A = a_0, W)]\) for user-selected values of \(a_0\)
-(via option `a_0`). The resulting targeted minimum loss-based estimates
-are doubly robust with respect to both consistency and asymptotic
-normality. The function computes doubly robust covariance estimates that
-can be used to construct doubly robust confidence intervals for marginal
-means and contrasts between means. A simple example on simulated data is
-shown below. We refer users to [the
-vignette](https://benkeser.github.io/drtmle/articles/using_drtmle.html)
-for more information and further examples.
+Here we demonstrate calls to `drord` to compute treatment effects using
+a simulated data set of COVID-19 outcomes in hospitalized patients.
 
 ``` r
-# load packages
-library(drtmle)
-#> drtmle: TMLE with doubly robust inference
-#> Version: 1.0.4.9001
-library(SuperLearner)
-#> Loading required package: nnls
-#> Super Learner
-#> Version: 2.0-25
-#> Package created on 2019-08-05
-
-# simulate simple data structure
-set.seed(12345)
-n <- 200
-W <- data.frame(W1 = runif(n,-2,2), W2 = rbinom(n,1,0.5))
-A <- rbinom(n, 1, plogis(-2 + W$W1 - 2*W$W1*W$W2))
-Y <- rbinom(n, 1, plogis(-2 + W$W1 - 2*W$W1*W$W2 + A))
-
-# estimate the covariate-adjusted marginal mean for A = 1 and A = 0
-# here, we do not properly estimate the propensity score
-fit1 <- drtmle(W = W, A = A, Y = Y, # input data
-               a_0 = c(0, 1), # return estimates for A = 0 and A = 1
-               SL_Q = "SL.npreg", # use kernel regression for E(Y | A = a, W)
-               glm_g = "W1 + W2", # use misspecified main terms glm for E(A | W)
-               SL_Qr = "SL.npreg", # use kernel regression to guard against
-                                   # misspecification of outcome regression
-               SL_gr = "SL.npreg", # use kernel regression to guard against
-                                  # misspecification of propensity score
-               returnModels = TRUE # for visualizing fits later
-              )
-# print the output
-fit1
-#> $est
-#>            
-#> 0 0.1729750
-#> 1 0.3620682
+library(drord)
+#> drord: Doubly robust estimators for ordinal outcomes
+#> Version: 1.0.0.9000
+# load data
+data(covid19)
+# estimate treatment effects
+fit <- drord(out = covid19$out, 
+             covar = covid19[ , "age_grp", drop = FALSE],
+             treat = covid19$treat)
+# look at estimates
+fit
+#> $mann_whitney
+#>       est  wald_cil  wald_ciu 
+#> 0.5771119 0.5310573 0.6231666 
 #> 
-#> $cov
-#>              0            1
-#> 0 8.823949e-04 2.366906e-05
-#> 1 2.366906e-05 7.155764e-03
-
-# get confidence intervals for marginal means
-# truth is E[Y(1)] = 0.29, E[Y(0)] = 0.15
-ci_fit1 <- ci(fit1)
-# print the output
-ci_fit1
-#> $drtmle
-#>     est   cil   ciu
-#> 0 0.173 0.115 0.231
-#> 1 0.362 0.196 0.528
-
-# get confidence intervals for ate
-# truth is E[Y(1)] - E[Y(0)] = 0.14
-ci_ate1 <- ci(fit1, contrast = c(-1, 1))
-# print the output
-ci_ate1
-#> $drtmle
-#>                   est   cil   ciu
-#> E[Y(1)]-E[Y(0)] 0.189 0.014 0.364
-```
-
-This method requires estimation of additional univariate regressions to
-ensure doubly robust confidence intervals and hypothesis tests. The
-method for estimation are input via `SL.Qr` and `SL.gr` or `glm.Qr` and
-`glm.gr` if parametric models are desired). These additional fits can be
-visualized by the `plot` method for `drtmle`.
-
-``` r
-layout(t(1:3))
-plot(fit1, ask = FALSE)
-```
-
-### Inference for super learner-based IPTW
-
-The package additionally includes a function for computing valid
-confidence intervals about an inverse probability of treatment weight
-(IPTW) estimator when super learning is used to estimate the propensity
-score.
-
-``` r
-# fit iptw
-fit2 <- adaptive_iptw(Y = Y, A = A, W = W, a_0 = c(0, 1),
-                      SL_g = c("SL.glm", "SL.mean", "SL.step.interaction"),
-                      SL_Qr = "SL.npreg")
-#> Loading required package: nloptr
-#> Loading required package: nloptr
-#> Loading required package: nloptr
-#> Loading required package: nloptr
-# print the output
-fit2
-#> $est
-#>            
-#> 0 0.1741983
-#> 1 0.2420712
+#> $log_odds
+#>               est   wald_cil     wald_ciu
+#> treat1 -1.2440885 -1.5162826 -0.971894388
+#> treat0 -0.8926642 -1.1271181 -0.658210387
+#> diff   -0.3514242 -0.6939617 -0.008886746
 #> 
-#> $cov
-#>              0            1
-#> 0 8.533203e-04 8.986878e-05
-#> 1 8.986878e-05 2.203778e-02
-
-# compute a confidence interval for margin means
-ci_fit2 <- ci(fit2)
-# print the output
-ci_fit2
-#> $iptw_tmle
-#>     est    cil   ciu
-#> 0 0.174  0.117 0.231
-#> 1 0.242 -0.049 0.533
-
-# compute a confidence interval for the ate
-ci_ate2 <- ci(fit2, contrast = c(-1, 1))
-# print the output
-ci_ate2
-#> $iptw_tmle
-#>                   est    cil   ciu
-#> E[Y(1)]-E[Y(0)] 0.068 -0.227 0.363
+#> $weighted_mean
+#>              est   wald_cil  wald_ciu
+#> treat1 2.5390788 2.44680292 2.6313546
+#> treat0 2.3635162 2.27899302 2.4480394
+#> diff   0.1755625 0.05620023 0.2949248
 ```
 
------
+There is a `plot` method included to visualize either the cumulative
+distribution or probability mass function of outcomes.
+
+``` r
+# plot of CDF
+cdf_plot <- plot(fit, dist = "cdf", 
+                 treat_labels = c("Treatment", "Control"),
+                 out_labels = c("Death", "Death or intubation"))
+cdf_plot + ggsci::scale_fill_nejm()
+```
+
+![](README-unnamed-chunk-3-1.png)<!-- -->
+
+The black bars are pointwise 95% confidence intervals; the gray bars are
+simultaneous 95% confidence intervals.
+
+A similar plot can be made for the PMF.
+
+``` r
+# plot of PMF
+pmf_plot <- plot(fit, dist = "pmf",
+                 treat_labels = c("Treatment", "Control"),
+                 out_labels = c("Death", "Intubation", "None"))
+pmf_plot + ggsci::scale_fill_nejm()                 
+```
+
+## ![](README-unnamed-chunk-4-1.png)<!-- -->
 
 ## Issues
 
 If you encounter any bugs or have any specific feature requests, please
-[file an issue](https://github.com/benkeser/drtmle/issues).
+[file an issue](https://github.com/benkeser/drord/issues).
 
 -----
 
 ## Citation
 
-After using the `drtmle` R package, please cite the following:
+After using the `drord` R package, please cite the following:
 
-    @Manual{drtmlepackage,
-      title = {drtmle: Doubly-Robust Nonparametric Estimation and Inference},
+    @Manual{drordpackage,
+      title = {drord: Doubly-Robust Estimators for Ordinal Outcomes},
       author = {David Benkeser},
       note = {R package version 1.0.0},
-      doi = {10.5281/zenodo.844836}
-    }
-    
-    @article{benkeser2017improved,
-      year  = {2017},
-      author = {Benkeser, David C and Carone, Marco and van der Laan, Mark J
-        and Gilbert, Peter B},
-      title = {Doubly-robust nonparametric inference on the average
-        treatment effect},
-      journal = {Biometrika},
-      volume = {104}, number = {4},
-      pages = {863–880},
-      doi = {10.1093/biomet/asx053}
+      doi = {TBA}
     }
 
 -----
 
 ## License
 
-© 2016-2019 [David C.
+© 2020- [David
 Benkeser](https://www.sph.emory.edu/faculty/profile/#!dbenkes)
 
 The contents of this repository are distributed under the MIT license.
@@ -242,7 +164,7 @@ See below for details:
 
     The MIT License (MIT)
     
-    Copyright (c) 2016-2019 David C. Benkeser
+    Copyright (c) 2020- David Benkeser
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

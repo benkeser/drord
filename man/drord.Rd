@@ -8,9 +8,9 @@ of treatments on ordinal outcomes.}
 drord(out, treat, covar, out_levels = sort(unique(out)),
   out_form = ".", out_weights = rep(1, length(out_levels)),
   out_model = c("polr", "vglm", "clm"), treat_form = "1",
-  param = c("weighted_mean", "log_odds", "mann_whitney"), ci = c("bca",
-  "wald"), alpha = 0.05, test = c("wald"), nboot = 10000,
-  return_models = TRUE, est_dist = TRUE, stratify = FALSE, ...)
+  param = c("weighted_mean", "log_odds", "mann_whitney"), ci = "wald",
+  alpha = 0.05, nboot = 10000, return_models = TRUE,
+  est_dist = TRUE, stratify = FALSE, ...)
 }
 \arguments{
 \item{out}{A \code{numeric} vector containing the outcomes.}
@@ -45,9 +45,6 @@ and/or \code{"mann_whitney"}).}
 should be computed (\code{"bca"} and/or \code{"wald"})}
 
 \item{alpha}{Confidence intervals have nominal level 1-\code{alpha}.}
-
-\item{test}{A vector of \code{characters} indicating which test should be performed
-(currently limited to \code{"wald"}).}
 
 \item{nboot}{Number of bootstrap replicates used to compute bootstrap confidence
 intervals.}
