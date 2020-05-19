@@ -4,15 +4,16 @@ Version: 1.0.0.9000
 Authors@R: c(
     person("David", "Benkeser", email = "benkeser@emory.edu",
            role = c("aut", "cre","cph"),
-           comment = c(ORCID = "0000-0002-1019-8343")),
-    person("Alex", "Luedtke", email = "aluedtke@uw.edu"),
-    person("Michael", "Rosenblum", email = "michael.a.rosenblum@gmail.com"))
+           comment = c(ORCID = "0000-0002-1019-8343"))
+           )
 Description: Efficient covariate-adjusted estimators of quantities that are useful for 
     establishing the effects of treatments on ordinal outcomes.
 Depends:
     R (>= 3.5.0)
 Imports:
-    MASS
+    MASS,
+    VGAM,
+    ordinal
 Suggests:
     testthat,
     knitr,

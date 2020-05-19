@@ -5,7 +5,7 @@
 \title{Estimate probability of receiving each level of treatment
 Assumes that \code{treat} comes in as a vector of 0's and 1's}
 \usage{
-estimate_treat_prob(treat, covar, treat_form)
+estimate_treat_prob(treat, covar, treat_form, return_models)
 }
 \value{
 A list where the first element is estimate of Pr(\code{treat} = 1 | \code{covar})

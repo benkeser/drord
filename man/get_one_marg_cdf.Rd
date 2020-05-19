@@ -4,7 +4,8 @@
 \alias{get_one_marg_cdf}
 \title{rename to reflect that its used for both CDF and PMF now}
 \usage{
-get_one_marg_cdf(treat, covar, treat_form, out, out_levels, out_form)
+get_one_marg_cdf(treat, covar, treat_form, out_model, out, out_levels,
+  out_form)
 }
 \description{
 rename to reflect that its used for both CDF and PMF now

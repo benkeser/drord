@@ -5,8 +5,8 @@
 \title{Get a treatment-specific estimate of the conditional PMF. 
 Essentially this is a wrapper function for \code{fit_trt_spec_reg}.}
 \usage{
-estimate_pmf(out, treat, covar, out_levels, out_form = NULL,
-  treat_prob_est, ...)
+estimate_pmf(out, treat, covar, out_levels, out_form = NULL, out_model,
+  treat_prob_est, stratify = FALSE, return_models = TRUE, ...)
 }
 \description{
 Get a treatment-specific estimate of the conditional PMF. 

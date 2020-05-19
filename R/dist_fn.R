@@ -6,6 +6,7 @@ estimate_ci_marg_dist <- function(marg_cdf_est,
 	                              treat_prob_est, 
 	                              treat_form, out_form,
 	                              treat, ci, out_levels, 
+	                              out_model,
 	                              out, alpha,
 	                              nboot){
 	if("wald" %in% ci){
@@ -57,7 +58,8 @@ estimate_ci_marg_dist <- function(marg_cdf_est,
 		                       out_form = out_form,
 		                       marg_cdf_est = marg_cdf_est,
 		                       marg_pmf_est = marg_pmf_est,
-		                       alpha = alpha)
+		                       alpha = alpha,
+		                       out_model = out_model)
 		bca_ci_cdf <- bca_ci$cdf
 		bca_ci_pmf <- bca_ci$pmf
 	}else{
@@ -74,7 +76,7 @@ marginalize_cdf <- function(cdf_est){
 }
 
 bca_marg_dist <- function(treat, covar, out, nboot, 
-                      treat_form, out_levels, out_form,
+                      treat_form, out_levels, out_form, out_model,
                       marg_cdf_est, marg_pmf_est, alpha = 0.05){
 	K <- length(out_levels)
 	boot_samples <- replicate(nboot, 
@@ -83,14 +85,16 @@ bca_marg_dist <- function(treat, covar, out, nboot,
 	                                           out = out, 
 	                                           treat_form = treat_form, 
 	                                           out_levels = out_levels, 
-	                                           out_form = out_form))
+	                                           out_form = out_form,
+	                                           out_model = out_model))
 
 	jack_samples <- jack_marg_cdf(treat = treat,
 	                           covar = covar,
 	                           out = out, 
 	                           treat_form = treat_form, 
 	                           out_levels = out_levels, 
-	                           out_form = out_form)
+	                           out_form = out_form,
+	                           out_model = out_model)
 
 	ci_cdf_1 <- compute_trt_spec_bca_intervals(dist = "cdf",
 	                                           trt = 1, 
@@ -122,42 +126,51 @@ bca_marg_dist <- function(treat, covar, out, nboot,
 	return(rslt)
 }
 
-jack_marg_cdf <- function(treat, covar, out, treat_form, out_levels, out_form){
+jack_marg_cdf <- function(treat, covar, out, treat_form, 
+                          out_levels, out_form, out_model){
   	marg_cdf_jack_est <- sapply(seq_along(out), function(i){
 		marg_cdf_minusi <- get_one_marg_cdf(treat = treat[-i],
 		                                covar = covar[-i, , drop = FALSE],
 		                                out = out[-i],
 		                                treat_form = treat_form,
 		                                out_levels = out_levels,
-		                                out_form = out_form)  		
+		                                out_form = out_form,
+		                                out_model = out_model)  		
 		return(marg_cdf_minusi)
   	})
   	return(marg_cdf_jack_est)
 }
 
-one_boot_marg_cdf <- function(treat, covar, out, treat_form, out_levels, out_form){
+one_boot_marg_cdf <- function(treat, covar, out, treat_form, 
+                              out_levels, out_form, out_model){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
 	marg_cdf_boot_est <- get_one_marg_cdf(treat = treat[boot_idx],
 	                                covar = covar[boot_idx, , drop = FALSE],
 	                                out = out[boot_idx],
 	                                treat_form = treat_form,
 	                                out_levels = out_levels,
-	                                out_form = out_form)
+	                                out_form = out_form,
+	                                out_model = out_model)
 	return(marg_cdf_boot_est)
 }
 
 #' rename to reflect that its used for both CDF and PMF now
-get_one_marg_cdf <- function(treat, covar, treat_form,
+get_one_marg_cdf <- function(treat, covar, treat_form, out_model,
                              out, out_levels, out_form){
 	# obtain estimate of treatment probabilities
-	treat_prob_est <- estimate_treat_prob(treat = treat,
+	treat_prob_fit <- estimate_treat_prob(treat = treat,
 	                                      covar = covar,
-	                                      treat_form = treat_form)
+	                                      treat_form = treat_form,
+	                                      return_models = FALSE)
+	treat_prob_est <- treat_prob_fit$gn
 
 	# obtain estimate of conditional PMF for each treatment level
-	pmf_est <- estimate_pmf(out = out, treat = treat, 
+	pmf_fit <- estimate_pmf(out = out, treat = treat, 
 	                        covar = covar, out_levels = out_levels,
-	                        out_form = out_form, treat_prob_est = treat_prob_est)
+	                        out_form = out_form, treat_prob_est = treat_prob_est,
+	                        out_model = out_model,
+	                        return_models = FALSE)
+  	pmf_est <- pmf_fit$pmf
 
 	cdf_est <- estimate_cdf(pmf_est = pmf_est)
 

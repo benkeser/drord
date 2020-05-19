@@ -13,7 +13,7 @@ corresponding to each outcome (ordered numerically). The entries
 represent the estimated covariate-conditional treatment-specific PMF.}
 \usage{
 fit_trt_spec_reg(trt_level, trt_spec_prob_est, out, treat, covar,
-  out_levels, out_form = NULL, ...)
+  out_levels, out_form = NULL, out_model, stratify, ...)
 }
 \arguments{
 \item{trt_spec_prob_est}{A vector of estimates of Pr(\code{treat} = \code{trt_level} | \code{covar}).}

@@ -5,7 +5,7 @@
 \title{following slides here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf}
 \usage{
 bca_wmean(treat, covar, out, nboot, treat_form, out_levels, out_form,
-  out_weights, wmean_est, alpha = 0.05)
+  out_weights, out_model, wmean_est, alpha = 0.05)
 }
 \description{
 following slides here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf

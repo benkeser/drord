@@ -1,7 +1,7 @@
 
 estimate_ci_mannwhitney <- function(
     mannwhitney_est, cdf_est, pmf_est, treat_prob_est, treat_form, out_form,
-    treat, ci, out, alpha, nboot, out_levels, covar
+    treat, ci, out, alpha, nboot, out_levels, covar, out_model
 ){
 	n <- length(out)
 	if("wald" %in% ci){
@@ -35,7 +35,8 @@ estimate_ci_mannwhitney <- function(
                       		  out_levels = out_levels, 
                       		  out_form = out_form,
                       		  mannwhitney_est = mannwhitney_est,
-                      		  alpha = alpha)
+                      		  alpha = alpha,
+                      		  out_model = out_model)
 	}else{
 		bca_ci <- NULL
 	}
@@ -45,21 +46,24 @@ estimate_ci_mannwhitney <- function(
 
 bca_mannwhitney <- function(treat, covar, out, nboot, 
                       treat_form, out_levels, out_form,
-                      mannwhitney_est, alpha = 0.05){
+                      mannwhitney_est, 
+                      out_model, alpha = 0.05){
 	boot_samples <- replicate(nboot, 
 	                          one_boot_mannwhitney(treat = treat, 
                                                covar = covar, 
 	                                           out = out, 
 	                                           treat_form = treat_form, 
 	                                           out_levels = out_levels, 
-	                                           out_form = out_form))
+	                                           out_form = out_form,
+	                                           out_model = out_model))
 
 	jack_samples <- jack_mannwhitney(treat = treat,
 	                           covar = covar,
 	                           out = out, 
 	                           treat_form = treat_form, 
 	                           out_levels = out_levels, 
-	                           out_form = out_form)
+	                           out_form = out_form,
+	                           out_model = out_model)
 
 	# CI for 1 
 	bca_ci_mannwhitney <- bca_interval(pt_est = mannwhitney_est,
@@ -70,26 +74,30 @@ bca_mannwhitney <- function(treat, covar, out, nboot,
 	return(rbind(bca_ci_mannwhitney))
 }
 
-jack_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form){
+jack_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form,
+                             out_model){
   	mannwhitney_jack_est <- sapply(seq_along(out), function(i){
 		mannwhitney_minusi <- get_one_mannwhitney(treat = treat[-i],
 		                                covar = covar[-i, , drop = FALSE],
 		                                out = out[-i],
 		                                treat_form = treat_form,
 		                                out_levels = out_levels,
-		                                out_form = out_form)  		
+		                                out_form = out_form,
+		                                out_model = out_model)  		
 		return(mannwhitney_minusi)
   	})
   	return(mannwhitney_jack_est)
 }
 
-one_boot_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form){
+one_boot_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form,
+                                 out_model){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
 	mannwhitney_boot_est <- tryCatch({get_one_mannwhitney(treat = treat[boot_idx],
 	                                covar = covar[boot_idx, , drop = FALSE],
 	                                out = out[boot_idx],
 	                                treat_form = treat_form,
 	                                out_levels = out_levels,
+	                                out_model = out_model,
 	                                out_form = out_form)}, error = function(e){
 		NA
 	})
@@ -97,16 +105,22 @@ one_boot_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_
 }
 
 get_one_mannwhitney <- function(treat, covar, treat_form,
-                            	out, out_levels, out_form){
+                            	out, out_levels, out_form,
+                            	out_model){
 	# obtain estimate of treatment probabilities
-	treat_prob_est <- estimate_treat_prob(treat = treat,
+	treat_prob_fit <- estimate_treat_prob(treat = treat,
 	                                      covar = covar,
-	                                      treat_form = treat_form)
+	                                      treat_form = treat_form,
+	                                      return_models = FALSE)
+	treat_prob_est <- treat_prob_fit$gn
 
 	# obtain estimate of conditional PMF for each treatment level
-	pmf_est <- estimate_pmf(out = out, treat = treat, 
+	pmf_fit <- estimate_pmf(out = out, treat = treat, 
 	                        covar = covar, out_levels = out_levels,
-	                        out_form = out_form, treat_prob_est = treat_prob_est)
+	                        out_form = out_form, treat_prob_est = treat_prob_est,
+	                        out_model = out_model,
+	                        return_models = FALSE)
+  	pmf_est <- pmf_fit$pmf
 
 	cdf_est <- estimate_cdf(pmf_est = pmf_est)
 

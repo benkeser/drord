@@ -7,7 +7,7 @@
 #' for \code{covar} equal to inputted values of \code{covar}
 #' @importFrom stats as.formula glm binomial
 #' 
-estimate_treat_prob <- function(treat, covar, treat_form){
+estimate_treat_prob <- function(treat, covar, treat_form, return_models){
 	if (length(unique(treat) == 2)){
       fm_treat <- list(stats::glm(
         formula = stats::as.formula(paste0("A~", treat_form)),
@@ -18,9 +18,10 @@ estimate_treat_prob <- function(treat, covar, treat_form){
       gn_A[[1]] <- stats::fitted(fm_treat[[1]])
       gn_A[[2]] <- 1 - gn_A[[1]]
     } else {
-      stop("multi-level treatments not yet supported")
+      stop("multi-level treatments not supported")
     } # end multi-level treatment if
-    return(gn_A)
+    return(list(gn = gn_A,
+                fm = fm_treat))
 }
 
 #' Get a treatment-specific estimate of the conditional PMF. 
@@ -32,19 +33,24 @@ estimate_pmf <- function(
   covar,
   out_levels,
   out_form = NULL,
+  out_model,
   treat_prob_est, 
   stratify = FALSE,
+  return_models = TRUE,
   ...
   ){
 	out <- mapply(trt_level = list(1,0),
 	              trt_spec_prob_est = treat_prob_est,
 	              FUN = fit_trt_spec_reg,
 	              MoreArgs = list(out = out, treat = treat,
+	                              out_model = out_model[1],
 	                              covar = covar, out_form = out_form,
 	                              out_levels = out_levels,
 	                              stratify = stratify),
 	              SIMPLIFY = FALSE)
-	return(out)
+	rout <- list(fm = list(treat1 = out[[1]]$fm_treat, treat0 = out[[2]]$fm_treat),
+	             pmf = list(out[[1]]$pmf_treat, out[[2]]$pmf_treat)) #!!! CHECK
+	return(rout)
 }
 
 
@@ -66,6 +72,9 @@ estimate_pmf <- function(
 #' @param out_form
 #' @param trt_spec_prob_est A vector of estimates of Pr(\code{treat} = \code{trt_level} | \code{covar}).
 #' @importFrom MASS polr
+#' @importFrom VGAM vglm
+#' @importFrom ordinal clm
+#' 
 fit_trt_spec_reg <- function(
   trt_level,
   trt_spec_prob_est,
@@ -74,40 +83,54 @@ fit_trt_spec_reg <- function(
   covar,
   out_levels,
   out_form = NULL,
+  out_model,
   stratify, 
   ...){
 	if(!stratify){
 		trt_spec_uniq_outcomes <- unique(out[treat == trt_level])
 		# only use polr if more than 2 outcome levels observed
 		# in treatment arm
-	  	use_polr <- length(trt_spec_uniq_outcomes) > 2
+	  	multi_level <- length(trt_spec_uniq_outcomes) > 2
 		
-		if(use_polr){
-			suppressWarnings( # weights throw unneeded warnings 
-				fm_trt <- tryCatch({MASS::polr(
-			      formula = stats::as.formula(paste0("factor(out) ~", out_form)),
-			      data = data.frame(out = out, 
-			                        covar, 
-			                        wt = 1/trt_spec_prob_est)[treat == trt_level, , drop = FALSE],
-			      weights = wt
-			    )}, error = function(e){
-			    	mod_mat <- model.matrix(stats::as.formula(paste0("factor(out) ~", out_form)),
-			    	                        data = data.frame(out = out, covar))
-			    	n_par <- (dim(mod_mat)[2] - 1) + (length(out_levels) - 1)
-					MASS::polr(
-				      formula = stats::as.formula(paste0("factor(out) ~", out_form)),
-				      data = data.frame(out = out, 
-				                        covar, 
-				                        wt = 1/trt_spec_prob_est)[treat == trt_level, , drop = FALSE],
-				      weights = wt, 
-				      start = c(rep(-1, length(out_levels) - 1), rep(0, dim(mod_mat)[2]-1))
-			    	)
-			    })
-		    )
-		 	pmf_treat <- predict(fm_trt, 
-		                      newdata = data.frame(out = out, covar,
-		                                           wt = 1/trt_spec_prob_est),
-		                      type = "probs")
+		if(multi_level){
+			if(out_model == "polr"){
+				suppressWarnings( # weights throw unneeded warnings 
+					fm_trt <- tryCatch({MASS::polr(
+				      formula = stats::as.formula(paste0("factor(out, ordered = TRUE) ~", out_form)),
+				      data = data.frame(out = out, covar),
+				      weights = as.numeric(treat == trt_level)/trt_spec_prob_est
+				    )}, error = function(e){
+				    	mod_mat <- model.matrix(stats::as.formula(paste0("factor(out) ~", out_form)),
+				    	                        data = data.frame(out = out, covar))
+				    	n_par <- (dim(mod_mat)[2] - 1) + (length(out_levels) - 1)
+						MASS::polr(
+					      formula = stats::as.formula(paste0("factor(out) ~", out_form)),
+					      data = data.frame(out = out, covar),				      	  
+					      weights = as.numeric(treat == trt_level)/trt_spec_prob_est,
+					      start = c(rep(-1, length(out_levels) - 1), rep(0, dim(mod_mat)[2]-1))
+				    	)
+				    })
+			    )
+			 	pmf_treat <- predict(fm_trt, 
+			                      newdata = data.frame(out = out, covar,
+			                                           wt = 1/trt_spec_prob_est),
+			                      type = "probs")
+		 	}else if(out_model == "vglm"){
+		 		fm_trt <- VGAM::vglm(formula = stats::as.formula(paste0("factor(out, ordered = TRUE) ~", out_form)),
+		 		               family = propodds,
+		 		               data = data.frame(out = out, covar)[treat == trt_level, , drop = FALSE],
+				      		   weights = 1/trt_spec_prob_est[treat == trt_level])
+			 	pmf_treat <- predict(fm_trt, 
+						             newdata = data.frame(out = out, covar),
+						             type = "response")
+		 	}else if(out_model == "clm"){
+		 		out_f <- factor(out, ordered = TRUE)
+		 		fm_trt <- ordinal::clm(formula = stats::as.formula(paste0("out ~", out_form)),		 		               
+		 		               data = data.frame(out = out_f, covar)[treat == trt_level, , drop = FALSE],
+				      		   weights = 1/trt_spec_prob_est[treat == trt_level])
+			 	pmf_treat <- predict(fm_trt, newdata = data.frame(covar),
+		 			        		 type = "prob")$fit
+		 	}
 		 	# add in columns of 0's for unobserved outcome levels and re-order things accordingly
 		 	obs_out_levels <- colnames(pmf_treat)
 		 	not_obs_out_levels <- which(!(out_levels %in% obs_out_levels))
@@ -151,6 +174,7 @@ fit_trt_spec_reg <- function(
 		 	pmf_treat <- pmf_treat_new[ , order(as.numeric(colnames(pmf_treat_new)))]
 		}
 	}else{
+		fm_trt <- NULL
 		if(out_form != "1"){
 			if(dim(covar)[2] > 1){
 				stop("stratified estimator only implemented for single covariate")
@@ -198,7 +222,8 @@ fit_trt_spec_reg <- function(
 			pmf_treat[,ncol(pmf_treat)] <- 1 - rowSums(pmf_treat[,1:(ncol(pmf_treat) - 1)])
 		}
 	}
-	return(pmf_treat)
+	return(list(pmf_treat = pmf_treat,
+	            fm_treat = fm_trt))
 }
 
 #' Map an estimate of the conditional PMF into an estimate of the conditional CDF

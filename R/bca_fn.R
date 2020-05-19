@@ -5,7 +5,7 @@ bca_interval <- function(pt_est, boot_samples,
 	z_1alpha2 <- qnorm(1 - alpha/2)
 	mean_jack <- mean(jack_samples, na.rm = TRUE)
 	z0 <- qnorm(mean(boot_samples < pt_est, na.rm = TRUE))
-	a <- sum((jack_samples - mean_jack)^3) / (6 * sum((jack_samples - mean_jack)^2)^(3/2))
+	a <- sum((mean_jack - jack_samples)^3) / (6 * sum((mean_jack - jack_samples)^2)^(3/2))
 	alpha1 <- pnorm(z0 + (z0 + z_alpha2) / (1 - a*(z0 + z_alpha2)))
 	alpha2 <- pnorm(z0 + (z0 + z_1alpha2) / (1 - a*(z0 + z_1alpha2)))
 	bca_ci <- quantile(boot_samples, p = c(alpha1, alpha2), na.rm = TRUE)

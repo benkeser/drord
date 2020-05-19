@@ -19,7 +19,7 @@ estimate_wmean <- function(pmf_est, treat, out, out_levels, out_weights,
 	                        SIMPLIFY = FALSE)
 	# point estimate
 	wmean_est <- sapply(cond_mean_est, mean)
-
+	wmean_est <- c(wmean_est, wmean_est[1] - wmean_est[2])
 	rslt <- list(est = wmean_est, cov = NULL)
 
 	if(return_cov){
@@ -55,6 +55,7 @@ estimate_ci_wmean <- function(
   out_levels = order(unique(out)),
   out_form = NULL,
   out_weights = rep(1, length(out_levels)),
+  out_model,
   treat_form = "1",
   ci = c("bca", "wald"), 
   nboot = 1e4
@@ -70,7 +71,8 @@ estimate_ci_wmean <- function(
 		                    out = out, nboot = nboot, 
 		                    treat_form = treat_form, out_levels = out_levels,
 		                    out_form = out_form, wmean_est = wmean_est, 
-		                    alpha = alpha, out_weights = out_weights)
+		                    alpha = alpha, out_weights = out_weights,
+		                    out_model = out_model)
 	}else{
 		bca_ci <- NULL
 	}
@@ -92,6 +94,7 @@ wald_ci_wmean <- function(wmean_est, alpha){
 #' following slides here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
 bca_wmean <- function(treat, covar, out, nboot, 
                       treat_form, out_levels, out_form, out_weights,
+                      out_model, 
                       wmean_est, alpha = 0.05){
 	boot_samples <- replicate(nboot, 
 	                          one_boot_wmean(treat = treat, 
@@ -100,7 +103,8 @@ bca_wmean <- function(treat, covar, out, nboot,
 	                                         treat_form = treat_form, 
 	                                         out_levels = out_levels, 
 	                                         out_form = out_form,
-	                                         out_weights = out_weights))
+	                                         out_weights = out_weights,
+	                                         out_model = out_model))
 	boot_trt1 <- boot_samples[1,]
 	boot_trt0 <- boot_samples[2,]
 	boot_diff <- boot_samples[1,] - boot_samples[2,]
@@ -111,7 +115,8 @@ bca_wmean <- function(treat, covar, out, nboot,
 	                           treat_form = treat_form, 
 	                           out_levels = out_levels, 
 	                           out_form = out_form,
-	                           out_weights = out_weights)
+	                           out_weights = out_weights,
+	                           out_model = out_model)
 
 	jack_trt1 <- jack_samples[1,]
 	jack_trt0 <- jack_samples[2,]
@@ -137,7 +142,8 @@ bca_wmean <- function(treat, covar, out, nboot,
 	return(rbind(bca_ci_trt1, bca_ci_trt0, bca_ci_diff))
 }
 
-jack_wmean <- function(treat, covar, out, treat_form, out_levels, out_form, out_weights){
+jack_wmean <- function(treat, covar, out, treat_form, out_levels, 
+                       out_form, out_weights, out_model){
   	wmean_jack_est <- sapply(seq_along(out), function(i){
 		wmean_minusi <- get_one_wmean(treat = treat[-i],
 		                                covar = covar[-i, , drop = FALSE],
@@ -145,13 +151,15 @@ jack_wmean <- function(treat, covar, out, treat_form, out_levels, out_form, out_
 		                                treat_form = treat_form,
 		                                out_levels = out_levels,
 		                                out_form = out_form,
-		                                out_weights = out_weights)  		
+		                                out_weights = out_weights,
+		                                out_model = out_model)  		
 		return(wmean_minusi)
   	})
   	return(wmean_jack_est)
 }
 
-one_boot_wmean <- function(treat, covar, out, treat_form, out_levels, out_form, out_weights){
+one_boot_wmean <- function(treat, covar, out, treat_form, out_levels, 
+                           out_form, out_weights, out_model){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
 	wmean_boot_est <- tryCatch({get_one_wmean(treat = treat[boot_idx],
 	                                covar = covar[boot_idx, , drop = FALSE],
@@ -159,23 +167,30 @@ one_boot_wmean <- function(treat, covar, out, treat_form, out_levels, out_form, 
 	                                treat_form = treat_form,
 	                                out_levels = out_levels,
 	                                out_form = out_form,
-	                                out_weights = out_weights)}, error = function(e){
+	                                out_weights = out_weights,
+	                                out_model = out_model)}, error = function(e){
 		rep(NA, 2)
 	})
 	return(wmean_boot_est)
 }
 get_one_wmean <- function(treat, covar, treat_form,
                           out, out_levels, out_form,
+                          out_model,
                           out_weights){
 	# obtain estimate of treatment probabilities
-	treat_prob_est <- estimate_treat_prob(treat = treat,
+	treat_prob_fit <- estimate_treat_prob(treat = treat,
 	                                      covar = covar,
-	                                      treat_form = treat_form)
+	                                      treat_form = treat_form,
+	                                      return_models = FALSE)
+	treat_prob_est <- treat_prob_fit$gn
 
 	# obtain estimate of conditional PMF for each treatment level
-	pmf_est <- estimate_pmf(out = out, treat = treat, 
+	pmf_fit <- estimate_pmf(out = out, treat = treat, 
 	                        covar = covar, out_levels = out_levels,
-	                        out_form = out_form, treat_prob_est = treat_prob_est)
+	                        out_form = out_form, treat_prob_est = treat_prob_est,
+	                        out_model = out_model, return_models = FALSE)
+  	pmf_est <- pmf_fit$pmf
+
 	
   	wmean_est <- estimate_wmean(
           pmf_est = pmf_est, treat = treat, out = out, out_levels = out_levels, 

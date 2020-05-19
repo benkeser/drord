@@ -4,7 +4,7 @@
 \alias{compute_trt_spec_marg_cdf_ptwise_ci}
 \title{this function could be renamed as it's used for both CDF and PMF}
 \usage{
-compute_trt_spec_marg_cdf_ptwise_ci(pt_est, cov_est, alpha)
+compute_trt_spec_marg_cdf_ptwise_ci(pt_est, cov_est, alpha, cdf = TRUE)
 }
 \description{
 this function could be renamed as it's used for both CDF and PMF
