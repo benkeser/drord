@@ -42,7 +42,7 @@ treatment on the ordinal outcome in three different ways:
     is defined as the difference in average outcomes.
   - Log odds ratio: The comparison describes the average log-odds
     (treatment level 1 versus 0) of the cumulative probability for each
-    level of the outcome. See [D{'i}az et al.
+    level of the outcome. See [Diaz et al.
     (2015)](https://doi.org/10.1111/biom.12450) for further discussion
     of this parameter.
   - Mann-Whitney: The probability that a randomly-selected individual
