@@ -120,3 +120,17 @@ plot.drord <- function(x,
               ggplot2::theme_bw()
   return(bar_plot)
 }
+
+
+#' Simulated COVID-19 outcomes for hospitalized patients. 
+#'
+#' A simulated dataset containing outcomes, (hypothetical) treatment,
+#' and age group 
+#'
+#' @format A data frame with 500 rows and 3 variables:
+#' \describe{
+#'   \item{out}{study outcome, here 1 represents death, 2 intubation, 3 no adverse outcome}
+#'   \item{age_grp}{age category with 1 the youngest and 7 the oldest}
+#'   \item{treat}{hypothetical treatment, here 1 represents an (effective) active treatment and 0 a control}
+#' }
+"covid19"
