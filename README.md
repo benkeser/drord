@@ -35,19 +35,22 @@ for the CDF of the outcome as a function of covariates in each treatment
 arm. The latter working model is implemented via proportional odds
 models that are fit in each treatment arm separately. Estimates based on
 these two working models are combined to quantify the effects of the
-treatment on the ordinal outcome in three different ways: - Difference
-in (weighted) means: The outcome levels are treated numerically, with
-each level possibly assigned a weight. The effect is defined as the
-difference in average outcomes. - Log odds ratio: The comparison
-describes the average log-odds (treatment level 1 versus 0) of the
-cumulative probability for each level of the outcome. See [D{'i}az et
-al. (2015)](https://doi.org/10.1111/biom.12450) for further discussion
-of this parameter. - Mann-Whitney: The probability that a
-randomly-selected individual receiving treatment 1 will have a larger
-outcome value than a randomly selected individual receiving treatment 0
-(with ties assigned weight 1/2). See [Vermeulen et al.
-(2014)](https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6386) for
-further discussion.
+treatment on the ordinal outcome in three different ways:
+
+  - Difference in (weighted) means: The outcome levels are treated
+    numerically, with each level possibly assigned a weight. The effect
+    is defined as the difference in average outcomes.
+  - Log odds ratio: The comparison describes the average log-odds
+    (treatment level 1 versus 0) of the cumulative probability for each
+    level of the outcome. See [D{'i}az et al.
+    (2015)](https://doi.org/10.1111/biom.12450) for further discussion
+    of this parameter.
+  - Mann-Whitney: The probability that a randomly-selected individual
+    receiving treatment 1 will have a larger outcome value than a
+    randomly selected individual receiving treatment 0 (with ties
+    assigned weight 1/2). See [Vermeulen et al.
+    (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6386)
+    for further discussion.
 
 -----
 
