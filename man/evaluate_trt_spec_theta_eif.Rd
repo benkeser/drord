@@ -2,11 +2,29 @@
 % Please edit documentation in R/logodds_fn.R
 \name{evaluate_trt_spec_theta_eif}
 \alias{evaluate_trt_spec_theta_eif}
-\title{get a matrix of eif estimates for theta}
+\title{get a matrix of eif estimates for the treatment-specific CDF estimates}
 \usage{
 evaluate_trt_spec_theta_eif(trt_spec_cdf_est, trt_spec_prob_est, trt_level,
   treat, out, out_levels)
 }
+\arguments{
+\item{trt_spec_cdf_est}{Estimated conditional CDF for \code{trt_level}.}
+
+\item{trt_spec_prob_est}{Estimated propensity for \code{trt_level}.}
+
+\item{trt_level}{Treatment level}
+
+\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
+a value 0 or 1.}
+
+\item{out}{A \code{numeric} vector containing the outcomes.}
+
+\item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
+outcome.}
+}
+\value{
+matrix of EIF estimates for CDF.
+}
 \description{
-get a matrix of eif estimates for theta
+get a matrix of eif estimates for the treatment-specific CDF estimates
 }

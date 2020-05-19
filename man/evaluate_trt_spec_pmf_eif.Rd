@@ -2,11 +2,29 @@
 % Please edit documentation in R/logodds_fn.R
 \name{evaluate_trt_spec_pmf_eif}
 \alias{evaluate_trt_spec_pmf_eif}
-\title{get a matrix of eif estimates for theta}
+\title{Get a matrix of eif estimates for treatment-specific PMF}
 \usage{
 evaluate_trt_spec_pmf_eif(trt_spec_pmf_est, trt_spec_prob_est, trt_level,
   treat, out, out_levels)
 }
+\arguments{
+\item{trt_spec_pmf_est}{Estimated conditional PMF for \code{trt_level}.}
+
+\item{trt_spec_prob_est}{Estimated propensity for \code{trt_level}.}
+
+\item{trt_level}{Treatment level}
+
+\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
+a value 0 or 1.}
+
+\item{out}{A \code{numeric} vector containing the outcomes.}
+
+\item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
+outcome.}
+}
+\value{
+a matrix of EIF estimates
+}
 \description{
-get a matrix of eif estimates for theta
+Get a matrix of eif estimates for treatment-specific PMF
 }

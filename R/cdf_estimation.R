@@ -42,7 +42,7 @@
 #' outcome. 
 #' @param out_form The right-hand side of a regression formula for the working proportional 
 #' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
-#' @param out_pkg Which R function should be used to fit the proportional odds 
+#' @param out_model Which R function should be used to fit the proportional odds 
 #' model. Options are \code{"polr"} (from the \code{MASS} package), 
 #' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
 #' @param out_weights A vector of \code{numeric} weights with length equal to the length 
@@ -201,6 +201,7 @@ drord <- function(
 		                             		  out_model = out_model,
 		                             		  treat = treat, ci = ci, 
 		                             		  out = out, alpha = alpha,
+		                             		  covar = covar, 
 		                             		  nboot = nboot)
 	}else{
 		marg_cdf_est <- NULL; marg_pmf_est <- NULL

@@ -2,10 +2,22 @@
 % Please edit documentation in R/nuisance_fn.R
 \name{estimate_treat_prob}
 \alias{estimate_treat_prob}
-\title{Estimate probability of receiving each level of treatment
-Assumes that \code{treat} comes in as a vector of 0's and 1's}
+\title{Estimate probability of receiving each level of treatment}
 \usage{
 estimate_treat_prob(treat, covar, treat_form, return_models)
+}
+\arguments{
+\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
+a value 0 or 1.}
+
+\item{covar}{A \code{data.frame} containing the covariates to include in the working
+proportional odds model.}
+
+\item{treat_form}{The right-hand side of a regression formula for the working model of
+treatment probability as a function of covariates}
+
+\item{return_models}{If \code{TRUE} the fitted working proportional odds models
+and treatment probability models are returned.}
 }
 \value{
 A list where the first element is estimate of Pr(\code{treat} = 1 | \code{covar})
@@ -15,5 +27,4 @@ for \code{covar} equal to inputted values of \code{covar}
 }
 \description{
 Estimate probability of receiving each level of treatment
-Assumes that \code{treat} comes in as a vector of 0's and 1's
 }

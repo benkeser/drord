@@ -16,9 +16,33 @@ fit_trt_spec_reg(trt_level, trt_spec_prob_est, out, treat, covar,
   out_levels, out_form = NULL, out_model, stratify, ...)
 }
 \arguments{
+\item{trt_level}{Which level of treatment to fit the proportional odds model for}
+
 \item{trt_spec_prob_est}{A vector of estimates of Pr(\code{treat} = \code{trt_level} | \code{covar}).}
 
-\item{out}{}
+\item{out}{A \code{numeric} vector containing the outcomes.}
+
+\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
+a value 0 or 1.}
+
+\item{covar}{A \code{data.frame} containing the covariates to include in the working
+proportional odds model.}
+
+\item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
+outcome.}
+
+\item{out_form}{The right-hand side of a regression formula for the working proportional 
+odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT.}
+
+\item{out_model}{Which R function should be used to fit the proportional odds 
+model. Options are \code{"polr"} (from the \code{MASS} package), 
+"vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
+
+\item{stratify}{Boolean indicating whether to use nonparametric maximum likelihood
+(i.e., a stratified estimator). If \code{out_form = "1"}, then a covariate-unadjusted
+estimate is computed.}
+
+\item{...}{Other options (not used).}
 }
 \description{
 Helper function to fit a treatment specific outcome regression. 

@@ -30,6 +30,10 @@ odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT.}
 \item{out_weights}{A vector of \code{numeric} weights with length equal to the length 
 of \code{out_levels}.}
 
+\item{out_model}{Which R function should be used to fit the proportional odds 
+model. Options are \code{"polr"} (from the \code{MASS} package), 
+"vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
+
 \item{treat_form}{The right-hand side of a regression formula for the working model of
 treatment probability as a function of covariates}
 
@@ -59,10 +63,6 @@ save time to set to \code{FALSE}.}
 \item{stratify}{If \code{TRUE}, then a fully stratified estimator is computed, i.e.,
 the empirical CDF of each treatment arm is estimated stratifying by levels of 
 \code{covar}. For now, this option is limited to univariate covariates.}
-
-\item{out_pkg}{Which R function should be used to fit the proportional odds 
-model. Options are \code{"polr"} (from the \code{MASS} package), 
-"vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
 }
 \value{
 TO DO: format output and add print/plot methods

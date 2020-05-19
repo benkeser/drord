@@ -1,6 +1,12 @@
-
 #' Estimate probability of receiving each level of treatment
-#' Assumes that \code{treat} comes in as a vector of 0's and 1's
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param return_models If \code{TRUE} the fitted working proportional odds models
+#' and treatment probability models are returned. 
 #' @return A list where the first element is estimate of Pr(\code{treat} = 1 | \code{covar})
 #' for \code{covar} equal to inputted values of \code{covar}
 #' and second element is estimate of Pr(\code{treat} = 0 | \code{covar})
@@ -25,7 +31,28 @@ estimate_treat_prob <- function(treat, covar, treat_form, return_models){
 }
 
 #' Get a treatment-specific estimate of the conditional PMF. 
-#' Essentially this is a wrapper function for \code{fit_trt_spec_reg}. 
+#' Essentially this is a wrapper function for \code{fit_trt_spec_reg}, which
+#' fits the proportion odds model in a given treatment arm. 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param treat_prob_est Estimated probability of treatments, output from call
+#' to \code{estimate_treat_prob}.
+#' @param return_models If \code{TRUE} the fitted working proportional odds models
+#' and treatment probability models are returned. 
+#' @param ... Other options (not used). 
+#' @return A list with \code{fm} the fitted model for treatment 1 and 0 (or, if 
+#' \code{!return_models} then \code{NULL}) and \code{pmf} the estimated PMF 
+#' under treatment 1 and 0 evaluated on each observation. 
 #' @importFrom MASS mvrnorm
 estimate_pmf <- function(
   out,
@@ -64,17 +91,29 @@ estimate_pmf <- function(
 #' corresponding to each outcome (ordered numerically). The entries 
 #' represent the estimated covariate-conditional treatment-specific PMF.
 #' 
-#' @param out 
-#' @param treat
-#' @param covar
-#' @param trt_level
-#' @param out_levels
-#' @param out_form
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param trt_level Which level of treatment to fit the proportional odds model for
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
 #' @param trt_spec_prob_est A vector of estimates of Pr(\code{treat} = \code{trt_level} | \code{covar}).
+#' @param stratify Boolean indicating whether to use nonparametric maximum likelihood
+#' (i.e., a stratified estimator). If \code{out_form = "1"}, then a covariate-unadjusted
+#' estimate is computed. 
+#' @param ... Other options (not used).
 #' @importFrom MASS polr
 #' @importFrom VGAM vglm
 #' @importFrom ordinal clm
-#' 
+
+
 fit_trt_spec_reg <- function(
   trt_level,
   trt_spec_prob_est,
@@ -227,6 +266,8 @@ fit_trt_spec_reg <- function(
 }
 
 #' Map an estimate of the conditional PMF into an estimate of the conditional CDF
+#' @param pmf_est A list of the treatment-specific PMF estimates
+#' @return A list of treatment-specific CDF estimates
 estimate_cdf <- function(pmf_est){
 	out <- lapply(pmf_est, function(x){
 		t(apply(x, 1, cumsum))

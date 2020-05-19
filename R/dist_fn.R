@@ -1,8 +1,41 @@
+#' Compute confidence interval/s for the treatment specific 
+#' PMF and CDF.
+#' 
+#' @param marg_cdf_est Point estimate of treatment-specific CDF.
+#' @param marg_pmf_est Point estimate of treatment-specific PMF.
+#' @param cdf_est Estimates of treatment-specific conditional CDF.
+#' @param pmf_est Estimates of treatment-specific conditional PMF.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param ci A vector of \code{characters} indicating which confidence intervals
+#' should be computed (\code{"bca"} and/or \code{"wald"}) 
+#' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
+#' intervals. 
+#' @param treat_prob_est Estimated probability of treatments, output from call
+#' to \code{estimate_treat_prob}.
+#' @return List of lists (\code{cdf} and \code{pmf}) with \code{wald} and \code{bca}-estimated confidence 
+#' intervals for the marginal treatment-specific distribution functions. 
 
 estimate_ci_marg_dist <- function(marg_cdf_est,
                                   marg_pmf_est,                                  
                                   cdf_est,
                                   pmf_est,
+                                  covar,
 	                              treat_prob_est, 
 	                              treat_form, out_form,
 	                              treat, ci, out_levels, 
@@ -19,9 +52,9 @@ estimate_ci_marg_dist <- function(marg_cdf_est,
 		                                                  marg_cdf_eif = marg_cdf_eif,
 		                                                  alpha = alpha)
 		# simultaneous CI
-		marg_cdf_simul_wald_ci <- evaluate_marg_cdf_simul_ci(marg_cdf_est = marg_cdf_est,
+		marg_cdf_simul_wald_ci <- evaluate_marg_dist_simul_ci(marg_cdf_est = marg_cdf_est,
 	                                                    marg_cdf_eif = marg_cdf_eif,
-	                                                    alpha = alpha, n = length(out), 
+	                                                    alpha = alpha, 
 	                                                    remove_last = TRUE)
 
 		marg_pmf_eif <- evaluate_marg_pmf_eif(pmf_est = pmf_est, 
@@ -33,9 +66,9 @@ estimate_ci_marg_dist <- function(marg_cdf_est,
 		                                                  marg_pmf_eif = marg_pmf_eif,
 		                                                  alpha = alpha)
 		# simultaneous CI
-		marg_pmf_simul_wald_ci <- evaluate_marg_cdf_simul_ci(marg_cdf_est = marg_pmf_est,
+		marg_pmf_simul_wald_ci <- evaluate_marg_dist_simul_ci(marg_cdf_est = marg_pmf_est,
 	                                                    marg_cdf_eif = marg_pmf_eif,
-	                                                    alpha = alpha, n = length(out),
+	                                                    alpha = alpha, 
 	                                                    remove_last = FALSE)
 
 		wald_ci_cdf <- list(list(ptwise = marg_cdf_ptwise_wald_ci[[1]], simul = marg_cdf_simul_wald_ci[[1]]),
@@ -70,17 +103,49 @@ estimate_ci_marg_dist <- function(marg_cdf_est,
 	       		pmf = list(wald = wald_ci_pmf, bca = bca_ci_pmf)))
 }
 
+#' Marginalize over empirical distribution to obtain marginal
+#' treatment-specific CDF estimate.
+#' 
+#' @param cdf_est Estimates of treatment-specific conditional CDF.
 
 marginalize_cdf <- function(cdf_est){
 	lapply(cdf_est, colMeans)
 }
 
+
+
+#' Compute a BCa bootstrap confidence interval for the weighted mean. The code is 
+#' based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
+#' intervals. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param marg_cdf_est Point estimate of treatment-specific CDF.
+#' @param marg_pmf_est Point estimate of treatment-specific PMF.
+#' @param alpha Level of confidence interval.
+#' @return List (\code{cdf}, \code{pmf}) of lists (\code{treat=1}, \code{treat=0}) of
+#' confidence intervals for distributions.
 bca_marg_dist <- function(treat, covar, out, nboot, 
                       treat_form, out_levels, out_form, out_model,
                       marg_cdf_est, marg_pmf_est, alpha = 0.05){
 	K <- length(out_levels)
 	boot_samples <- replicate(nboot, 
-	                          one_boot_marg_cdf(treat = treat, 
+	                          one_boot_marg_dist(treat = treat, 
                                                covar = covar, 
 	                                           out = out, 
 	                                           treat_form = treat_form, 
@@ -126,10 +191,27 @@ bca_marg_dist <- function(treat, covar, out, nboot,
 	return(rslt)
 }
 
+#' Compute jackknife distribution estimates.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @return Jackknife estimated distributions
+#' 
 jack_marg_cdf <- function(treat, covar, out, treat_form, 
                           out_levels, out_form, out_model){
   	marg_cdf_jack_est <- sapply(seq_along(out), function(i){
-		marg_cdf_minusi <- get_one_marg_cdf(treat = treat[-i],
+		marg_cdf_minusi <- get_one_marg_dist(treat = treat[-i],
 		                                covar = covar[-i, , drop = FALSE],
 		                                out = out[-i],
 		                                treat_form = treat_form,
@@ -141,10 +223,28 @@ jack_marg_cdf <- function(treat, covar, out, treat_form,
   	return(marg_cdf_jack_est)
 }
 
-one_boot_marg_cdf <- function(treat, covar, out, treat_form, 
+#' Get one bootstrap computation of the CDF and PMF estimates 
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @return Estimates of CDF and PMF for a particular bootstrap sample. 
+
+one_boot_marg_dist <- function(treat, covar, out, treat_form, 
                               out_levels, out_form, out_model){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
-	marg_cdf_boot_est <- get_one_marg_cdf(treat = treat[boot_idx],
+	marg_cdf_boot_est <- get_one_marg_dist(treat = treat[boot_idx],
 	                                covar = covar[boot_idx, , drop = FALSE],
 	                                out = out[boot_idx],
 	                                treat_form = treat_form,
@@ -154,8 +254,25 @@ one_boot_marg_cdf <- function(treat, covar, out, treat_form,
 	return(marg_cdf_boot_est)
 }
 
-#' rename to reflect that its used for both CDF and PMF now
-get_one_marg_cdf <- function(treat, covar, treat_form, out_model,
+
+#' Compute one estimate of the marginal CDF/PMF on a given data set. 
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param return List of estimated cdf/pmf for these input data. 
+get_one_marg_dist <- function(treat, covar, treat_form, out_model,
                              out, out_levels, out_form){
 	# obtain estimate of treatment probabilities
 	treat_prob_fit <- estimate_treat_prob(treat = treat,
@@ -180,19 +297,31 @@ get_one_marg_cdf <- function(treat, covar, treat_form, out_model,
   	return(list(cdf = marg_cdf_est, pmf = marg_pmf_est))
 }
 
-#' this function could be renamed since it's used for CDF and PMF
-#' for CDF, set remove_last = FALSE, for PMF set remove_last = TRUE
-evaluate_marg_cdf_simul_ci <- function(marg_cdf_est, marg_cdf_eif, alpha, n,
+#' Evaluate simultaneous confidence interval for marginal PMF or CDF. 
+#' @param marg_dist_est The point estimate of the marginal CDF/PMF distribution
+#' @param marg_dist_eif The EIF estimates for the marginal CDF/PMF estimates
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @param remove_last Should the last level be removed? Should be set equal to 
+#' \code{TRUE} for CDF computations and \code{FALSE} for PMF computations.
+#' @return List by treatment of simultaneous confidence intervals
+evaluate_marg_dist_simul_ci <- function(marg_dist_est, marg_dist_eif, alpha,
                                        remove_last = FALSE){
-	simul_ci <- mapply(pt_est = marg_cdf_est, trt_spec_marg_cdf_eif = marg_cdf_eif, 
-	                    FUN = compute_trt_spec_marg_cdf_simul_ci,
+	simul_ci <- mapply(pt_est = marg_dist_est, trt_spec_marg_dist_eif = marg_dist_eif, 
+	                    FUN = compute_trt_spec_marg_dist_simul_ci,
 	                    SIMPLIFY = FALSE, MoreArgs = list(remove_last = remove_last,
 	                                                      alpha = alpha))
     return(simul_ci)
 }
 
-#' this function could be renamed since it's used for CDF and PMF
-compute_trt_spec_marg_cdf_simul_ci <- function(pt_est, trt_spec_marg_cdf_eif,
+#' Compute simultaneous confidence interval for treatment-specific marginal distribution 
+#' @param pt_est The point estimate of the treatment-specific marginal CDF/PMF
+#' @param trt_spec_marg_dist_eif The EIF estimates for the treatment-specific marginal 
+#' CDF/PMF estimates
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @param remove_last Should the last level be removed? Should be set equal to 
+#' \code{TRUE} for CDF computations and \code{FALSE} for PMF computations.
+#' @return Confidence interval 
+compute_trt_spec_marg_dist_simul_ci <- function(pt_est, trt_spec_marg_dist_eif,
                                                remove_last = TRUE, alpha){
 	# remove largest value
 	if(remove_last){ # for CDF since last pt_est is always 1
@@ -200,9 +329,9 @@ compute_trt_spec_marg_cdf_simul_ci <- function(pt_est, trt_spec_marg_cdf_eif,
 	}
 	K <- length(pt_est)
 	gradient <- diag(1 / (pt_est - pt_est^2))
-	cor_mat <- cor(trt_spec_marg_cdf_eif %*% gradient)
+	cor_mat <- cor(trt_spec_marg_dist_eif %*% gradient)
 	# put on logistic scale
-	cov_est_logistic <- cov(trt_spec_marg_cdf_eif %*% gradient) / length(trt_spec_marg_cdf_eif[,1])
+	cov_est_logistic <- cov(trt_spec_marg_dist_eif %*% gradient) / length(trt_spec_marg_dist_eif[,1])
 	# Sigma <- n * cov_est_logistic
 	normal_samples <- MASS::mvrnorm(n = 1e5, mu = rep(0, K),
 	                                Sigma = cor_mat)
@@ -211,30 +340,46 @@ compute_trt_spec_marg_cdf_simul_ci <- function(pt_est, trt_spec_marg_cdf_eif,
 	return(plogis(qlogis(pt_est) + t(c(-q_1alpha, q_1alpha) %o% sqrt(diag(cov_est_logistic)))))
 }
 
+#' Evaluate pointwise confidence interval for marginal CDF. 
+#' @param marg_cdf_est The point estimate of the marginal CDF distribution
+#' @param marg_cdf_eif The EIF estimates for the marginal CDF estimates
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @return List by treatment of simultaneous confidence intervals
 evaluate_marg_cdf_ptwise_ci <- function(marg_cdf_est, marg_cdf_eif, alpha){
 	marg_cdf_cov <- lapply(marg_cdf_eif, function(x){
 		cov(x) / length(x[,1])
 	})
 	# do on logistic scale
 	ptwise_ci <- mapply(pt_est = marg_cdf_est, cov_est = marg_cdf_cov, 
-	       				FUN = compute_trt_spec_marg_cdf_ptwise_ci, 
+	       				FUN = compute_trt_spec_marg_dist_ptwise_ci, 
 	       				MoreArgs = list(alpha = alpha, cdf = TRUE), SIMPLIFY = FALSE)
     return(ptwise_ci)
 }
 
+#' Evaluate pointwise confidence interval for marginal PMF. 
+#' @param marg_pmf_est The point estimate of the marginal PMF distribution
+#' @param marg_pmf_eif The EIF estimates for the marginal PMF estimates
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @return List by treatment of simultaneous confidence intervals
 evaluate_marg_pmf_ptwise_ci <- function(marg_pmf_est, marg_pmf_eif, alpha){
 	marg_pmf_cov <- lapply(marg_pmf_eif, function(x){
 		cov(x) / length(x[,1])
 	})
 	# do on logistic scale
 	ptwise_ci <- mapply(pt_est = marg_pmf_est, cov_est = marg_pmf_cov, 
-	       				FUN = compute_trt_spec_marg_cdf_ptwise_ci, 
+	       				FUN = compute_trt_spec_marg_dist_ptwise_ci, 
 	       				MoreArgs = list(alpha = alpha, cdf = FALSE), SIMPLIFY = FALSE)
     return(ptwise_ci)
 }
 
-#' this function could be renamed as it's used for both CDF and PMF
-compute_trt_spec_marg_cdf_ptwise_ci <- function(pt_est, cov_est, alpha, cdf = TRUE){
+#' Compute simultaneous confidence interval for treatment-specific marginal distribution 
+#' @param pt_est The point estimate of the treatment-specific marginal CDF/PMF
+#' @param cov_est Covariance matrix estimates.
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @param cdf Is this for CDF or PMF?
+#' @return Confidence interval 
+
+compute_trt_spec_marg_dist_ptwise_ci <- function(pt_est, cov_est, alpha, cdf = TRUE){
 	 K <- length(pt_est)
 	 # remove largest value
 	 if(cdf){
@@ -250,18 +395,36 @@ compute_trt_spec_marg_cdf_ptwise_ci <- function(pt_est, cov_est, alpha, cdf = TR
 	 return(plogis(qlogis(pt_est) + t(qnorm(c(alpha/2, 1 - alpha/2)) %o% sqrt(diag(cov_est_logistic)))))
 }
 
+#' Get eif estimates for treatment-specific PMF
+#' 
+#' @param pmf_est Estimated conditional PMF for \code{trt_level}. 
+#' @param trt_prob_est Estimated propensity for \code{trt_level}.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @return a list of eif estimates
 evaluate_marg_pmf_eif <- function(pmf_est, treat_prob_est, treat, out, out_levels){
 	eif_matrix_list <- mapply(trt_spec_pmf_est = pmf_est, 
 	       trt_spec_prob_est = treat_prob_est, trt_level = list(1,0), 
 	       FUN = evaluate_trt_spec_pmf_eif,
 	       MoreArgs = list(treat = treat, out = out, out_levels = out_levels),
 	       SIMPLIFY = FALSE)
-	# cov_matrix <- lapply(eif_matrix_list, function(x){
-	# 	cov(x) / length(out)
-	# })
+
 	return(eif_matrix_list)
 }
 
+#' Get eif estimates for treatment-specific CDF
+#' 
+#' @param cdf_est Estimated conditional CDF for \code{trt_level}. 
+#' @param trt_prob_est Estimated propensity for \code{trt_level}.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @return a list of eif estimates
 
 evaluate_marg_cdf_eif <- function(cdf_est, treat_prob_est, treat, out, out_levels){
 	eif_matrix_list <- mapply(trt_spec_cdf_est = cdf_est, 
@@ -269,11 +432,14 @@ evaluate_marg_cdf_eif <- function(cdf_est, treat_prob_est, treat, out, out_level
 	       FUN = evaluate_trt_spec_theta_eif,
 	       MoreArgs = list(treat = treat, out = out, out_levels = out_levels),
 	       SIMPLIFY = FALSE)
-	# cov_matrix <- lapply(eif_matrix_list, function(x){
-	# 	cov(x) / length(out)
-	# })
+
 	return(eif_matrix_list)
 }
+
+#' Marginalize over empirical distribution to obtain marginal
+#' treatment-specific PMF estimate.
+#' 
+#' @param pmf_est Estimates of treatment-specific conditional PMF. 
 
 marginalize_pmf <- function(pmf_est){
 	lapply(pmf_est, colMeans)

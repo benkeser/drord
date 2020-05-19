@@ -2,10 +2,27 @@
 % Please edit documentation in R/logodds_fn.R
 \name{evaluate_theta_cov}
 \alias{evaluate_theta_cov}
-\title{get a covariance matrix for theta}
+\title{get a covariance matrix for the estimated CDF}
 \usage{
 evaluate_theta_cov(cdf_est, treat_prob_est, treat, out, out_levels)
 }
+\arguments{
+\item{cdf_est}{The estimates of the treatment-specific CDFs}
+
+\item{treat_prob_est}{List of estimated probability of treatments, output from call
+to \code{estimate_treat_prob}.}
+
+\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
+a value 0 or 1.}
+
+\item{out}{A \code{numeric} vector containing the outcomes.}
+
+\item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
+outcome.}
+}
+\value{
+Estimated covariance matrix for CDF estimates
+}
 \description{
-get a covariance matrix for theta
+get a covariance matrix for the estimated CDF
 }

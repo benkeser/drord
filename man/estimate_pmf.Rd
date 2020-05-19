@@ -3,12 +3,46 @@
 \name{estimate_pmf}
 \alias{estimate_pmf}
 \title{Get a treatment-specific estimate of the conditional PMF. 
-Essentially this is a wrapper function for \code{fit_trt_spec_reg}.}
+Essentially this is a wrapper function for \code{fit_trt_spec_reg}, which
+fits the proportion odds model in a given treatment arm.}
 \usage{
 estimate_pmf(out, treat, covar, out_levels, out_form = NULL, out_model,
   treat_prob_est, stratify = FALSE, return_models = TRUE, ...)
 }
+\arguments{
+\item{out}{A \code{numeric} vector containing the outcomes.}
+
+\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
+a value 0 or 1.}
+
+\item{covar}{A \code{data.frame} containing the covariates to include in the working
+proportional odds model.}
+
+\item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
+outcome.}
+
+\item{out_form}{The right-hand side of a regression formula for the working proportional 
+odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT.}
+
+\item{out_model}{Which R function should be used to fit the proportional odds 
+model. Options are \code{"polr"} (from the \code{MASS} package), 
+"vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
+
+\item{treat_prob_est}{Estimated probability of treatments, output from call
+to \code{estimate_treat_prob}.}
+
+\item{return_models}{If \code{TRUE} the fitted working proportional odds models
+and treatment probability models are returned.}
+
+\item{...}{Other options (not used).}
+}
+\value{
+A list with \code{fm} the fitted model for treatment 1 and 0 (or, if 
+\code{!return_models} then \code{NULL}) and \code{pmf} the estimated PMF 
+under treatment 1 and 0 evaluated on each observation.
+}
 \description{
 Get a treatment-specific estimate of the conditional PMF. 
-Essentially this is a wrapper function for \code{fit_trt_spec_reg}.
+Essentially this is a wrapper function for \code{fit_trt_spec_reg}, which
+fits the proportion odds model in a given treatment arm.
 }

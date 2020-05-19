@@ -6,6 +6,12 @@
 \usage{
 estimate_cdf(pmf_est)
 }
+\arguments{
+\item{pmf_est}{A list of the treatment-specific PMF estimates}
+}
+\value{
+A list of treatment-specific CDF estimates
+}
 \description{
 Map an estimate of the conditional PMF into an estimate of the conditional CDF
 }

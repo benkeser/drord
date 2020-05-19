@@ -1,4 +1,19 @@
-
+#' Compute the estimate of the weighted mean parameter based on 
+#' estimated PMF in each treatment arm.  
+#' 
+#' @param pmf_est List of treatment-specific PMF estimates.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param treat_prob_est Estimated probability of treatments, output from call
+#' to \code{estimate_treat_prob}.
+#' @param return_cov If \code{TRUE} the estimated covariance matrix is returned.
+#' @return List with estimates of treatment-specific means and difference in means. 
+#' If \code{return_cov = TRUE}, also includes covariance matrix estimates. 
 estimate_wmean <- function(pmf_est, treat, out, out_levels, out_weights,
                            treat_prob_est, return_cov = TRUE){
 	# align ordering 
@@ -30,6 +45,12 @@ estimate_wmean <- function(pmf_est, treat, out, out_levels, out_weights,
 	return(rslt)
 }
 
+#' Map an estimate of treatment-specific PMF into an estimate of 
+#' treatment specific conditional mean for each observation.
+#' @param trt_spec_pmf_est The treatment-specific PMF estimates 
+#' @param ordered_out_levels Self explanatory
+#' @param ordered_out_weights Self explanatory
+#' @return Vector of estimated conditional means
 estimate_cond_mean <- function(trt_spec_pmf_est, ordered_out_levels, ordered_out_weights){
 	rslt <- apply(trt_spec_pmf_est, 1, function(pmf){
 		sum(ordered_out_levels * ordered_out_weights * pmf) / sum(ordered_out_weights * pmf)
@@ -37,6 +58,14 @@ estimate_cond_mean <- function(trt_spec_pmf_est, ordered_out_levels, ordered_out
 	return(rslt)
 }
 
+#' Obtain an estimate of the efficient influence function for the 
+#' treatment-specific weighted mean parameter
+#' @param trt_spec_cond_mean_est Conditional mean for \code{trt_level}
+#' @param trt_spec_prob_est Propensity for \code{trt_level}
+#' @param trt_level Treatment level 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
 estimate_eif_wmean <- function(trt_spec_cond_mean_est,
                               trt_spec_prob_est, 
                               trt_level,
@@ -46,6 +75,32 @@ estimate_eif_wmean <- function(trt_spec_cond_mean_est,
 	return(eif)
 }
 
+#' Compute confidence interval/s for the weight mean parameters
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param wmean_est The point estimates for weighted means
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param ci A vector of \code{characters} indicating which confidence intervals
+#' should be computed (\code{"bca"} and/or \code{"wald"}) 
+#' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
+#' intervals. 
+#' @return List with \code{wald} and \code{bca}-estimated confidence intervals 
+#' for the weighted mean parameters. 
 estimate_ci_wmean <- function(
   out,
   treat,
@@ -79,6 +134,10 @@ estimate_ci_wmean <- function(
 	return(list(wald = wald_ci, bca = bca_ci))
 }
 
+#' Compute a Wald confidence interval for the weighted mean
+#' @param wmean_est The estimated weighted means + estimated covariance matrix. 
+#' @param alpha Level of confidence interval.
+#' @return matrix with treatment-specific weighted mean CIs and CI for difference.
 wald_ci_wmean <- function(wmean_est, alpha){
 	# treatment 1 ci
 	wald_ci_1 <- wmean_est$est[1] + qnorm(c(alpha/2, 1 - alpha/2)) * sqrt(wmean_est$cov[1,1])
@@ -91,7 +150,30 @@ wald_ci_wmean <- function(wmean_est, alpha){
 	return(rbind(wald_ci_1,wald_ci_0,wald_ci_diff))
 }
 
-#' following slides here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
+#' Compute a BCa bootstrap confidence interval for the weighted mean. The code is 
+#' based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
+#' intervals. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param wmean_est The estimated weighted means + estimated covariance matrix. 
+#' @param alpha Level of confidence interval.
+#' @return matrix with treatment-specific weighted mean CIs and CI for difference.
 bca_wmean <- function(treat, covar, out, nboot, 
                       treat_form, out_levels, out_form, out_weights,
                       out_model, 
@@ -142,6 +224,25 @@ bca_wmean <- function(treat, covar, out, nboot,
 	return(rbind(bca_ci_trt1, bca_ci_trt0, bca_ci_diff))
 }
 
+#' Compute jackknife weighted mean estimates.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @return Jackknife-estimated weighted mean
+
 jack_wmean <- function(treat, covar, out, treat_form, out_levels, 
                        out_form, out_weights, out_model){
   	wmean_jack_est <- sapply(seq_along(out), function(i){
@@ -158,6 +259,25 @@ jack_wmean <- function(treat, covar, out, treat_form, out_levels,
   	return(wmean_jack_est)
 }
 
+#' Get one bootstrap computation of the weighted mean parameters. 
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @return Estimates of weighted mean for a particular bootstrap sample. 
 one_boot_wmean <- function(treat, covar, out, treat_form, out_levels, 
                            out_form, out_weights, out_model){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
@@ -173,6 +293,25 @@ one_boot_wmean <- function(treat, covar, out, treat_form, out_levels,
 	})
 	return(wmean_boot_est)
 }
+
+#' Compute one weighted mean based on a given data set. 
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
 get_one_wmean <- function(treat, covar, treat_form,
                           out, out_levels, out_form,
                           out_model,

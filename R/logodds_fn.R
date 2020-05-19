@@ -1,4 +1,32 @@
-
+#' Compute confidence interval/s for the log-odds parameters
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param logodds_est The point estimates for log-odds.
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param ci A vector of \code{characters} indicating which confidence intervals
+#' should be computed (\code{"bca"} and/or \code{"wald"}) 
+#' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
+#' intervals.
+#' @param treat_prob_est Estimated probability of treatments, output from call
+#' to \code{estimate_treat_prob}. 
+#' @return List with \code{wald} and \code{bca}-estimated confidence intervals 
+#' for the weighted mean parameters. 
+#' 
 estimate_ci_logodds <- function(logodds_est, cdf_est, out_form, covar, 
                                 treat_prob_est, treat, treat_form, out, ci, 
                                 alpha = 0.05, nboot, out_levels, out_model, ...){
@@ -38,6 +66,31 @@ estimate_ci_logodds <- function(logodds_est, cdf_est, out_form, covar,
 	return(list(wald = wald_ci, bca = bca_ci))
 }
 
+
+#' Compute a BCa bootstrap confidence interval for the weighted mean. The code is 
+#' based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
+#' intervals. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param logodds_est The estimated log-odds. 
+#' @param alpha Level of confidence interval.
+#' @return matrix with treatment-specific log-odds CIs and CI for difference.
 bca_logodds <- function(treat, covar, out, nboot, 
                       treat_form, out_levels, out_form, out_model,
                       logodds_est, alpha = 0.05){
@@ -93,6 +146,22 @@ bca_logodds <- function(treat, covar, out, nboot,
 	return(rbind(bca_ci_trt1, bca_ci_trt0, bca_ci_diff))
 }
 
+#' Compute jackknife log-odds estimates.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @return Jackknife estimated log-odds
 jack_logodds <- function(treat, covar, out, treat_form, out_model, out_levels, out_form){
   	logodds_jack_est <- sapply(seq_along(out), function(i){
 		logodds_minusi <- get_one_logodds(treat = treat[-i],
@@ -107,6 +176,23 @@ jack_logodds <- function(treat, covar, out, treat_form, out_model, out_levels, o
   	return(logodds_jack_est)
 }
 
+#' Get one bootstrap computation of the log odds parameters. 
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @return Estimates of log odds for a particular bootstrap sample. 
 one_boot_logodds <- function(treat, covar, out, treat_form, 
                              out_levels, out_form, out_model){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
@@ -122,6 +208,23 @@ one_boot_logodds <- function(treat, covar, out, treat_form,
 	return(logodds_boot_est)
 }
 
+#' Compute one log odds based on a given data set. 
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param return Estimated log odds for these input data. 
 get_one_logodds <- function(treat, covar, treat_form, out_model,
                             out, out_levels, out_form){
 
@@ -149,6 +252,8 @@ get_one_logodds <- function(treat, covar, treat_form, out_model,
 }
 
 #' implements a plug-in estimator of equation (2) in Diaz et al
+#' @param cdf_est A list of treatment-specific CDF estimates
+#' @return Log odds of treatment = 1, = 0, and the difference.  
 estimate_logodds <- function(cdf_est){
 	# get marginal CDF
 	theta_1 <- colMeans(cdf_est[[1]])
@@ -162,6 +267,10 @@ estimate_logodds <- function(cdf_est){
 	return(c(beta_1, beta_0, beta_est))
 }
 
+#' Get the covariance matrix for beta
+#' @param cdf_est Estimated CDFs
+#' @param theta_cov Covariance matrix for CDF estimates
+#' @return Estimated covariance matrix for log-odds ratio parameters 
 evaluate_beta_cov <- function(cdf_est, theta_cov){
 	# get marginal CDF
 	theta_1 <- colMeans(cdf_est[[1]])
@@ -188,7 +297,16 @@ evaluate_beta_cov <- function(cdf_est, theta_cov){
 	return(c(theta_1_avg_cov_est, theta_0_avg_cov_est, beta_cov_est))
 }
 
-#' get a covariance matrix for theta
+#' get a covariance matrix for the estimated CDF
+#' @param cdf_est The estimates of the treatment-specific CDFs
+#' @param treat_prob_est List of estimated probability of treatments, output from call
+#' to \code{estimate_treat_prob}.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @return Estimated covariance matrix for CDF estimates
 evaluate_theta_cov <- function(cdf_est, treat_prob_est, treat, out, out_levels){
 	eif_matrix_list <- mapply(trt_spec_cdf_est = cdf_est, 
 	       trt_spec_prob_est = treat_prob_est, trt_level = list(1,0), 
@@ -200,7 +318,16 @@ evaluate_theta_cov <- function(cdf_est, treat_prob_est, treat, out, out_levels){
 	return(cov_matrix)
 }
 
-#' get a matrix of eif estimates for theta
+#' get a matrix of eif estimates for the treatment-specific CDF estimates
+#' @param trt_spec_cdf_est Estimated conditional CDF for \code{trt_level}. 
+#' @param trt_spec_prob_est Estimated propensity for \code{trt_level}.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param trt_level Treatment level 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @return matrix of EIF estimates for CDF. 
 evaluate_trt_spec_theta_eif <- function(trt_spec_cdf_est, 
                                trt_spec_prob_est, 
                                trt_level,
@@ -216,7 +343,17 @@ evaluate_trt_spec_theta_eif <- function(trt_spec_cdf_est,
 	return(eif_matrix)
 }
 
-#' get a matrix of eif estimates for theta
+#' Get a matrix of eif estimates for treatment-specific PMF
+#' 
+#' @param trt_spec_pmf_est Estimated conditional PMF for \code{trt_level}. 
+#' @param trt_spec_prob_est Estimated propensity for \code{trt_level}.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param trt_level Treatment level 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @return a matrix of EIF estimates
 evaluate_trt_spec_pmf_eif <- function(trt_spec_pmf_est, 
                                trt_spec_prob_est, 
                                trt_level,
@@ -232,6 +369,17 @@ evaluate_trt_spec_pmf_eif <- function(trt_spec_pmf_est,
 	return(eif_matrix)
 }
 
+#' Get EIF estimates for treatment-specific PMF at a particular
+#' level of the outcome
+#' 
+#' @param k The level of the outcome.
+#' @param trt_k_spec_pmf_est Estimated conditional PMF for \code{trt_level} at \code{k}. 
+#' @param trt_spec_prob_est Estimated propensity for \code{trt_level}.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param trt_level Treatment level 
+
 eif_pmf_k <- function(k, out, treat, trt_level, trt_spec_prob_est,
                         trt_k_spec_pmf_est){
 	eif <- as.numeric(treat == trt_level) / trt_spec_prob_est * 
@@ -241,7 +389,17 @@ eif_pmf_k <- function(k, out, treat, trt_level, trt_spec_prob_est,
 }
 
 
-#' get influence function for \theta_k
+#' Get EIF estimates for treatment-specific CDF at a particular
+#' level of the outcome
+#' 
+#' @param k The level of the outcome.
+#' @param trt_k_spec_cdf_est Estimated conditional CDF for \code{trt_level} at \code{k}. 
+#' @param trt_spec_prob_est Estimated propensity for \code{trt_level}.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param trt_level Treatment level 
+
 eif_theta_k <- function(k, out, treat, trt_level, trt_spec_prob_est,
                         trt_k_spec_cdf_est){
 	eif <- as.numeric(treat == trt_level) / trt_spec_prob_est * 

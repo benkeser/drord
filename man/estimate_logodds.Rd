@@ -6,6 +6,12 @@
 \usage{
 estimate_logodds(cdf_est)
 }
+\arguments{
+\item{cdf_est}{A list of treatment-specific CDF estimates}
+}
+\value{
+Log odds of treatment = 1, = 0, and the difference.
+}
 \description{
 implements a plug-in estimator of equation (2) in Diaz et al
 }

@@ -1,4 +1,34 @@
-
+#' Compute confidence interval/s for the Mann-Whitney parameter
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param mannwhitney_est The point estimates for log-odds.
+#' @param pmf_est The estimated conditional PMF.
+#' @param cdf_est The estimated conditional CDF.
+#' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param ci A vector of \code{characters} indicating which confidence intervals
+#' should be computed (\code{"bca"} and/or \code{"wald"}) 
+#' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
+#' intervals.
+#' @param treat_prob_est Estimated probability of treatments, output from call
+#' to \code{estimate_treat_prob}. 
+#' @return List with \code{wald} and \code{bca}-estimated confidence intervals 
+#' for the Mann-Whitney parameter. 
+#' 
 estimate_ci_mannwhitney <- function(
     mannwhitney_est, cdf_est, pmf_est, treat_prob_est, treat_form, out_form,
     treat, ci, out, alpha, nboot, out_levels, covar, out_model
@@ -44,6 +74,30 @@ estimate_ci_mannwhitney <- function(
 	return(list(wald = wald_ci, bca = bca_ci))
 }
 
+#' Compute a BCa bootstrap confidence interval for the Mann-Whitney parameter. The code is 
+#' based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
+#' intervals. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
+#' of \code{out_levels}. 
+#' @param mannwhitney_est The point estimate of the Mann-Whitney parameter. 
+#' @param alpha Level of confidence interval.
+#' @return Confidence interval for the Mann-Whitney parameter
 bca_mannwhitney <- function(treat, covar, out, nboot, 
                       treat_form, out_levels, out_form,
                       mannwhitney_est, 
@@ -65,7 +119,6 @@ bca_mannwhitney <- function(treat, covar, out, nboot,
 	                           out_form = out_form,
 	                           out_model = out_model)
 
-	# CI for 1 
 	bca_ci_mannwhitney <- bca_interval(pt_est = mannwhitney_est,
 	                            boot_samples = boot_samples,
 	                            jack_samples = jack_samples,
@@ -73,6 +126,24 @@ bca_mannwhitney <- function(treat, covar, out, nboot,
 
 	return(rbind(bca_ci_mannwhitney))
 }
+
+
+#' Compute Mann-Whitney log-odds estimates.
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @return Jackknife estimate of Mann-Whitney parameter
 
 jack_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form,
                              out_model){
@@ -89,6 +160,23 @@ jack_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form
   	return(mannwhitney_jack_est)
 }
 
+#' Get one bootstrap computation of the Mann-Whitney parameter. 
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @return Estimates of Mann-Whitney parameter for a particular bootstrap sample. 
 one_boot_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form,
                                  out_model){
 	boot_idx <- sample(seq_along(out), replace = TRUE)
@@ -103,6 +191,24 @@ one_boot_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_
 	})
 	return(mannwhitney_boot_est)
 }
+
+#' Compute one estimate of Mann-Whitney parameter based on a given data set. 
+#' 
+#' @param out A \code{numeric} vector containing the outcomes.
+#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
+#' a value 0 or 1. 
+#' @param covar A \code{data.frame} containing the covariates to include in the working
+#' proportional odds model. 
+#' @param treat_form The right-hand side of a regression formula for the working model of
+#' treatment probability as a function of covariates
+#' @param out_levels A \code{numeric} vector containing all ordered levels of the 
+#' outcome. 
+#' @param out_form The right-hand side of a regression formula for the working proportional 
+#' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
+#' @param out_model Which R function should be used to fit the proportional odds 
+#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
+#' @param return Estimate of Mann-Whitney parameter for these input data. 
 
 get_one_mannwhitney <- function(treat, covar, treat_form,
                             	out, out_levels, out_form,
@@ -129,6 +235,11 @@ get_one_mannwhitney <- function(treat, covar, treat_form,
   	return(mannwhitney_est)
 }
 
+#' Compute the estimated gradient of the Mann-Whitney parameter. Needed to derive 
+#' standard error for Wald confidence intervals.
+#' @param cdf_est Conditional CDF estimates
+#' @param pmf_est Conditional PMF estimates
+#' @return 3-length vector for delta method calculus
 evaluate_mannwhitney_gradient <- function(cdf_est, pmf_est){
 	K <- ncol(cdf_est[[1]])
 
@@ -151,6 +262,10 @@ evaluate_mannwhitney_gradient <- function(cdf_est, pmf_est){
     return(gradient)
 }
 
+#' Compute the estimate of Mann-Whitney based on conditional CDF and PMF
+#' @param cdf_est Conditional CDF estimates
+#' @param pmf_est Conditional PMF estimates
+#' @return Mann-Whitney point estimate
 estimate_mannwhitney <- function(cdf_est, pmf_est){
 	K <- ncol(cdf_est[[1]])
 
