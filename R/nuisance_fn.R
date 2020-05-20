@@ -58,7 +58,7 @@ estimate_treat_prob <- function(treat, covar, treat_form, return_models){
 #' under treatment 1 and 0 evaluated on each observation. 
 #' @importFrom MASS mvrnorm
 #' @importFrom VGAM propodds
-#' @importFrom stats predict
+#' @importFrom stats predict qlogis
 estimate_pmf <- function(
   out,
   treat,
