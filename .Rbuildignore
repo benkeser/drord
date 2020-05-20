@@ -7,7 +7,7 @@
 ^sandbox$
 ^README\.md$
 ^README\.html$
-^\Makefile$
+^Makefile$
 ^CONTRIBUTING\.md$
 ^cran-comments\.md$
 ^\.git$
