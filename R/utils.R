@@ -71,7 +71,6 @@ print.drord <- function(x, ci = "bca", digits = 3, ...) {
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_bar scale_y_continuous geom_errorbar 
 #' @importFrom ggplot2 theme_bw ggtitle position_dodge
-#' @importFrom ggsci scale_color_nejm
 #' @method plot drord
 plot.drord <- function(x, 
                        treat_labels = c(1, 0),                        
