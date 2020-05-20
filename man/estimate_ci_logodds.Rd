@@ -11,6 +11,8 @@ estimate_ci_logodds(logodds_est, cdf_est, out_form, covar, treat_prob_est,
 \arguments{
 \item{logodds_est}{The point estimates for log-odds.}
 
+\item{cdf_est}{A list of treatment-specific CDF estimates.}
+
 \item{out_form}{The right-hand side of a regression formula for the working proportional 
 odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT.}
 
@@ -43,8 +45,7 @@ outcome.}
 model. Options are \code{"polr"} (from the \code{MASS} package), 
 "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
 
-\item{out_weights}{A vector of \code{numeric} weights with length equal to the length 
-of \code{out_levels}.}
+\item{...}{Other options (not currently used).}
 }
 \value{
 List with \code{wald} and \code{bca}-estimated confidence intervals 

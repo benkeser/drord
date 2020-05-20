@@ -14,8 +14,6 @@
 #' @param out_model Which R function should be used to fit the proportional odds 
 #' model. Options are \code{"polr"} (from the \code{MASS} package), 
 #' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
-#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
-#' of \code{out_levels}. 
 #' @param treat_form The right-hand side of a regression formula for the working model of
 #' treatment probability as a function of covariates
 #' @param ci A vector of \code{characters} indicating which confidence intervals
@@ -24,6 +22,8 @@
 #' intervals.
 #' @param treat_prob_est Estimated probability of treatments, output from call
 #' to \code{estimate_treat_prob}. 
+#' @param cdf_est A list of treatment-specific CDF estimates.
+#' @param ... Other options (not currently used). 
 #' @return List with \code{wald} and \code{bca}-estimated confidence intervals 
 #' for the weighted mean parameters. 
 #' 
@@ -86,8 +86,6 @@ estimate_ci_logodds <- function(logodds_est, cdf_est, out_form, covar,
 #' @param out_model Which R function should be used to fit the proportional odds 
 #' model. Options are \code{"polr"} (from the \code{MASS} package), 
 #' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
-#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
-#' of \code{out_levels}. 
 #' @param logodds_est The estimated log-odds. 
 #' @param alpha Level of confidence interval.
 #' @return matrix with treatment-specific log-odds CIs and CI for difference.
@@ -224,7 +222,7 @@ one_boot_logodds <- function(treat, covar, out, treat_form,
 #' @param out_model Which R function should be used to fit the proportional odds 
 #' model. Options are \code{"polr"} (from the \code{MASS} package), 
 #' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
-#' @param return Estimated log odds for these input data. 
+#' @return Estimated log odds for these input data. 
 get_one_logodds <- function(treat, covar, treat_form, out_model,
                             out, out_levels, out_form){
 

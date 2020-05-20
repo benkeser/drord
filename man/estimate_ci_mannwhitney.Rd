@@ -46,9 +46,6 @@ proportional odds model.}
 \item{out_model}{Which R function should be used to fit the proportional odds 
 model. Options are \code{"polr"} (from the \code{MASS} package), 
 "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
-
-\item{out_weights}{A vector of \code{numeric} weights with length equal to the length 
-of \code{out_levels}.}
 }
 \value{
 List with \code{wald} and \code{bca}-estimated confidence intervals 

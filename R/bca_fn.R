@@ -34,6 +34,7 @@ bca_interval <- function(pt_est, boot_samples,
 #' @param jack_samples A vector of jackknife estimates of the 
 #' parameter of interest. 
 #' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
+#' @importFrom stats cor
 #' @return List of pointwise and simultaneous confidence intervals for \code{dist}.
 compute_trt_spec_bca_intervals <- function(dist = c("cdf","pmf"),
                                            trt = c(1,0),
@@ -52,21 +53,21 @@ compute_trt_spec_bca_intervals <- function(dist = c("cdf","pmf"),
 	n_est <- ifelse(dist == "cdf", K-1, K)
 	bca_ptwise_ci <- matrix(NA, ncol = 2, nrow = n_est)
 	for(k in 1:n_est){
-		bca_ptwise_ci[k,] <- plogis(bca_interval(pt_est = qlogis(marg_est[[idx]][k]),
-	                            boot_samples = qlogis(boot_mat[,k]),
-	                            jack_samples = qlogis(jack_mat[,k]),
+		bca_ptwise_ci[k,] <- stats::plogis(bca_interval(pt_est = stats::qlogis(marg_est[[idx]][k]),
+	                            boot_samples = stats::qlogis(boot_mat[,k]),
+	                            jack_samples = stats::qlogis(jack_mat[,k]),
 	                            alpha = alpha))
 	}
 	# for simultaneous
-	cor_mat <- cor(scale(trimmed_logit(boot_mat[1:n_est, 1:n_est])))
+	cor_mat <- stats::cor(scale(trimmed_logit(boot_mat[1:n_est, 1:n_est])))
 	normal_samples <- MASS::mvrnorm(n = 1e5, mu = rep(0, n_est),
 	                                Sigma = cor_mat)
 	max_samples <- apply(abs(normal_samples), 1, max)
-	q_1alpha <- quantile(max_samples, p = 1 - alpha)
+	q_1alpha <- stats::quantile(max_samples, p = 1 - alpha)
 	scale_factor <- q_1alpha / qnorm(1 - alpha/2)
 	bca_simul_ci <- cbind(
-        plogis(trimmed_logit(marg_est[[idx]][1:n_est]) - (trimmed_logit(marg_est[[idx]][1:n_est]) - trimmed_logit(bca_ptwise_ci[,1]))*scale_factor),
-        plogis(trimmed_logit(marg_est[[idx]][1:n_est]) + (trimmed_logit(bca_ptwise_ci[,2]) - trimmed_logit(marg_est[[idx]][1:n_est]))*scale_factor)
+        stats::plogis(trimmed_logit(marg_est[[idx]][1:n_est]) - (trimmed_logit(marg_est[[idx]][1:n_est]) - trimmed_logit(bca_ptwise_ci[,1]))*scale_factor),
+        stats::plogis(trimmed_logit(marg_est[[idx]][1:n_est]) + (trimmed_logit(bca_ptwise_ci[,2]) - trimmed_logit(marg_est[[idx]][1:n_est]))*scale_factor)
     )
     return(list(ptwise = bca_ptwise_ci,
                 simul = bca_simul_ci))
@@ -87,5 +88,5 @@ trimmed_logit <- function(x){
 			y
 		})
 	}
-	return(qlogis(rslt))
+	return(stats::qlogis(rslt))
 }

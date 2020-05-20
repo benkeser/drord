@@ -18,8 +18,6 @@
 #' @param out_model Which R function should be used to fit the proportional odds 
 #' model. Options are \code{"polr"} (from the \code{MASS} package), 
 #' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
-#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
-#' of \code{out_levels}. 
 #' @param treat_form The right-hand side of a regression formula for the working model of
 #' treatment probability as a function of covariates
 #' @param ci A vector of \code{characters} indicating which confidence intervals
@@ -133,8 +131,6 @@ marginalize_cdf <- function(cdf_est){
 #' @param out_model Which R function should be used to fit the proportional odds 
 #' model. Options are \code{"polr"} (from the \code{MASS} package), 
 #' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
-#' @param out_weights A vector of \code{numeric} weights with length equal to the length 
-#' of \code{out_levels}. 
 #' @param marg_cdf_est Point estimate of treatment-specific CDF.
 #' @param marg_pmf_est Point estimate of treatment-specific PMF.
 #' @param alpha Level of confidence interval.
@@ -271,7 +267,7 @@ one_boot_marg_dist <- function(treat, covar, out, treat_form,
 #' @param out_model Which R function should be used to fit the proportional odds 
 #' model. Options are \code{"polr"} (from the \code{MASS} package), 
 #' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
-#' @param return List of estimated cdf/pmf for these input data. 
+#' @return List of estimated cdf/pmf for these input data. 
 get_one_marg_dist <- function(treat, covar, treat_form, out_model,
                              out, out_levels, out_form){
 	# obtain estimate of treatment probabilities
@@ -320,6 +316,7 @@ evaluate_marg_dist_simul_ci <- function(marg_dist_est, marg_dist_eif, alpha,
 #' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
 #' @param remove_last Should the last level be removed? Should be set equal to 
 #' \code{TRUE} for CDF computations and \code{FALSE} for PMF computations.
+#' @importFrom stats cov quantile
 #' @return Confidence interval 
 compute_trt_spec_marg_dist_simul_ci <- function(pt_est, trt_spec_marg_dist_eif,
                                                remove_last = TRUE, alpha){
@@ -329,15 +326,15 @@ compute_trt_spec_marg_dist_simul_ci <- function(pt_est, trt_spec_marg_dist_eif,
 	}
 	K <- length(pt_est)
 	gradient <- diag(1 / (pt_est - pt_est^2))
-	cor_mat <- cor(trt_spec_marg_dist_eif %*% gradient)
+	cor_mat <- stats::cor(trt_spec_marg_dist_eif %*% gradient)
 	# put on logistic scale
-	cov_est_logistic <- cov(trt_spec_marg_dist_eif %*% gradient) / length(trt_spec_marg_dist_eif[,1])
+	cov_est_logistic <- stats::cov(trt_spec_marg_dist_eif %*% gradient) / length(trt_spec_marg_dist_eif[,1])
 	# Sigma <- n * cov_est_logistic
 	normal_samples <- MASS::mvrnorm(n = 1e5, mu = rep(0, K),
 	                                Sigma = cor_mat)
 	max_samples <- apply(abs(normal_samples), 1, max)
-	q_1alpha <- quantile(max_samples, p = 1 - alpha)
-	return(plogis(qlogis(pt_est) + t(c(-q_1alpha, q_1alpha) %o% sqrt(diag(cov_est_logistic)))))
+	q_1alpha <- stats::quantile(max_samples, p = 1 - alpha)
+	return(stats::plogis(stats::qlogis(pt_est) + t(c(-q_1alpha, q_1alpha) %o% sqrt(diag(cov_est_logistic)))))
 }
 
 #' Evaluate pointwise confidence interval for marginal CDF. 
@@ -392,13 +389,13 @@ compute_trt_spec_marg_dist_ptwise_ci <- function(pt_est, cov_est, alpha, cdf = T
 	 # put on logistic scale
 	 gradient <- diag(1 / (pt_est - pt_est^2))
 	 cov_est_logistic <- t(gradient) %*% cov_est %*% gradient
-	 return(plogis(qlogis(pt_est) + t(qnorm(c(alpha/2, 1 - alpha/2)) %o% sqrt(diag(cov_est_logistic)))))
+	 return(stats::plogis(stats::qlogis(pt_est) + t(qnorm(c(alpha/2, 1 - alpha/2)) %o% sqrt(diag(cov_est_logistic)))))
 }
 
 #' Get eif estimates for treatment-specific PMF
 #' 
 #' @param pmf_est Estimated conditional PMF for \code{trt_level}. 
-#' @param trt_prob_est Estimated propensity for \code{trt_level}.
+#' @param treat_prob_est Estimated propensity for \code{trt_level}.
 #' @param out A \code{numeric} vector containing the outcomes.
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
@@ -418,7 +415,7 @@ evaluate_marg_pmf_eif <- function(pmf_est, treat_prob_est, treat, out, out_level
 #' Get eif estimates for treatment-specific CDF
 #' 
 #' @param cdf_est Estimated conditional CDF for \code{trt_level}. 
-#' @param trt_prob_est Estimated propensity for \code{trt_level}.
+#' @param treat_prob_est Estimated propensity for \code{trt_level}.
 #' @param out A \code{numeric} vector containing the outcomes.
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 

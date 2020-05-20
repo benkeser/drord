@@ -28,8 +28,9 @@ outcome.}
 
 \item{out_form}{The right-hand side of a regression formula for the working proportional 
 odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT.}
-
-\item{return}{List of estimated cdf/pmf for these input data.}
+}
+\value{
+List of estimated cdf/pmf for these input data.
 }
 \description{
 Compute one estimate of the marginal CDF/PMF on a given data set.

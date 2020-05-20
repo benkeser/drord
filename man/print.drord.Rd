@@ -4,7 +4,7 @@
 \alias{print.drord}
 \title{Print the output of a \code{"drord"} object.}
 \usage{
-\method{print}{drord}(x, ci = "bca", digits = 3, ...)
+\method{print}{drord}(x, ci = "bca", ...)
 }
 \arguments{
 \item{x}{A \code{"drord"} object}

@@ -9,6 +9,8 @@ evaluate_marg_cdf_eif(cdf_est, treat_prob_est, treat, out, out_levels)
 \arguments{
 \item{cdf_est}{Estimated conditional CDF for \code{trt_level}.}
 
+\item{treat_prob_est}{Estimated propensity for \code{trt_level}.}
+
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
 a value 0 or 1.}
 
@@ -16,8 +18,6 @@ a value 0 or 1.}
 
 \item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
 outcome.}
-
-\item{trt_prob_est}{Estimated propensity for \code{trt_level}.}
 }
 \value{
 a list of eif estimates

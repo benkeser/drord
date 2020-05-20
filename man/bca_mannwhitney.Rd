@@ -36,9 +36,6 @@ model. Options are \code{"polr"} (from the \code{MASS} package),
 "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
 
 \item{alpha}{Level of confidence interval.}
-
-\item{out_weights}{A vector of \code{numeric} weights with length equal to the length 
-of \code{out_levels}.}
 }
 \value{
 Confidence interval for the Mann-Whitney parameter

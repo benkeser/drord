@@ -31,6 +31,10 @@ model. Options are \code{"polr"} (from the \code{MASS} package),
 \item{treat_prob_est}{Estimated probability of treatments, output from call
 to \code{estimate_treat_prob}.}
 
+\item{stratify}{Boolean indicating whether to use nonparametric maximum likelihood
+(i.e., a stratified estimator). If \code{out_form = "1"}, then a covariate-unadjusted
+estimate is computed.}
+
 \item{return_models}{If \code{TRUE} the fitted working proportional odds models
 and treatment probability models are returned.}
 

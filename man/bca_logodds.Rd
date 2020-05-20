@@ -36,9 +36,6 @@ model. Options are \code{"polr"} (from the \code{MASS} package),
 \item{logodds_est}{The estimated log-odds.}
 
 \item{alpha}{Level of confidence interval.}
-
-\item{out_weights}{A vector of \code{numeric} weights with length equal to the length 
-of \code{out_levels}.}
 }
 \value{
 matrix with treatment-specific log-odds CIs and CI for difference.

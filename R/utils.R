@@ -1,3 +1,7 @@
+utils::globalVariables(c("Outcome","Proportion","Intervention",
+                         "ptwise_cil","ptwise_ciu","simul_cil",
+                         "simul_ciu"))
+
 #' Print the output of a \code{"drord"} object.
 #'
 #' @param x A \code{"drord"} object
@@ -6,7 +10,7 @@
 #' @param ... Other arguments (not used)
 #' @export
 #' @method print drord
-print.drord <- function(x, ci = "bca", digits = 3, ...) {
+print.drord <- function(x, ci = "bca", ...) {
   
   rout <- list()
   if("mann_whitney" %in% x$param){

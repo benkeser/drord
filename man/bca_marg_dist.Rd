@@ -38,9 +38,6 @@ model. Options are \code{"polr"} (from the \code{MASS} package),
 \item{marg_pmf_est}{Point estimate of treatment-specific PMF.}
 
 \item{alpha}{Level of confidence interval.}
-
-\item{out_weights}{A vector of \code{numeric} weights with length equal to the length 
-of \code{out_levels}.}
 }
 \value{
 List (\code{cdf}, \code{pmf}) of lists (\code{treat=1}, \code{treat=0}) of

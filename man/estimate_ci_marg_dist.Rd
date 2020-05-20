@@ -49,9 +49,6 @@ model. Options are \code{"polr"} (from the \code{MASS} package),
 
 \item{nboot}{Number of bootstrap replicates used to compute bootstrap confidence
 intervals.}
-
-\item{out_weights}{A vector of \code{numeric} weights with length equal to the length 
-of \code{out_levels}.}
 }
 \value{
 List of lists (\code{cdf} and \code{pmf}) with \code{wald} and \code{bca}-estimated confidence 

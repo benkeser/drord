@@ -49,12 +49,16 @@ estimate_treat_prob <- function(treat, covar, treat_form, return_models){
 #' to \code{estimate_treat_prob}.
 #' @param return_models If \code{TRUE} the fitted working proportional odds models
 #' and treatment probability models are returned. 
+#' @param stratify Boolean indicating whether to use nonparametric maximum likelihood
+#' (i.e., a stratified estimator). If \code{out_form = "1"}, then a covariate-unadjusted
+#' estimate is computed. 
 #' @param ... Other options (not used). 
 #' @return A list with \code{fm} the fitted model for treatment 1 and 0 (or, if 
 #' \code{!return_models} then \code{NULL}) and \code{pmf} the estimated PMF 
 #' under treatment 1 and 0 evaluated on each observation. 
 #' @importFrom MASS mvrnorm
 #' @importFrom VGAM propodds
+#' @importFrom stats predict
 estimate_pmf <- function(
   out,
   treat,
@@ -111,6 +115,7 @@ estimate_pmf <- function(
 #' estimate is computed. 
 #' @param ... Other options (not used).
 #' @importFrom MASS polr
+#' @importFrom stats model.matrix
 #' @importFrom VGAM vglm
 #' @importFrom ordinal clm
 
@@ -140,7 +145,7 @@ fit_trt_spec_reg <- function(
 				      data = data.frame(out = out, covar),
 				      weights = as.numeric(treat == trt_level)/trt_spec_prob_est
 				    )}, error = function(e){
-				    	mod_mat <- model.matrix(stats::as.formula(paste0("factor(out) ~", out_form)),
+				    	mod_mat <- stats::model.matrix(stats::as.formula(paste0("factor(out) ~", out_form)),
 				    	                        data = data.frame(out = out, covar))
 				    	n_par <- (dim(mod_mat)[2] - 1) + (length(out_levels) - 1)
 						MASS::polr(
@@ -151,7 +156,7 @@ fit_trt_spec_reg <- function(
 				    	)
 				    })
 			    )
-			 	pmf_treat <- predict(fm_trt, 
+			 	pmf_treat <- stats::predict(fm_trt, 
 			                      newdata = data.frame(out = out, covar,
 			                                           wt = 1/trt_spec_prob_est),
 			                      type = "probs")
@@ -161,10 +166,10 @@ fit_trt_spec_reg <- function(
 		 		               data = data.frame(out = out, covar)[treat == trt_level, , drop = FALSE],
 				      		   weights = 1/trt_spec_prob_est[treat == trt_level])
 		 		# re-order things
-			 	tmp <- predict(fm_trt, newdata = covar, type = "response")
+			 	tmp <- stats::predict(fm_trt, newdata = covar, type = "response")
 				colnames(tmp) <- sort(trt_spec_uniq_outcomes)[-1]
 				pmf_treat <- t(apply(tmp, 1, function(x){
-					rr <- rev(diff(c(0,rev(plogis(x)))))
+					rr <- rev(diff(c(0,rev(stats::plogis(x)))))
 					c(1 - sum(rr), rr)
 				}))
 				colnames(pmf_treat)[1] <- sort(trt_spec_uniq_outcomes)[1]
@@ -173,7 +178,7 @@ fit_trt_spec_reg <- function(
 		 		fm_trt <- ordinal::clm(formula = stats::as.formula(paste0("out ~", out_form)),		 		               
 		 		               data = data.frame(out = out_f, covar)[treat == trt_level, , drop = FALSE],
 				      		   weights = 1/trt_spec_prob_est[treat == trt_level])
-			 	pmf_treat <- predict(fm_trt, newdata = data.frame(covar),
+			 	pmf_treat <- stats::predict(fm_trt, newdata = data.frame(covar),
 		 			        		 type = "prob")$fit
 		 	}
 		 	# add in columns of 0's for unobserved outcome levels and re-order things accordingly
@@ -194,15 +199,14 @@ fit_trt_spec_reg <- function(
 				fm_trt <- stats::glm(
 			      formula = stats::as.formula(paste0("factor(out) ~", out_form)),
 			      data = data.frame(out = relabeled_outcome, 
-			                        covar, 
-			                        wt = 1/trt_spec_prob_est)[treat == trt_level, , drop = FALSE],
-			      weights = wt, family = binomial()
+			                        covar)[treat == trt_level, , drop = FALSE],
+			      weights = 1/trt_spec_prob_est[treat == trt_level], family = binomial()
 			    )
 		    )
 
-			pred_of_trt_spec_uniq_outcomes2 <- as.numeric(predict(
+			pred_of_trt_spec_uniq_outcomes2 <- as.numeric(stats::predict(
 	          fm_trt, type = "response", newdata = data.frame(out = relabeled_outcome,
-	                                                          covar, wt = 1/trt_spec_prob_est)
+	                                                          covar)
 	        ))
 			pmf_treat <- cbind(1 - pred_of_trt_spec_uniq_outcomes2, pred_of_trt_spec_uniq_outcomes2)
 			colnames(pmf_treat) <- trt_spec_uniq_outcomes

@@ -28,8 +28,9 @@ odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT.}
 \item{out_model}{Which R function should be used to fit the proportional odds 
 model. Options are \code{"polr"} (from the \code{MASS} package), 
 "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
-
-\item{return}{Estimate of Mann-Whitney parameter for these input data.}
+}
+\value{
+Estimate of Mann-Whitney parameter for these input data.
 }
 \description{
 Compute one estimate of Mann-Whitney parameter based on a given data set.

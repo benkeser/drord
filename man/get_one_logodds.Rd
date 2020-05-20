@@ -28,8 +28,9 @@ outcome.}
 
 \item{out_form}{The right-hand side of a regression formula for the working proportional 
 odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT.}
-
-\item{return}{Estimated log odds for these input data.}
+}
+\value{
+Estimated log odds for these input data.
 }
 \description{
 Compute one log odds based on a given data set.
