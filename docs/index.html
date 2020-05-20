@@ -54,7 +54,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/using_drtmle.html">`drtmle`: Doubly-Robust Inference in R</a>
+      <a href="articles/using_drord.html">`drord`: Doubly robust estimators of ordinal treatment effects</a>
     </li>
   </ul>
 </li>
@@ -101,7 +101,7 @@
 <p>The estimators implemented in the package are <em>doubly robust</em>, in that they are based on working models for the probability of treatment as a function of covariates (i.e., the propensity score) and for the CDF of the outcome as a function of covariates in each treatment arm. The latter working model is implemented via proportional odds models that are fit in each treatment arm separately. Estimates based on these two working models are combined to quantify the effects of the treatment on the ordinal outcome in three different ways:</p>
 <ul>
 <li>Difference in (weighted) means: The outcome levels are treated numerically, with each level possibly assigned a weight. The effect is defined as the difference in average outcomes.</li>
-<li>Log odds ratio: The comparison describes the average log-odds (treatment level 1 versus 0) of the cumulative probability for each level of the outcome. See <a href="https://doi.org/10.1111/biom.12450">Diaz et al. (2015)</a> for further discussion of this parameter.</li>
+<li>Log odds ratio: The comparison describes the average log-odds (treatment level 1 versus 0) of the cumulative probability for each level of the outcome. See <a href="https://doi.org/10.1111/biom.12450">Diaz et al. (2016)</a> for further discussion of this parameter.</li>
 <li>Mann-Whitney: The probability that a randomly-selected individual receiving treatment 1 will have a larger outcome value than a randomly selected individual receiving treatment 0 (with ties assigned weight 1/2). See <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6386">Vermeulen et al. (2014)</a> for further discussion.</li>
 </ul>
 <hr>
@@ -129,29 +129,31 @@ install.packages("drord")
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(drord)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; drord: Doubly robust estimators for ordinal outcomes</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Version: 1.0.0.9000</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co"># load data</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(covid19)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co"># estimate treatment effects</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">fit &lt;-<span class="st"> </span><span class="kw"><a href="reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, </a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">             <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">             <span class="dt">treat =</span> covid19<span class="op">$</span>treat)</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># look at estimates</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">fit</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; $mann_whitney</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt;       est  wald_cil  wald_ciu </span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; 0.5771119 0.5310573 0.6231666 </span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; $log_odds</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt;               est   wald_cil     wald_ciu</span></a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt; treat1 -1.2440885 -1.5162826 -0.971894388</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; treat0 -0.8926642 -1.1271181 -0.658210387</span></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; diff   -0.3514242 -0.6939617 -0.008886746</span></a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; $weighted_mean</span></a>
-<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt;              est   wald_cil  wald_ciu</span></a>
-<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; treat1 2.5390788 2.44680292 2.6313546</span></a>
-<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt; treat0 2.3635162 2.27899302 2.4480394</span></a>
-<a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co">#&gt; diff   0.1755625 0.05620023 0.2949248</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co"># load data</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(covid19)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co"># estimate treatment effects</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">fit &lt;-<span class="st"> </span><span class="kw"><a href="reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, </a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">             <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">             <span class="dt">treat =</span> covid19<span class="op">$</span>treat)</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co"># look at estimates</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">fit</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; $mann_whitney</span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt;       est  wald_cil  wald_ciu </span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; 0.5771119 0.5310573 0.6231666 </span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt; $log_odds</span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt;               est   wald_cil     wald_ciu</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; treat1 -1.2440885 -1.5162826 -0.971894388</span></a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; treat0 -0.8926642 -1.1271181 -0.658210387</span></a>
+<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; diff   -0.3514242 -0.6939617 -0.008886746</span></a>
+<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; $weighted_mean</span></a>
+<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt;              est   wald_cil  wald_ciu</span></a>
+<a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co">#&gt; treat1 2.5390788 2.44680292 2.6313546</span></a>
+<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="co">#&gt; treat0 2.3635162 2.27899302 2.4480394</span></a>
+<a class="sourceLine" id="cb2-28" data-line-number="28"><span class="co">#&gt; diff   0.1755625 0.05620023 0.2949248</span></a></code></pre></div>
 <p>There is a <code>plot</code> method included to visualize either the cumulative distribution or probability mass function of outcomes.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># plot of CDF</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">cdf_plot &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(fit, <span class="dt">dist =</span> <span class="st">"cdf"</span>, </a>

@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute the estimate of the weighted mean parameter based on 
-estimated PMF in each treatment arm. — estimate_wmean • drord</title>
+<title>Changelog • drord</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,12 +30,7 @@ estimated PMF in each treatment arm. — estimate_wmean • drord</title>
 
 
 
-<meta property="og:title" content="Compute the estimate of the weighted mean parameter based on 
-estimated PMF in each treatment arm. — estimate_wmean" />
-
-<meta property="og:description" content="Compute the estimate of the weighted mean parameter based on 
-estimated PMF in each treatment arm." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -53,7 +47,7 @@ estimated PMF in each treatment arm." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -117,75 +111,25 @@ estimated PMF in each treatment arm." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute the estimate of the weighted mean parameter based on 
-estimated PMF in each treatment arm.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/benkeser/drord/blob/master/R/wmean_fn.R'><code>R/wmean_fn.R</code></a></small>
-    <div class="hidden name"><code>estimate_wmean.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/benkeser/drord/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    
-    <p>Compute the estimate of the weighted mean parameter based on 
-estimated PMF in each treatment arm.</p>
-    
-    </div>
-
-    <pre class="usage"><span class='fu'>estimate_wmean</span>(<span class='no'>pmf_est</span>, <span class='no'>treat</span>, <span class='no'>out</span>, <span class='no'>out_levels</span>, <span class='no'>out_weights</span>,
-  <span class='no'>treat_prob_est</span>, <span class='kw'>return_cov</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>pmf_est</th>
-      <td><p>List of treatment-specific PMF estimates.</p></td>
-    </tr>
-    <tr>
-      <th>treat</th>
-      <td><p>A <code>numeric</code> vector containing treatment status. Should only assume 
-a value 0 or 1.</p></td>
-    </tr>
-    <tr>
-      <th>out</th>
-      <td><p>A <code>numeric</code> vector containing the outcomes.</p></td>
-    </tr>
-    <tr>
-      <th>out_levels</th>
-      <td><p>A <code>numeric</code> vector containing all ordered levels of the 
-outcome.</p></td>
-    </tr>
-    <tr>
-      <th>out_weights</th>
-      <td><p>A vector of <code>numeric</code> weights with length equal to the length 
-of <code>out_levels</code>.</p></td>
-    </tr>
-    <tr>
-      <th>treat_prob_est</th>
-      <td><p>Estimated probability of treatments, output from call
-to <code>estimate_treat_prob</code>.</p></td>
-    </tr>
-    <tr>
-      <th>return_cov</th>
-      <td><p>If <code>TRUE</code> the estimated covariance matrix is returned.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>List with estimates of treatment-specific means and difference in means. 
-If <code>return_cov = TRUE</code>, also includes covariance matrix estimates.</p>
-    
-
+    <div id="drord-1-0-0" class="section level1">
+<h1 class="page-header">
+<a href="#drord-1-0-0" class="anchor"></a>drord 1.0.0</h1>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#drord-1-0-0">1.0.0</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
       <footer>

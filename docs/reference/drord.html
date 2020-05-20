@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Doubly robust estimates of parameters for evaluating the effects 
+<title>Doubly robust estimates of for evaluating effects 
 of treatments on ordinal outcomes. — drord • drord</title>
 
 <!-- jquery -->
@@ -31,7 +31,7 @@ of treatments on ordinal outcomes. — drord • drord</title>
 
 
 
-<meta property="og:title" content="Doubly robust estimates of parameters for evaluating the effects 
+<meta property="og:title" content="Doubly robust estimates of for evaluating effects 
 of treatments on ordinal outcomes. — drord" />
 
 <meta property="og:description" content="The available parameters for evaluating treatment efficacy are:
@@ -97,7 +97,7 @@ individual receiving treatment 0 (with ties assigned weight 1/2).
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/using_drtmle.html">`drtmle`: Doubly-Robust Inference in R</a>
+      <a href="../articles/using_drord.html">`drord`: Doubly robust estimators of ordinal treatment effects</a>
     </li>
   </ul>
 </li>
@@ -125,7 +125,7 @@ individual receiving treatment 0 (with ties assigned weight 1/2).
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Doubly robust estimates of parameters for evaluating the effects 
+    <h1>Doubly robust estimates of for evaluating effects 
 of treatments on ordinal outcomes.</h1>
     <small class="dont-index">Source: <a href='https://github.com/benkeser/drord/blob/master/R/cdf_estimation.R'><code>R/cdf_estimation.R</code></a></small>
     <div class="hidden name"><code>drord.Rd</code></div>
@@ -234,11 +234,35 @@ save time to set to <code>FALSE</code>.</p></td>
 the empirical CDF of each treatment arm is estimated stratifying by levels of 
 <code>covar</code>. For now, this option is limited to univariate covariates.</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other options (not currently used).</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>TO DO: format output and add print/plot methods</p>
+    <p>An object of class <code>drord</code>. In addition to information related to 
+how <code>drord</code> was called, the output contains the following:</p><dl class='dl-horizontal'>
+  <dt>log_odds</dt><dd><p>inference pertaining to the log-odds parameter. <code>NULL</code> if 
+					 this parameter not requested in call to <code>drord</code>.</p></dd>
+  <dt>mann_whitney</dt><dd><p>inference pertaining to the Mann-Whitney parameter. <code>NULL</code> if 
+					 this parameter not requested in call to <code>drord</code>.</p></dd>
+  <dt>weighted_mean</dt><dd><p>inference pertaining to weighted mean parameter. <code>NULL</code> if 
+					 this parameter not requested in call to <code>drord</code>.</p></dd>
+  <dt>cdf</dt><dd><p>inference pertaining to the treatment-specific CDFs. See the <code>plot</code>
+				method for a convenient way of visualizing this information. <code>NULL</code> 
+				if <code>est_dist = FALSE</code> in call to <code>drord</code>.</p></dd>
+	 <dt>pmf</dt><dd><p>inference pertaining to the treatment-specific PMFs. See the <code>plot</code>
+				method for a convenient way of visualizing this information. <code>NULL</code> 
+				if <code>est_dist = FALSE</code> in call to <code>drord</code>.</p></dd>
+  <dt>treat_mod</dt><dd><p>the fitted model for the probability of treatment as a function
+					  of covariates. <code>NULL</code> if <code>return_models = FALSE</code></p></dd>
+  <dt>out_mod</dt><dd><p>the proportional odds model fit in each treatment arm. named entries 
+					in list indicate the corresponding treatment arm. 
+					<code>NULL</code> if <code>return_models = FALSE</code> or <code>stratify = TRUE</code>.</p></dd>
+</dl>
+
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -263,16 +287,24 @@ can be used for subsequent visualizations (see <code>plot.drord</code>).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>500</span>
-<span class='no'>covar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='no'>n</span>), <span class='kw'>x2</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='no'>n</span>))
-<span class='no'>treat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>rbinom</a></span>(<span class='no'>n</span>, <span class='fl'>1</span>, <span class='fl'>1</span>/<span class='fl'>2</span>)
-<span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>rbinom</a></span>(<span class='no'>n</span>, <span class='fl'>3</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Logistic'>plogis</a></span>(-<span class='fl'>1</span> + <span class='no'>covar</span>$<span class='no'>x1</span> - <span class='no'>covar</span>$<span class='no'>x2</span> + <span class='fl'>0.2</span> * <span class='no'>treat</span>))
-<span class='co'># call drord and obtain wald inference</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='no'>out</span>, <span class='no'>treat</span>, <span class='no'>covar</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='st'>"wald"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>covid19</span>)
 
-<span class='co'># stratified estimator</span>
-<span class='no'>covar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>rbinom</a></span>(<span class='no'>n</span>, <span class='fl'>2</span>, <span class='fl'>0.25</span>))
-<span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='fu'>rbinon</span>(<span class='no'>n</span>, <span class='fl'>3</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Logistic'>plogis</a></span>(-<span class='fl'>1</span> + <span class='no'>covar</span>$<span class='no'>x1</span> + <span class='fl'>0.5</span> * <span class='no'>treat</span>))</div><div class='output co'>#&gt; <span class='error'>Error in rbinon(n, 3, plogis(-1 + covar$x1 + 0.5 * treat)): could not find function "rbinon"</span></div><div class='input'><span class='no'>stratified_fit</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='no'>out</span>, <span class='no'>treat</span>, <span class='no'>covar</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='st'>"wald"</span>, <span class='kw'>stratify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
+<span class='co'># get estimates of all parameters based on main-effects </span>
+<span class='co'># proportional odds model and intercept-only propensity model</span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
+             <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>])
+
+<span class='co'># get estimates of all parameters based on proportional odds and</span>
+<span class='co'># propensity model that treats age_grp as categorical</span>
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
+              <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
+                                 <span class='kw'>out_form</span> <span class='kw'>=</span> <span class='st'>"factor(age_grp)"</span>,
+                                 <span class='kw'>treat_form</span> <span class='kw'>=</span> <span class='st'>"factor(age_grp)"</span>)
+
+<span class='co'># obtain estimator stratified by age group </span>
+<span class='no'>fit3</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
+              <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
+                                 <span class='kw'>stratify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
