@@ -1,4 +1,4 @@
-#' Doubly robust estimates of parameters for evaluating the effects 
+#' Doubly robust estimates of for evaluating effects 
 #' of treatments on ordinal outcomes.
 #' 
 #' The available parameters for evaluating treatment efficacy are:
@@ -66,21 +66,49 @@
 #' should be computed and returned. For real data analysis, we generally recommend 
 #' leaving as \code{TRUE}; however, when studying performance in simulations, it can 
 #' save time to set to \code{FALSE}. 
+#' @param ... Other options (not currently used). 
 #' @export
 #' 
-#' @return TO DO: format output and add print/plot methods
+#' @return An object of class \code{drord}. In addition to information related to 
+#' how \code{drord} was called, the output contains the following:
+#' \describe{
+#'   \item{log_odds}{inference pertaining to the log-odds parameter. \code{NULL} if 
+#' 					 this parameter not requested in call to \code{drord}.}
+#'   \item{mann_whitney}{inference pertaining to the Mann-Whitney parameter. \code{NULL} if 
+#' 					 this parameter not requested in call to \code{drord}.}
+#'   \item{weighted_mean}{inference pertaining to weighted mean parameter. \code{NULL} if 
+#' 					 this parameter not requested in call to \code{drord}.}
+#'   \item{cdf}{inference pertaining to the treatment-specific CDFs. See the \code{plot}
+#' 				method for a convenient way of visualizing this information. \code{NULL} 
+#' 				if \code{est_dist = FALSE} in call to \code{drord}.}
+#' 	 \item{pmf}{inference pertaining to the treatment-specific PMFs. See the \code{plot}
+#' 				method for a convenient way of visualizing this information. \code{NULL} 
+#' 				if \code{est_dist = FALSE} in call to \code{drord}.}
+#'   \item{treat_mod}{the fitted model for the probability of treatment as a function
+#' 					  of covariates. \code{NULL} if \code{return_models = FALSE}}
+#'   \item{out_mod}{the proportional odds model fit in each treatment arm. named entries 
+#' 					in list indicate the corresponding treatment arm. 
+#' 					\code{NULL} if \code{return_models = FALSE} or \code{stratify = TRUE}.}
+#' }
 #'@examples 
-#' n <- 500
-#' covar <- data.frame(x1 = runif(n), x2 = runif(n))
-#' treat <- rbinom(n, 1, 1/2)
-#' out <- rbinom(n, 3, plogis(-1 + covar$x1 - covar$x2 + 0.2 * treat))
-#' # call drord and obtain wald inference
-#' fit <- drord(out, treat, covar, ci = "wald")
+#' data(covid19)
 #' 
-#' # stratified estimator
-#' covar <- data.frame(x1 = rbinom(n, 2, 0.25))
-#' out <- rbinon(n, 3, plogis(-1 + covar$x1 + 0.5 * treat))
-#' stratified_fit <- drord(out, treat, covar, ci = "wald", stratify = TRUE)
+#' # get estimates of all parameters based on main-effects 
+#' # proportional odds model and intercept-only propensity model
+#' fit <- drord(out = covid19$out, treat = covid19$treat, 
+#'              covar = covid19[, "age_grp", drop = FALSE])
+#' 
+#' # get estimates of all parameters based on proportional odds and
+#' # propensity model that treats age_grp as categorical
+#' fit2 <- drord(out = covid19$out, treat = covid19$treat, 
+#'               covar = covid19[, "age_grp", drop = FALSE],
+#' 				 out_form = "factor(age_grp)",
+#' 				 treat_form = "factor(age_grp)")
+#' 
+#' # obtain estimator stratified by age group 
+#' fit3 <- drord(out = covid19$out, treat = covid19$treat, 
+#'               covar = covid19[, "age_grp", drop = FALSE],
+#' 				 stratify = TRUE)
 
 drord <- function(
   out,
@@ -120,9 +148,9 @@ drord <- function(
 	                        stratify = stratify, return_models = return_models)
   	pmf_est <- pmf_fit$pmf
   	if(return_models){
-  		propodds_mod <- pmf_fit$fm
+  		out_mod <- pmf_fit$fm
   	}else{
-  		propodds_mod <- NULL
+  		out_mod <- NULL
   	}
 
   	# map into estimates of CDF
@@ -212,7 +240,7 @@ drord <- function(
 	            cdf = list(est = marg_cdf_est, ci = marg_dist_ci$cdf),
 	            pmf = list(est = marg_pmf_est, ci = marg_dist_ci$pmf),
 	            out_levels = out_levels, treat_mod = treat_mod,
-	            propodds_mod = propodds_mod, param = param, 
+	            out_mod = out_mod, param = param, 
 	            ci = ci, alpha = alpha, est_dist = est_dist)
 	class(rout) <- "drord"
 	return(rout)

@@ -1,0 +1,243 @@
+---
+author: |
+    | David Benkeser
+    | Emory University
+    | Department of Biostatistics and Bioinformatics
+    | 1518 Clifton Road, NE
+    | Mailstop: 002-3AA
+    | Atlanta, Georgia, 30322, U.S.A.
+    | benkeser@emory.edu
+title: '`drord`: Doubly robust estimators of ordinal treatment effects'
+abstract: >
+  Many treatments are evaluated using randomized trials or observational 
+  studies examining effects or associations with ordinal outcomes. In these 
+  situations, researchers must carefully select a statistical estimand that
+  reflects an interpretable and clinically relevant treatment effect. Several
+  such estimands have been proposed in the literature. In the context of 
+  randomized trials, simple nonparametric estimators are available. These 
+  estimators can be improved through adjustment for covariates that are
+  prognostic of the study outcome. The `drord` package implements 
+  covariate-adjusted estimators of several popular estimands for evaluating 
+  treatment effects on ordinal outcomes. The estimators use working models
+  for the treatment probability as a function of covariates (i.e., the propensity
+  score) and the outcome distribution as a function of covariates. The latter
+  is based on a proportional odds model. Estimates of these two quantities
+  are combined to provide estimates of treatment effects. The treatment effect
+  estimates are doubly robust, in that they are consistent if one of the two 
+  working models contains the truth. The effect estimates are nonparametric
+  efficient if both working models contain the truth. This vignette provides 
+  a brief introduction to the `drord` package, demonstrating several estimators
+  that are available therein. 
+preamble: >
+  \usepackage{amsmath}
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{drord: Doubly robust estimators of ordinal treatment effects}
+  %\VignetteEncoding{UTF-8}
+bibliography: refs.bib
+---
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });
+</script>
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+# Introduction \label{intro}
+
+Ordinal outcomes are commonly encountered in practice. For example, randomized trials
+evaluating treatments for COVID-19, the disease caused by the SARS-CoV-2 virus, often 
+consider ordinal outcomes such as: death, intubation, or no adverse event. In these 
+settings it is important to pre-specify an estimand that quantifies the effect of 
+the treatment on the outcome distribution in a way that is interpretable and closely
+related to patient care. Several such estimands are commonly employed including: 
+
+* Difference in (weighted) means: The outcome levels are assigned a numeric value and possibly additionally assigned a weight reflecting that some outcomes may be considerably worse than others. The effect is defined as the difference in weighted average outcomes between two treatments. 
+* Log odds ratio: The comparison describes the average over all levels of the log-odds ratio comparing two treatments of the cumulative probability for each level of the outcome. See [@diaz2016enhanced] for further discussion. 
+* Mann-Whitney: The probability that a randomly-selected individual 
+receiving a given treatment will have a more favorable outcome than a randomly selected
+individual receiving an alternative treatment (with ties assigned weight 1/2). See [@vermeulen2015increasing] for further discussion. 
+
+Simple nonparametric estimates of these quantities are readily available. For example, in the context of a randomized trial, the difference in means parameter can be consistently estimated by a difference in sample means. Similarly straightforward estimates are available for the other quantities. These simple estimators can be improved by considering adjustment 
+for baseline covariates that are prognostic of the study outcome. Adjusting for covariates yields estimates that are *more precise* than unadjusted estimates. Thus, the power to detect
+treatment effects may be improved by utilizing these estimators. The `drord` package provides
+covariate-adjusted estimates of the three quantities above, along with several methods
+that are useful for analyzing studies with ordinal outcomes. 
+
+# Estimators
+
+To solidify ideas, we briefly introduce notation. Let $X$ be a vector 
+of baseline covariates that could include continuous, binary, or categorical components, $A$ be a binary treatment vector (assuming values 1, e.g., for active treatment and 0, e.g., for a 
+control treatment or standard of care), and $Y$ be an ordinal-valued outcome encoded to assume numeric values $j = 0, 1, ..., $K$. We assume that the data consist of $n$ independent copies of the random variable $O = (X,A,Y)$.
+
+Our estimators are constructed by first estimating key *nuisance parameters* describing different aspects of the distribution of $O$. These nuisance parameters are not directly of interest, but are used as an intermediate step in the estimation procedure. We describe these nuisance quantities mathematically and return to these ideas when we demonstrate how to control their estimation within the `drord` function. 
+
+## Nuisance parameters
+
+The first nuisance parameter is $P(A | X)$, the conditional probability of the treatment variable given baseline covariates. This quantity is known exactly in a randomized trial and may not depend at all on $X$ (e.g., if randomization is not stratified by covariates). We use $\hat{\pi}(a | x)$ to denote an estimate of $P(A = a | X = x)$ for $a = 0, 1$ and a given covariate values $x$. This estimate could be set exactly equal to the known randomization probability, the sample proportion that receive treatment $a$, or a logistic regression model to adjust for chance imbalances in $X$ across the treatment arms. 
+
+We also require estimates of $\{ P(Y \le j | A = a, X), j = 0, 1, ..., J \}$ for $a = 0, 1$. We refer to these as treatment-specific conditional distribution functions (CDFs) of the outcome. Our estimators are built on a working proportional odds regression model: for $j = 0, ..., K-1$, $\mbox{logit}\{P(Y \le j | A = a, X = x)\} = m_{\alpha_a, \beta_a}(j,x) = \alpha_a(j) + \beta_a^\top \beta$. Importantly, the validity (i.e., consistency, asymptotic normality) of our estimators **does not** rely on this working model being correctly specified. For $a = 0, 1$ our estimates of $\alpha_a, \beta_a$ are chosen by minimizing $$
+  -\sum_{j=0}^{K-1} \sum_{i=1}^n \frac{I\{A_i = a\}}{\hat{\pi}(A_i | X_i)} \log\left[m_{\alpha,\beta}(j,X_i)^{I(Y_i\le j)}\{1-m_{\alpha,\beta}(j,X_i)\}^{I(Y_i> j)}\right]. \label{eq:empiricalRisk} \ . 
+$$
+This estimation can be carried out using standard software packages (discussed in detail below)
+for fitting proportional odds models by including observation-level weights equal for the $i$-th observation to $\frac{I\{A_i = a\}}{\hat{\pi}(A_i | X_i)}$. Note that this procedure is repeated in each treatment arm separately. 
+
+Finally, we require an estimate for each $x$ of $F_X(x) = P(X \le x)$, the distribution of baseline covariates. Our estimators use the empirical distribution of this quantity. 
+
+## Parameters of interest
+
+We can create a covariate-adjusted estimate of the CDF $\psi_a(j) = P(Y\le j|A=a)$ by marginalizing the conditional CDF estimates with respect to the distribution of baseline covariates. By the law of total probability $\psi_a(j) = E\{P(Y \le j | A = a, X)\} = \int P(Y \le j | A = a, X) dF_X(x)$. A plug-in estimate of this quantity based on our working model estimates is $$
+    \hat{\psi}_a(j) = \frac{1}{n}\sum_{i=1}^n m_{\hat{\alpha}_a,\hat{\beta}_a}(j,X_i). \label{eq:CDF}
+$$
+
+This estimate of $\psi_a(j)$ is *doubly robust* in that it is consistent if at least one of $\hat{\pi}$ and $\mbox{logit}^{-1}(m_{\hat{\alpha}_a, \hat{\beta}_a})$ are consistent forthe true propensity score or true conditional CDF, respectively. The key to establishing this is to note that by including weights in the proportional odds model and including $j$-specific intercept terms $$
+ \frac{1}{n}\sum_{i=1}^n \frac{I\{A_i=a\}}{\hat{\pi}(A_i|X_i)}\left\{I(Y_i\le j) - m_{\hat{\alpha}_a,\hat{\beta}_a}(j,X_i)\right\} = 0.
+$$
+is satisfied for each $j = 0, ..., K$. 
+
+The estimates $\hat{\psi}_a(j)$ of $\psi_a(j)$ can now be mapped into estimates of the effects of interest. For simplicity of notation, we introduce notation for the implied treatment-specific probability mass function (PMF). In particular, we define $\hat{\theta}_a(0) = \hat{\psi}_a(0)$ and for $j = 1, \dots, K$ define $\hat{\theta}_a(j) = \hat{\psi}_a(j) - \hat{\psi}_a(j-1)$. Estimates of the treatment effect parameters can be computed as follows. The estimate for the difference in weighted means is $$
+  \sum_{j=0}^K \ j \ w_j \{\hat{\theta}_1(j) - \hat{\theta}_0(j)\} \ ,
+$$
+where $w_j$ is the weight assigned to outcome level $j$. The estimate of the average log-odds ratio is $$
+  \frac{1}{K} \sum_{j=0}^{K-1} \left[\mbox{log}\left\{\frac{\hat{\psi}_1(j)}{1 - \hat{\psi}_1(j)} \right\} - \mbox{log} \left\{\frac{\hat{\psi}_0(j)}{1 - \hat{\psi}_0(j)} \right\} \right] \ . 
+$$ 
+The estimate of the Mann-Whitney estimand is $$
+  \sum_{j=0}^{K} \left\{\hat{\psi}_0(j-1) + \frac{1}{2} \hat{\theta}_0(j) \right\} \hat{\theta}_1(j) \ . 
+$$
+
+Standard error estimates can be derived using influence functions and the delta method. Alternatively, nonparametric bootstrap can be used. In the next section, we discuss the implementation of these for building confidence intervals.
+
+# Using the `drord` function
+
+## COVID-19 data
+The main function in this package is the eponymous `drord` function. We illustrate its usage using the `covid19` data set included with the package. This is a simulated data set mimicking a randomized COVID-19 treatment trial, where we will illustrate how such a trial could be analyzed while adjusting for patient age. The control arm data were simulated to match the outcomes of a CDC preliminary description of 2,449 cases reported to the CDC from February 12 to March 16, 2020. The data were simulated such that the treatment decreased the probability of intubation, but has no impact on the probability of death. The data can be loaded and viewed as follows. 
+
+```{r}
+library(drord)
+
+# load data
+data(covid19)
+
+# look at first 3 rows
+head(covid19, 3)
+```
+
+The data include three variables:
+
+* `out`: the study outcome with 1 representing death, 2 intubation, 3 no adverse outcome;
+* `age_grp`: age category with 1 the youngest and 7 the oldest represent age groups (0-19, 20-44, 45-54, 55-64, 65-74, 75-84, $\ge$ 85);
+* `treat`: hypothetical treatment, here 1 represents an the effective, active treatment and 0 a standard of care condition. 
+
+## Basic calls and plots
+
+We begin with a simple call to `drord` to familiarize ourselves with its output
+
+```{r}
+(fit1 <- drord(out = covid19$out, treat = covid19$treat, 
+               covar = covid19[ , "age_grp", drop = FALSE]))
+```
+
+The main function inputs are `out`, `treat`, and `covar`. Note that `covar` must be input as a `data.frame` even though in this example it contains only a single covariate. We see that the function returns estimates of each of the three parameters described above. For the log-odds and weighted mean parameters, output is broken down into treatment-specific estimates, as well as the difference. Thus the row labeled `treat1` in `$weighted_mean` corresponds to inference about $\sum_{j=0}^K \ j \ w_j \theta_1(j)$, the weighted mean in the `treat=1` group. Similarly, the row label `treat0` in `$log_odds` corresponds to inference about $$
+\frac{1}{K} \sum_{j=0}^{K-1} \mbox{log}\left\{\frac{\psi_1(j)}{1 - \psi_1(j)} \right\} \ . 
+$$
+
+In addition to the treatment effect parameters, one can obtain inference about $\psi_a$ 
+and $\theta_a$. This information can be viewed in the `$cdf` and `$pdf` output, respectively, or can be plotted using `ggplot2` via the `plot.drord` method. 
+
+```{r cdf-plot, fig.width = 4, fig.cap="Plot of treatment-specific CDF. Black bars are pointwise 95% confidence intervals; gray bars are 95% simultaneous confidence bands."}
+# plot of CDF
+cdf_plot <- plot(fit1, dist = "cdf", 
+                 treat_labels = c("Treatment", "Control"),
+                 out_labels = c("Death", "Death or intubation"))
+cdf_plot + ggsci::scale_fill_nejm()
+```
+
+Note that custom labels for treatments and outcome levels are allowed. For the CDF, the the outcome labels should correspond to labels for outcome levels 0, 1, ..., $K-1$ (as the CDF evaluated at $K$ is always equal to 1). 
+
+A similar plot for the PMF can be obtained. 
+
+```{r pmf-plot, fig.width = 5, fig.cap="Plot of treatment-specific PMF. Black bars are pointwise 95% confidence intervals; gray bars are 95% simultaneous confidence bands."}
+# plot of PMF
+pmf_plot <- plot(fit1, dist = "pmf",
+                 treat_labels = c("Treatment", "Control"),
+                 out_labels = c("Death", "Intubation", "None"))
+pmf_plot + ggsci::scale_fill_nejm()    
+```
+
+## Working model controls
+
+In the simple call, we used default working models. The `drord` documentation indicates that the working model fits can be controlled via the `out_form` and `treat_form` models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (`out_form = ".")`is a main-effects proportional odds model (fit using `MASS::polr`). The default for the treatment model is an intercept-only logistic regression model (`treat_form = 1`), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to `drord` where we treat `age_grp` as a `factor` rather than numeric in the outcome model and include adjustment for `age_grp` in the propensity model. 
+
+```{r}
+(fit2 <- drord(out = covid19$out, treat = covid19$treat, 
+               covar = covid19[ , "age_grp", drop = FALSE],
+               out_form = "factor(age_grp)",
+               treat_form = "factor(age_grp)"))
+```
+
+By default models are returned in the `drord` object; this behavior can be suppressed via the `return_models` option. The fitted working models can be accessed via `$out_mod` and `$treat_mod`, which we can use to confirm that the models were fit as expected in `fit1` and `fit2`. Note that `out_mod` is a list of length two, which contains a fitted proportional odds model for each treatment level.
+
+```{r}
+# age_grp treated as numeric in fit1
+fit1$out_mod$treat1
+
+# age_grp treated as factor in fit2
+fit2$out_mod$treat1
+```
+
+Other packages are available for fitting the proportional odds models. While the model is the same in each package, the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the `polr` fitting routine, one may consider one of the alternative packages. Options are `vglm` (from the `VGAM` package), or `clm` (from the `ordinal` package). Here we demonstrate this control.
+
+```{r}
+# use vglm to fit model instead
+fit3 <- drord(out = covid19$out, treat = covid19$treat, 
+              covar = covid19[ , "age_grp", drop = FALSE],
+              out_model = "vglm")
+
+# view model output
+fit3$out_mod$treat1
+```
+
+## Bootstrap confidence intervals
+
+By default, `drord` will used closed-form inference. While this is generally faster, we may instead prefer to use bootstrap confidence intervals, which should provide more robust behavior when working models are misspecified. Bootstrap intervals can be requested via the `ci = "bca"`, with option `nboot` determining the number of bootstrap resamples performed. The bootstrap employed by the package is the bias corrected and accelerated bootstrap [@efron1994introduction]. **In practice, we recommend using many bootstrap samples** (e.g., the package default, `nboot = 1e4`), so that inference is not dependent on the random seed that is set; however, here we illustrate using a small number of bootstrap samples for fast compilation of this vignette. To increase speed, we also turn off estimation of confidence intervals for the CDF and PMF by setting `est_dist = FALSE`. 
+
+```{r}
+(fit4 <- drord(out = covid19$out, treat = covid19$treat, 
+               covar = covid19[ , "age_grp", drop = FALSE],
+               ci = "bca", nboot = 20, # use more bootstrap samples in practice!!!
+               param = "mann_whitney", # only compute mann-whitney estimator
+               est_dist = FALSE)) # save time by not computing CIs for CDF/PMF
+```
+
+
+## Stratified estimators 
+
+An alternative approach in settings with low-dimensional covariates is to use fully stratified estimators. That is, we take our estimate of $P(Y \le j | A = a, X = x)$ to be  the empirical proportion of the sample with $A = a$ and $X = x$ observed to have $Y \le j$. This is the nonparametric maximum likelihood estimator. The estimator is nonparametric efficient under no assumptions; however, this estimator can only be computed when $X$ contains only discrete components. Moreover, it will exhibit unstable finite-sample behavior if only few observations are observed with $A = a$ and $X = x$. Thus, our implementation of this estimator is restricted to univariate $X$. If, in reality, $X$ contains e.g., 2 binary components, then a univariate covariate could be constructed with one level for each of the cells in the 2x2 table. We leave this sort of pre-processing to the user. 
+
+Here we illustrate the stratified estimator in action.
+
+```{r}
+(fit5 <- drord(out = covid19$out, treat = covid19$treat, 
+               covar = covid19[ , "age_grp", drop = FALSE],
+               stratify = TRUE))
+```
+
+In general, `out_form` is ignored if `stratify = TRUE`; the exception is if `out_form = "1"`, then it is assumed that one wishes to obtain a covariate-*unadjusted* estimate of the treatment effects. 
+
+```{r}
+(fit6 <- drord(out = covid19$out, treat = covid19$treat, 
+               covar = covid19[ , "age_grp", drop = FALSE],
+               stratify = TRUE, out_form = "1",
+               param = "weighted_mean"))
+
+# compare to sample means
+(samp_mean_treat1 <- mean(covid19$out[covid19$treat == 1]))
+(samp_mean_treat0 <- mean(covid19$out[covid19$treat == 0]))
+```
+# Session Info
+
+```{r}
+sessionInfo()
+```

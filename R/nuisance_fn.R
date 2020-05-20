@@ -54,6 +54,7 @@ estimate_treat_prob <- function(treat, covar, treat_form, return_models){
 #' \code{!return_models} then \code{NULL}) and \code{pmf} the estimated PMF 
 #' under treatment 1 and 0 evaluated on each observation. 
 #' @importFrom MASS mvrnorm
+#' @importFrom VGAM propodds
 estimate_pmf <- function(
   out,
   treat,
@@ -156,12 +157,17 @@ fit_trt_spec_reg <- function(
 			                      type = "probs")
 		 	}else if(out_model == "vglm"){
 		 		fm_trt <- VGAM::vglm(formula = stats::as.formula(paste0("factor(out, ordered = TRUE) ~", out_form)),
-		 		               family = propodds,
+		 		               family = VGAM::propodds,
 		 		               data = data.frame(out = out, covar)[treat == trt_level, , drop = FALSE],
 				      		   weights = 1/trt_spec_prob_est[treat == trt_level])
-			 	pmf_treat <- predict(fm_trt, 
-						             newdata = data.frame(out = out, covar),
-						             type = "response")
+		 		# re-order things
+			 	tmp <- predict(fm_trt, newdata = covar, type = "response")
+				colnames(tmp) <- sort(trt_spec_uniq_outcomes)[-1]
+				pmf_treat <- t(apply(tmp, 1, function(x){
+					rr <- rev(diff(c(0,rev(plogis(x)))))
+					c(1 - sum(rr), rr)
+				}))
+				colnames(pmf_treat)[1] <- sort(trt_spec_uniq_outcomes)[1]
 		 	}else if(out_model == "clm"){
 		 		out_f <- factor(out, ordered = TRUE)
 		 		fm_trt <- ordinal::clm(formula = stats::as.formula(paste0("out ~", out_form)),		 		               

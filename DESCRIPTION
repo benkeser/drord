@@ -18,7 +18,8 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    ggsci
 License: MIT + file LICENSE
 URL: https://github.com/benkeser/drord
 BugReports: https://github.com/benkeser/drord/issues

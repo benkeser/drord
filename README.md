@@ -15,7 +15,6 @@ state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![MIT
 license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/75324341.svg)](https://zenodo.org/badge/latestdoi/75324341)
 
 > Doubly robust estimators of treatment effects for ordinal outcomes
 
@@ -28,14 +27,18 @@ Benkeser](https://www.sph.emory.edu/faculty/profile/#!dbenkes)
 
 `drord` is an R package that computes estimates of effect parameters
 that are useful for evaluating efficacy of treatments on ordinal
-outcomes. The estimators implemented in the package are doubly robust,
-in that they are based on working models for the probability of
-treatment as a function of covariates (i.e., the propensity score) and
-for the CDF of the outcome as a function of covariates in each treatment
-arm. The latter working model is implemented via proportional odds
-models that are fit in each treatment arm separately. Estimates based on
-these two working models are combined to quantify the effects of the
-treatment on the ordinal outcome in three different ways:
+outcomes. The effect estimates are *covariate-adjusted*, which means
+they can be used in observational settings or to gain efficiency in
+randomized trials.
+
+The estimators implemented in the package are *doubly robust*, in that
+they are based on working models for the probability of treatment as a
+function of covariates (i.e., the propensity score) and for the CDF of
+the outcome as a function of covariates in each treatment arm. The
+latter working model is implemented via proportional odds models that
+are fit in each treatment arm separately. Estimates based on these two
+working models are combined to quantify the effects of the treatment on
+the ordinal outcome in three different ways:
 
   - Difference in (weighted) means: The outcome levels are treated
     numerically, with each level possibly assigned a weight. The effect
@@ -43,7 +46,7 @@ treatment on the ordinal outcome in three different ways:
   - Log odds ratio: The comparison describes the average log-odds
     (treatment level 1 versus 0) of the cumulative probability for each
     level of the outcome. See [Diaz et al.
-    (2015)](https://doi.org/10.1111/biom.12450) for further discussion
+    (2016)](https://doi.org/10.1111/biom.12450) for further discussion
     of this parameter.
   - Mann-Whitney: The probability that a randomly-selected individual
     receiving treatment 1 will have a larger outcome value than a
@@ -84,8 +87,10 @@ a simulated data set of COVID-19 outcomes in hospitalized patients.
 library(drord)
 #> drord: Doubly robust estimators for ordinal outcomes
 #> Version: 1.0.0.9000
+
 # load data
 data(covid19)
+
 # estimate treatment effects
 fit <- drord(out = covid19$out, 
              covar = covid19[ , "age_grp", drop = FALSE],
