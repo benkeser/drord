@@ -14,18 +14,15 @@
 #' @importFrom stats as.formula glm binomial
 #' 
 estimate_treat_prob <- function(treat, covar, treat_form, return_models){
-	if (length(unique(treat) == 2)){
-      fm_treat <- list(stats::glm(
-        formula = stats::as.formula(paste0("A~", treat_form)),
-        data = data.frame(A = treat, covar), 
-        family = stats::binomial()
-      ))
-      gn_A <- vector(mode = "list", length = 2)
-      gn_A[[1]] <- stats::fitted(fm_treat[[1]])
-      gn_A[[2]] <- 1 - gn_A[[1]]
-    } else {
-      stop("multi-level treatments not supported")
-    } # end multi-level treatment if
+	fm_treat <- list(stats::glm(
+	  formula = stats::as.formula(paste0("treat ~", treat_form)),
+	  data = data.frame(treat = treat, covar)[treat %in% c(0, 1), ], 
+	  family = stats::binomial()
+	))
+	gn_A <- vector(mode = "list", length = 2)
+	gn_A[[1]] <- stats::predict(fm_treat, newdata = data.frame(treat = treat, covar))
+	gn_A[[2]] <- 1 - gn_A[[1]]
+
     return(list(gn = gn_A,
                 fm = fm_treat))
 }
