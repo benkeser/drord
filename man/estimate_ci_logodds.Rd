@@ -28,7 +28,8 @@ a value 0 or 1.}
 \item{treat_form}{The right-hand side of a regression formula for the working model of
 treatment probability as a function of covariates}
 
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
 \item{ci}{A vector of \code{characters} indicating which confidence intervals
 should be computed (\code{"bca"} and/or \code{"wald"})}

@@ -320,7 +320,7 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
 <a class="sourceLine" id="cb15-5" data-line-number="5">               <span class="dt">est_dist =</span> <span class="ot">FALSE</span>)) <span class="co"># save time by not computing CIs for CDF/PMF</span></a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est   bca_cil   bca_ciu 
-## 0.5771119 0.5396615 0.5972482</code></pre>
+## 0.5771119 0.5504073 0.6114632</code></pre>
 </div>
 <div id="stratified-estimators" class="section level2">
 <h2 class="hasAnchor">
@@ -361,11 +361,41 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">(samp_mean_treat0 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(covid19<span class="op">$</span>out[covid19<span class="op">$</span>treat <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]))</a></code></pre></div>
 <pre><code>## [1] 2.393822</code></pre>
 </div>
+<div id="missing-outcome-values" class="section level2">
+<h2 class="hasAnchor">
+<a href="#missing-outcome-values" class="anchor"></a>Missing outcome values</h2>
+<p>Missing outcome values are permitted in <code>drord</code>. To implement this approach, the function simply applies the methods as described above, but with <code>treat</code> recoded as 0 to indicate that an observation had <code>treat = 0</code> and had their outcome measured, 1 to indicate an observation that had <code>treat = 1</code> and had their outcome measured, and -1 to indicate that the outcome is missing. The propensity score estimation thus includes two components, one for the probability that the re-coded <code>treat = 1</code> given <code>covar</code>, the other for the probability that the re-coded <code>treat = 0</code> given <code>covar</code>. In the example below, we introduce some missingness into the outcome based on <code>age_grp</code> and call <code>drord</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># missingness probability</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">miss_out_prob &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Logistic">plogis</a></span>(<span class="op">-</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(covid19<span class="op">$</span>age_grp <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">miss_out &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Binomial">rbinom</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(covid19), <span class="dv">1</span>, miss_out_prob) <span class="op">==</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb25-4" data-line-number="4">out_with_miss &lt;-<span class="st"> </span>covid19<span class="op">$</span>out</a>
+<a class="sourceLine" id="cb25-5" data-line-number="5">out_with_miss[miss_out] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb25-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="co"># correctly model missingness</span></a>
+<a class="sourceLine" id="cb25-8" data-line-number="8">(fit7 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> out_with_miss, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
+<a class="sourceLine" id="cb25-9" data-line-number="9">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>], </a>
+<a class="sourceLine" id="cb25-10" data-line-number="10">               <span class="dt">treat_form =</span> <span class="st">"I(age_grp &lt; 5)"</span>))</a></code></pre></div>
+<pre><code>## $mann_whitney
+##       est  wald_cil  wald_ciu 
+## 0.5817078 0.5316611 0.6317545 
+## 
+## $log_odds
+##               est   wald_cil     wald_ciu
+## treat1 -1.2680440 -1.5526972 -0.983390780
+## treat0 -0.8911639 -1.1514322 -0.630895610
+## diff   -0.3768800 -0.7474982 -0.006261914
+## 
+## $weighted_mean
+##              est   wald_cil  wald_ciu
+## treat1 2.5464139 2.45113195 2.6416958
+## treat0 2.3598177 2.26643480 2.4532007
+## diff   0.1865961 0.05828206 0.3149102</code></pre>
+</div>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
 <pre><code>## R version 3.5.3 (2019-03-11)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS Mojave 10.14.6
@@ -435,6 +465,7 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
       <li><a href="#working-model-controls">Working model controls</a></li>
       <li><a href="#bootstrap-confidence-intervals">Bootstrap confidence intervals</a></li>
       <li><a href="#stratified-estimators">Stratified estimators</a></li>
+      <li><a href="#missing-outcome-values">Missing outcome values</a></li>
       </ul>
 </li>
       <li><a href="#session-info">Session Info</a></li>

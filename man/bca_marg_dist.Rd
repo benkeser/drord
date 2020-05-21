@@ -15,7 +15,8 @@ a value 0 or 1.}
 \item{covar}{A \code{data.frame} containing the covariates to include in the working
 proportional odds model.}
 
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
 \item{nboot}{Number of bootstrap replicates used to compute bootstrap confidence
 intervals.}

@@ -1,6 +1,7 @@
 #' Compute confidence interval/s for the log-odds parameters
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -70,7 +71,8 @@ estimate_ci_logodds <- function(logodds_est, cdf_est, out_form, covar,
 #' Compute a BCa bootstrap confidence interval for the weighted mean. The code is 
 #' based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -145,7 +147,8 @@ bca_logodds <- function(treat, covar, out, nboot,
 }
 
 #' Compute jackknife log-odds estimates.
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -176,7 +179,8 @@ jack_logodds <- function(treat, covar, out, treat_form, out_model, out_levels, o
 
 #' Get one bootstrap computation of the log odds parameters. 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -208,7 +212,8 @@ one_boot_logodds <- function(treat, covar, out, treat_form,
 
 #' Compute one log odds based on a given data set. 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -299,7 +304,8 @@ evaluate_beta_cov <- function(cdf_est, theta_cov){
 #' @param cdf_est The estimates of the treatment-specific CDFs
 #' @param treat_prob_est List of estimated probability of treatments, output from call
 #' to \code{estimate_treat_prob}.
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param out_levels A \code{numeric} vector containing all ordered levels of the 
@@ -319,9 +325,13 @@ evaluate_theta_cov <- function(cdf_est, treat_prob_est, treat, out, out_levels){
 #' get a matrix of eif estimates for the treatment-specific CDF estimates
 #' @param trt_spec_cdf_est Estimated conditional CDF for \code{trt_level}. 
 #' @param trt_spec_prob_est Estimated propensity for \code{trt_level}.
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param trt_level Treatment level 
 #' @param out_levels A \code{numeric} vector containing all ordered levels of the 
 #' outcome. 
@@ -345,7 +355,8 @@ evaluate_trt_spec_theta_eif <- function(trt_spec_cdf_est,
 #' 
 #' @param trt_spec_pmf_est Estimated conditional PMF for \code{trt_level}. 
 #' @param trt_spec_prob_est Estimated propensity for \code{trt_level}.
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param trt_level Treatment level 
@@ -373,13 +384,15 @@ evaluate_trt_spec_pmf_eif <- function(trt_spec_pmf_est,
 #' @param k The level of the outcome.
 #' @param trt_k_spec_pmf_est Estimated conditional PMF for \code{trt_level} at \code{k}. 
 #' @param trt_spec_prob_est Estimated propensity for \code{trt_level}.
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param trt_level Treatment level 
 
 eif_pmf_k <- function(k, out, treat, trt_level, trt_spec_prob_est,
                         trt_k_spec_pmf_est){
+	out[is.na(out)] <- -99999
 	eif <- as.numeric(treat == trt_level) / trt_spec_prob_est * 
 		(as.numeric(out == k) - trt_k_spec_pmf_est) + 
 			trt_k_spec_pmf_est - mean(trt_k_spec_pmf_est)
@@ -393,13 +406,15 @@ eif_pmf_k <- function(k, out, treat, trt_level, trt_spec_prob_est,
 #' @param k The level of the outcome.
 #' @param trt_k_spec_cdf_est Estimated conditional CDF for \code{trt_level} at \code{k}. 
 #' @param trt_spec_prob_est Estimated propensity for \code{trt_level}.
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param trt_level Treatment level 
 
 eif_theta_k <- function(k, out, treat, trt_level, trt_spec_prob_est,
                         trt_k_spec_cdf_est){
+	out[is.na(out)] <- -99999
 	eif <- as.numeric(treat == trt_level) / trt_spec_prob_est * 
 		(as.numeric(out <= k) - trt_k_spec_cdf_est) + 
 			trt_k_spec_cdf_est - mean(trt_k_spec_cdf_est)

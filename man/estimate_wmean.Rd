@@ -11,10 +11,14 @@ estimate_wmean(pmf_est, treat, out, out_levels, out_weights,
 \arguments{
 \item{pmf_est}{List of treatment-specific PMF estimates.}
 
-\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
-a value 0 or 1.}
+\item{treat}{A \code{numeric} vector containing treatment status. Missing
+values are not allowed unless the corresponding entry in \code{out} is also missing. 
+Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+to encode a value for which the outcome is missing and the corresponding outcome value is 
+ignored.}
 
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
 \item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
 outcome.}

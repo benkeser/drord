@@ -1,6 +1,7 @@
 #' Estimate probability of receiving each level of treatment
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param treat A \code{numeric} vector containing treatment status. Only values of
+#' 0 or 1 are treated as actual treatment levels. Any other value is assumed to encode
+#' a value for which the outcome is missing. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param treat_form The right-hand side of a regression formula for the working model of
@@ -14,25 +15,45 @@
 #' @importFrom stats as.formula glm binomial
 #' 
 estimate_treat_prob <- function(treat, covar, treat_form, return_models){
-	fm_treat <- list(stats::glm(
-	  formula = stats::as.formula(paste0("treat ~", treat_form)),
-	  data = data.frame(treat = treat, covar)[treat %in% c(0, 1), ], 
+	fm_treat1 <- stats::glm(
+	  formula = stats::as.formula(paste0("treat1 ~", treat_form)),
+	  data = data.frame(treat1 = as.numeric(treat == 1), covar), 
 	  family = stats::binomial()
-	))
+	)
 	gn_A <- vector(mode = "list", length = 2)
-	gn_A[[1]] <- stats::predict(fm_treat, newdata = data.frame(treat = treat, covar))
-	gn_A[[2]] <- 1 - gn_A[[1]]
+	gn_A[[1]] <- predict(fm_treat1, newdata = data.frame(treat = treat, covar),
+	                     type = "response")
+	if(all(treat %in% c(0,1))){
+		gn_A[[2]] <- 1 - gn_A[[1]]
+	}else{
+		fm_treat0 <- stats::glm(
+	  	  formula = stats::as.formula(paste0("treat0 ~", treat_form)),
+	  	  data = data.frame(treat0 = as.numeric(treat == 0), covar), 
+		  family = stats::binomial()
+		)
+		gn_A[[2]] <- predict(fm_treat0, newdata = data.frame(treat = treat, covar),
+	                     type = "response")
+	}
+	rout <- list(gn = gn_A,
+                 fm = list(treat1 = fm_treat1,
+                           treat0 = NULL))
+	if(!all(treat %in% c(0,1))){
+		rout$fm$treat0 = fm_treat0
+	}
 
-    return(list(gn = gn_A,
-                fm = fm_treat))
+    return(rout)
 }
 
 #' Get a treatment-specific estimate of the conditional PMF. 
 #' Essentially this is a wrapper function for \code{fit_trt_spec_reg}, which
 #' fits the proportion odds model in a given treatment arm. 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param out_levels A \code{numeric} vector containing all ordered levels of the 
@@ -93,9 +114,13 @@ estimate_pmf <- function(
 #' corresponding to each outcome (ordered numerically). The entries 
 #' represent the estimated covariate-conditional treatment-specific PMF.
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param trt_level Which level of treatment to fit the proportional odds model for

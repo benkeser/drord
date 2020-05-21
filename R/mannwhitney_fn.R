@@ -1,8 +1,12 @@
 #' Compute confidence interval/s for the Mann-Whitney parameter
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param mannwhitney_est The point estimates for log-odds.
@@ -75,9 +79,13 @@ estimate_ci_mannwhitney <- function(
 #' Compute a BCa bootstrap confidence interval for the Mann-Whitney parameter. The code is 
 #' based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
@@ -125,9 +133,13 @@ bca_mannwhitney <- function(treat, covar, out, nboot,
 
 
 #' Compute Mann-Whitney log-odds estimates.
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param treat_form The right-hand side of a regression formula for the working model of
@@ -158,9 +170,13 @@ jack_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_form
 
 #' Get one bootstrap computation of the Mann-Whitney parameter. 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param treat_form The right-hand side of a regression formula for the working model of
@@ -190,9 +206,13 @@ one_boot_mannwhitney <- function(treat, covar, out, treat_form, out_levels, out_
 
 #' Compute one estimate of Mann-Whitney parameter based on a given data set. 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param treat_form The right-hand side of a regression formula for the working model of

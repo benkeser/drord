@@ -9,13 +9,17 @@ bca_mannwhitney(treat, covar, out, nboot, treat_form, out_levels, out_form,
   mannwhitney_est, out_model, alpha = 0.05)
 }
 \arguments{
-\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
-a value 0 or 1.}
+\item{treat}{A \code{numeric} vector containing treatment status. Missing
+values are not allowed unless the corresponding entry in \code{out} is also missing. 
+Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+to encode a value for which the outcome is missing and the corresponding outcome value is 
+ignored.}
 
 \item{covar}{A \code{data.frame} containing the covariates to include in the working
 proportional odds model.}
 
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
 \item{nboot}{Number of bootstrap replicates used to compute bootstrap confidence
 intervals.}

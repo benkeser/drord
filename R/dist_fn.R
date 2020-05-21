@@ -5,9 +5,13 @@
 #' @param marg_pmf_est Point estimate of treatment-specific PMF.
 #' @param cdf_est Estimates of treatment-specific conditional CDF.
 #' @param pmf_est Estimates of treatment-specific conditional PMF.
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param alpha Confidence intervals have nominal level 1-\code{alpha}. 
@@ -115,7 +119,8 @@ marginalize_cdf <- function(cdf_est){
 #' Compute a BCa bootstrap confidence interval for the weighted mean. The code is 
 #' based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -188,7 +193,8 @@ bca_marg_dist <- function(treat, covar, out, nboot,
 }
 
 #' Compute jackknife distribution estimates.
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -221,7 +227,8 @@ jack_marg_cdf <- function(treat, covar, out, treat_form,
 
 #' Get one bootstrap computation of the CDF and PMF estimates 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -253,7 +260,8 @@ one_boot_marg_dist <- function(treat, covar, out, treat_form,
 
 #' Compute one estimate of the marginal CDF/PMF on a given data set. 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
@@ -396,7 +404,8 @@ compute_trt_spec_marg_dist_ptwise_ci <- function(pt_est, cov_est, alpha, cdf = T
 #' 
 #' @param pmf_est Estimated conditional PMF for \code{trt_level}. 
 #' @param treat_prob_est Estimated propensity for \code{trt_level}.
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param out_levels A \code{numeric} vector containing all ordered levels of the 
@@ -416,7 +425,8 @@ evaluate_marg_pmf_eif <- function(pmf_est, treat_prob_est, treat, out, out_level
 #' 
 #' @param cdf_est Estimated conditional CDF for \code{trt_level}. 
 #' @param treat_prob_est Estimated propensity for \code{trt_level}.
-#' @param out A \code{numeric} vector containing the outcomes.
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
 #' @param treat A \code{numeric} vector containing treatment status. Should only assume 
 #' a value 0 or 1. 
 #' @param out_levels A \code{numeric} vector containing all ordered levels of the 

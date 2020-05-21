@@ -10,7 +10,8 @@ eif_pmf_k(k, out, treat, trt_level, trt_spec_prob_est, trt_k_spec_pmf_est)
 \arguments{
 \item{k}{The level of the outcome.}
 
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
 a value 0 or 1.}

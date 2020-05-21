@@ -142,12 +142,16 @@ estimated PMF in each treatment arm.</p>
     </tr>
     <tr>
       <th>treat</th>
-      <td><p>A <code>numeric</code> vector containing treatment status. Should only assume 
-a value 0 or 1.</p></td>
+      <td><p>A <code>numeric</code> vector containing treatment status. Missing
+values are not allowed unless the corresponding entry in <code>out</code> is also missing. 
+Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+to encode a value for which the outcome is missing and the corresponding outcome value is 
+ignored.</p></td>
     </tr>
     <tr>
       <th>out</th>
-      <td><p>A <code>numeric</code> vector containing the outcomes.</p></td>
+      <td><p>A <code>numeric</code> vector containing the outcomes. Missing outcomes are 
+allowed.</p></td>
     </tr>
     <tr>
       <th>out_levels</th>

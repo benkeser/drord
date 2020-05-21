@@ -33,9 +33,13 @@
 #' (BCa). Inference for the CDF and probability mass function is also returned and 
 #' can be used for subsequent visualizations (see \code{plot.drord}). 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param out_levels A \code{numeric} vector containing all ordered levels of the 
@@ -109,6 +113,15 @@
 #' fit3 <- drord(out = covid19$out, treat = covid19$treat, 
 #'               covar = covid19[, "age_grp", drop = FALSE],
 #' 				 stratify = TRUE)
+#' 
+#' # demonstration with missing outcome data
+#' covid19$out[1:5] <- NA
+#' 
+#' # propensity model should now adjust for covariates to address
+#' # the potential for informative missingness
+#' fit4 <- drord(out = covid19$out, treat = covid19$treat, 
+#'               covar = covid19[, "age_grp", drop = FALSE],
+#' 				 treat_form = "age_grp")
 
 drord <- function(
   out,
@@ -128,6 +141,12 @@ drord <- function(
   stratify = FALSE, 
   ...
 ){
+
+	# recode treat for NA outcomes
+	if(any(is.na(out))){
+		treat[is.na(out)] <- -1
+	}
+
 	# obtain estimate of treatment probabilities
 	treat_prob_fit <- estimate_treat_prob(treat = treat,
 	                                      covar = covar,

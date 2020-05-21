@@ -13,10 +13,14 @@ drord(out, treat, covar, out_levels = sort(unique(out)),
   est_dist = TRUE, stratify = FALSE, ...)
 }
 \arguments{
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
-\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
-a value 0 or 1.}
+\item{treat}{A \code{numeric} vector containing treatment status. Missing
+values are not allowed unless the corresponding entry in \code{out} is also missing. 
+Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+to encode a value for which the outcome is missing and the corresponding outcome value is 
+ignored.}
 
 \item{covar}{A \code{data.frame} containing the covariates to include in the working
 proportional odds model.}
@@ -139,4 +143,13 @@ fit2 <- drord(out = covid19$out, treat = covid19$treat,
 fit3 <- drord(out = covid19$out, treat = covid19$treat, 
               covar = covid19[, "age_grp", drop = FALSE],
 				 stratify = TRUE)
+
+# demonstration with missing outcome data
+covid19$out[1:5] <- NA
+
+# propensity model should now adjust for covariates to address
+# the potential for informative missingness
+fit4 <- drord(out = covid19$out, treat = covid19$treat, 
+              covar = covid19[, "age_grp", drop = FALSE],
+				 treat_form = "age_grp")
 }

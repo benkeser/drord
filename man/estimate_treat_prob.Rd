@@ -7,8 +7,9 @@
 estimate_treat_prob(treat, covar, treat_form, return_models)
 }
 \arguments{
-\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
-a value 0 or 1.}
+\item{treat}{A \code{numeric} vector containing treatment status. Only values of
+0 or 1 are treated as actual treatment levels. Any other value is assumed to encode
+a value for which the outcome is missing.}
 
 \item{covar}{A \code{data.frame} containing the covariates to include in the working
 proportional odds model.}

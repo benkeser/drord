@@ -21,7 +21,8 @@ treatment probability as a function of covariates}
 model. Options are \code{"polr"} (from the \code{MASS} package), 
 "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).}
 
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
 \item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
 outcome.}

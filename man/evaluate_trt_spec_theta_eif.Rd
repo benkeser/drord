@@ -14,10 +14,14 @@ evaluate_trt_spec_theta_eif(trt_spec_cdf_est, trt_spec_prob_est, trt_level,
 
 \item{trt_level}{Treatment level}
 
-\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
-a value 0 or 1.}
+\item{treat}{A \code{numeric} vector containing treatment status. Missing
+values are not allowed unless the corresponding entry in \code{out} is also missing. 
+Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+to encode a value for which the outcome is missing and the corresponding outcome value is 
+ignored.}
 
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
 \item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
 outcome.}

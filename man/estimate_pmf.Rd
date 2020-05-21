@@ -10,10 +10,14 @@ estimate_pmf(out, treat, covar, out_levels, out_form = NULL, out_model,
   treat_prob_est, stratify = FALSE, return_models = TRUE, ...)
 }
 \arguments{
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
-\item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
-a value 0 or 1.}
+\item{treat}{A \code{numeric} vector containing treatment status. Missing
+values are not allowed unless the corresponding entry in \code{out} is also missing. 
+Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+to encode a value for which the outcome is missing and the corresponding outcome value is 
+ignored.}
 
 \item{covar}{A \code{data.frame} containing the covariates to include in the working
 proportional odds model.}

@@ -236,6 +236,25 @@ In general, `out_form` is ignored if `stratify = TRUE`; the exception is if `out
 (samp_mean_treat1 <- mean(covid19$out[covid19$treat == 1]))
 (samp_mean_treat0 <- mean(covid19$out[covid19$treat == 0]))
 ```
+
+## Missing outcome values
+
+Missing outcome values are permitted in `drord`. To implement this approach, the function simply applies the methods as described above, but with `treat` recoded as 0 to indicate that an observation had `treat = 0` and had their outcome measured, 1 to indicate an observation that had `treat = 1` and had their outcome measured, and -1 to indicate that the outcome is missing. The propensity score estimation thus includes two components, one for the probability that the re-coded `treat = 1` given `covar`, the other for the probability that the re-coded `treat = 0` given `covar`. In the example below, we introduce some missingness
+into the outcome based on `age_grp` and call `drord`. 
+
+```{r}
+# missingness probability
+miss_out_prob <- plogis(-2 + as.numeric(covid19$age_grp < 5))
+miss_out <- rbinom(nrow(covid19), 1, miss_out_prob) == 1
+out_with_miss <- covid19$out
+out_with_miss[miss_out] <- NA
+
+# correctly model missingness
+(fit7 <- drord(out = out_with_miss, treat = covid19$treat, 
+               covar = covid19[ , "age_grp", drop = FALSE], 
+               treat_form = "I(age_grp < 5)"))
+```
+
 # Session Info
 
 ```{r}

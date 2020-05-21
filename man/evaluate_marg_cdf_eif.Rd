@@ -14,7 +14,8 @@ evaluate_marg_cdf_eif(cdf_est, treat_prob_est, treat, out, out_levels)
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 
 a value 0 or 1.}
 
-\item{out}{A \code{numeric} vector containing the outcomes.}
+\item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
+allowed.}
 
 \item{out_levels}{A \code{numeric} vector containing all ordered levels of the 
 outcome.}

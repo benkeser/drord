@@ -158,12 +158,16 @@ individual receiving treatment 0 (with ties assigned weight 1/2).</p></li>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>out</th>
-      <td><p>A <code>numeric</code> vector containing the outcomes.</p></td>
+      <td><p>A <code>numeric</code> vector containing the outcomes. Missing outcomes are 
+allowed.</p></td>
     </tr>
     <tr>
       <th>treat</th>
-      <td><p>A <code>numeric</code> vector containing treatment status. Should only assume 
-a value 0 or 1.</p></td>
+      <td><p>A <code>numeric</code> vector containing treatment status. Missing
+values are not allowed unless the corresponding entry in <code>out</code> is also missing. 
+Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+to encode a value for which the outcome is missing and the corresponding outcome value is 
+ignored.</p></td>
     </tr>
     <tr>
       <th>covar</th>
@@ -304,7 +308,16 @@ can be used for subsequent visualizations (see <code>plot.drord</code>).</p>
 <span class='co'># obtain estimator stratified by age group </span>
 <span class='no'>fit3</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
               <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
-                                 <span class='kw'>stratify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
+                                 <span class='kw'>stratify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># demonstration with missing outcome data</span>
+<span class='no'>covid19</span>$<span class='no'>out</span>[<span class='fl'>1</span>:<span class='fl'>5</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
+
+<span class='co'># propensity model should now adjust for covariates to address</span>
+<span class='co'># the potential for informative missingness</span>
+<span class='no'>fit4</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
+              <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
+                                 <span class='kw'>treat_form</span> <span class='kw'>=</span> <span class='st'>"age_grp"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -2,9 +2,13 @@
 #' estimated PMF in each treatment arm.  
 #' 
 #' @param pmf_est List of treatment-specific PMF estimates.
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param out_levels A \code{numeric} vector containing all ordered levels of the 
 #' outcome. 
 #' @param out_weights A vector of \code{numeric} weights with length equal to the length 
@@ -63,13 +67,18 @@ estimate_cond_mean <- function(trt_spec_pmf_est, ordered_out_levels, ordered_out
 #' @param trt_spec_cond_mean_est Conditional mean for \code{trt_level}
 #' @param trt_spec_prob_est Propensity for \code{trt_level}
 #' @param trt_level Treatment level 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 estimate_eif_wmean <- function(trt_spec_cond_mean_est,
                               trt_spec_prob_est, 
                               trt_level,
                               out, treat){
+	out[is.na(out)] <- -99999
 	eif <- as.numeric(treat == trt_level) / trt_spec_prob_est * (out - trt_spec_cond_mean_est) + 
 			trt_spec_cond_mean_est - mean(trt_spec_cond_mean_est)
 	return(eif)
@@ -77,9 +86,13 @@ estimate_eif_wmean <- function(trt_spec_cond_mean_est,
 
 #' Compute confidence interval/s for the weight mean parameters
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param wmean_est The point estimates for weighted means
@@ -153,9 +166,13 @@ wald_ci_wmean <- function(wmean_est, alpha){
 #' Compute a BCa bootstrap confidence interval for the weighted mean. The code is 
 #' based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param nboot Number of bootstrap replicates used to compute bootstrap confidence
@@ -225,9 +242,13 @@ bca_wmean <- function(treat, covar, out, nboot,
 }
 
 #' Compute jackknife weighted mean estimates.
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param treat_form The right-hand side of a regression formula for the working model of
@@ -261,9 +282,13 @@ jack_wmean <- function(treat, covar, out, treat_form, out_levels,
 
 #' Get one bootstrap computation of the weighted mean parameters. 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param treat_form The right-hand side of a regression formula for the working model of
@@ -296,9 +321,13 @@ one_boot_wmean <- function(treat, covar, out, treat_form, out_levels,
 
 #' Compute one weighted mean based on a given data set. 
 #' 
-#' @param out A \code{numeric} vector containing the outcomes.
-#' @param treat A \code{numeric} vector containing treatment status. Should only assume 
-#' a value 0 or 1. 
+#' @param out A \code{numeric} vector containing the outcomes. Missing outcomes are 
+#' allowed. 
+#' @param treat A \code{numeric} vector containing treatment status. Missing
+#' values are not allowed unless the corresponding entry in \code{out} is also missing. 
+#' Only values of 0 or 1 are treated as actual treatment levels. Any other value is assumed 
+#' to encode a value for which the outcome is missing and the corresponding outcome value is 
+#' ignored. 
 #' @param covar A \code{data.frame} containing the covariates to include in the working
 #' proportional odds model. 
 #' @param treat_form The right-hand side of a regression formula for the working model of
