@@ -151,13 +151,19 @@ If you encounter any bugs or have any specific feature requests, please
 
 ## Citation
 
-After using the `drord` R package, please cite the following:
+After using the `drord` R package, please cite both of the following:
 
     @Manual{drordpackage,
       title = {drord: Doubly-Robust Estimators for Ordinal Outcomes},
       author = {David Benkeser},
       note = {R package version 1.0.0},
       doi = {TBA}
+    }
+    
+    @article{benkeserdiazluedtke2020,
+      title = {Improving Precision and Power in Randomized Trials for COVID-19 Treatments Using Covariate Adjustment, for Ordinal or Time to Event Outcomes},
+      doi = {10.1101/2020.04.19.20069922},
+      journal = {medRxiv: The Preprint Server for Health Sciences.}
     }
 
 -----
