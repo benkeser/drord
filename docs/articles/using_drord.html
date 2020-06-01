@@ -320,7 +320,7 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
 <a class="sourceLine" id="cb15-5" data-line-number="5">               <span class="dt">est_dist =</span> <span class="ot">FALSE</span>)) <span class="co"># save time by not computing CIs for CDF/PMF</span></a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est   bca_cil   bca_ciu 
-## 0.5771119 0.5504073 0.6114632</code></pre>
+## 0.5771119 0.5489721 0.6139196</code></pre>
 </div>
 <div id="stratified-estimators" class="section level2">
 <h2 class="hasAnchor">
@@ -377,19 +377,19 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
 <a class="sourceLine" id="cb25-10" data-line-number="10">               <span class="dt">treat_form =</span> <span class="st">"I(age_grp &lt; 5)"</span>))</a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5817078 0.5316611 0.6317545 
+## 0.5547436 0.5054174 0.6040699 
 ## 
 ## $log_odds
-##               est   wald_cil     wald_ciu
-## treat1 -1.2680440 -1.5526972 -0.983390780
-## treat0 -0.8911639 -1.1514322 -0.630895610
-## diff   -0.3768800 -0.7474982 -0.006261914
+##               est   wald_cil   wald_ciu
+## treat1 -1.1390955 -1.4230477 -0.8551434
+## treat0 -0.9734399 -1.2291569 -0.7177228
+## diff   -0.1656557 -0.5321215  0.2008102
 ## 
 ## $weighted_mean
-##              est   wald_cil  wald_ciu
-## treat1 2.5464139 2.45113195 2.6416958
-## treat0 2.3598177 2.26643480 2.4532007
-## diff   0.1865961 0.05828206 0.3149102</code></pre>
+##              est    wald_cil  wald_ciu
+## treat1 2.5011045  2.39928968 2.6029192
+## treat0 2.3919111  2.30241429 2.4814079
+## diff   0.1091933 -0.02084888 0.2392356</code></pre>
 </div>
 </div>
 <div id="session-info" class="section level1">

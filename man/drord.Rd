@@ -7,7 +7,7 @@ of treatments on ordinal outcomes.}
 \usage{
 drord(out, treat, covar, out_levels = sort(unique(out)),
   out_form = ".", out_weights = rep(1, length(out_levels)),
-  out_model = c("polr", "vglm", "clm"), treat_form = "1",
+  out_model = c("clm", "polr", "vglm"), treat_form = "1",
   param = c("weighted_mean", "log_odds", "mann_whitney"), ci = "wald",
   alpha = 0.05, nboot = 10000, return_models = TRUE,
   est_dist = TRUE, stratify = FALSE, ...)
