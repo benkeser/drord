@@ -130,7 +130,7 @@ drord <- function(
   out_levels = sort(unique(out)), # must be in order for this to work!
   out_form = ".",
   out_weights = rep(1, length(out_levels)),
-  out_model = c("polr", "vglm", "clm"),
+  out_model = c("clm", "polr", "vglm"),
   treat_form = "1",
   param = c("weighted_mean", "log_odds", "mann_whitney"),
   ci = "wald",
