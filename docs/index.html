@@ -141,19 +141,19 @@ install.packages("drord")
 <a class="sourceLine" id="cb2-13" data-line-number="13">fit</a>
 <a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; $mann_whitney</span></a>
 <a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt;       est  wald_cil  wald_ciu </span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; 0.5771119 0.5310573 0.6231666 </span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; 0.5771141 0.5310594 0.6231689 </span></a>
 <a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt; $log_odds</span></a>
 <a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt;               est   wald_cil     wald_ciu</span></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; treat1 -1.2440885 -1.5162826 -0.971894388</span></a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; treat0 -0.8926642 -1.1271181 -0.658210387</span></a>
-<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; diff   -0.3514242 -0.6939617 -0.008886746</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; treat1 -1.2441017 -1.5162963 -0.971907150</span></a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; treat0 -0.8926670 -1.1271207 -0.658213260</span></a>
+<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; diff   -0.3514347 -0.6939725 -0.008897035</span></a>
 <a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; $weighted_mean</span></a>
 <a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt;              est   wald_cil  wald_ciu</span></a>
-<a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co">#&gt; treat1 2.5390788 2.44680292 2.6313546</span></a>
-<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="co">#&gt; treat0 2.3635162 2.27899302 2.4480394</span></a>
-<a class="sourceLine" id="cb2-28" data-line-number="28"><span class="co">#&gt; diff   0.1755625 0.05620023 0.2949248</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co">#&gt; treat1 2.5390850 2.44680920 2.6313607</span></a>
+<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="co">#&gt; treat0 2.3635178 2.27899457 2.4480410</span></a>
+<a class="sourceLine" id="cb2-28" data-line-number="28"><span class="co">#&gt; diff   0.1755672 0.05620494 0.2949294</span></a></code></pre></div>
 <p>There is a <code>plot</code> method included to visualize either the cumulative distribution or probability mass function of outcomes.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># plot of CDF</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">cdf_plot &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(fit, <span class="dt">dist =</span> <span class="st">"cdf"</span>, </a>

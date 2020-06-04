@@ -111,7 +111,7 @@ Atlanta, Georgia, 30322, U.S.A.<br><a href="mailto:benkeser@emory.edu" class="em
 <p>Ordinal outcomes are commonly encountered in practice. For example, randomized trials evaluating treatments for COVID-19, the disease caused by the SARS-CoV-2 virus, often consider ordinal outcomes such as: death, intubation, or no adverse event. In these settings it is important to pre-specify an estimand that quantifies the effect of the treatment on the outcome distribution in a way that is interpretable and closely related to patient care. Several such estimands are commonly employed including:</p>
 <ul>
 <li>Difference in (weighted) means: The outcome levels are assigned a numeric value and possibly additionally assigned a weight reflecting that some outcomes may be considerably worse than others. The effect is defined as the difference in weighted average outcomes between two treatments.</li>
-<li>Log odds ratio: The comparison describes the average over all levels of the log-odds ratio comparing two treatments of the cumulative probability for each level of the outcome. See <span class="citation">(Dı'az, Colantuoni, and Rosenblum 2016)</span> for further discussion.</li>
+<li>Log odds ratio: The comparison describes the average over all levels of the log-odds ratio comparing two treatments of the cumulative probability for each level of the outcome. See <span class="citation">(Díaz, Colantuoni, and Rosenblum 2016)</span> for further discussion.</li>
 <li>Mann-Whitney: The probability that a randomly-selected individual receiving a given treatment will have a more favorable outcome than a randomly selected individual receiving an alternative treatment (with ties assigned weight 1/2). See <span class="citation">(Vermeulen, Thas, and Vansteelandt 2015)</span> for further discussion.</li>
 </ul>
 <p>Simple nonparametric estimates of these quantities are readily available. For example, in the context of a randomized trial, the difference in means parameter can be consistently estimated by a difference in sample means. Similarly straightforward estimates are available for the other quantities. These simple estimators can be improved by considering adjustment for baseline covariates that are prognostic of the study outcome. Adjusting for covariates yields estimates that are <em>more precise</em> than unadjusted estimates. Thus, the power to detect treatment effects may be improved by utilizing these estimators. The <code>drord</code> package provides covariate-adjusted estimates of the three quantities above, along with several methods that are useful for analyzing studies with ordinal outcomes.</p>
@@ -119,15 +119,17 @@ Atlanta, Georgia, 30322, U.S.A.<br><a href="mailto:benkeser@emory.edu" class="em
 <div id="estimators" class="section level1">
 <h1 class="hasAnchor">
 <a href="#estimators" class="anchor"></a>Estimators</h1>
-<p>To solidify ideas, we briefly introduce notation. Let <span class="math inline">\(X\)</span> be a vector of baseline covariates that could include continuous, binary, or categorical components, <span class="math inline">\(A\)</span> be a binary treatment vector (assuming values 1, e.g., for active treatment and 0, e.g., for a control treatment or standard of care), and <span class="math inline">\(Y\)</span> be an ordinal-valued outcome encoded to assume numeric values $j = 0, 1, …, <span class="math inline">\(K\)</span>. We assume that the data consist of <span class="math inline">\(n\)</span> independent copies of the random variable <span class="math inline">\(O = (X,A,Y)\)</span>.</p>
+<p>To solidify ideas, we briefly introduce notation. Let <span class="math inline">\(X\)</span> be a vector of baseline covariates that could include continuous, binary, or categorical components, <span class="math inline">\(A\)</span> be a binary treatment vector (assuming values 1, e.g., for active treatment and 0, e.g., for a control treatment or standard of care), and <span class="math inline">\(Y\)</span> be an ordinal-valued outcome encoded to assume numeric values <span class="math inline">\(j = 0, 1, ..., K\)</span>. We assume that the data consist of <span class="math inline">\(n\)</span> independent copies of the random variable <span class="math inline">\(O = (X,A,Y)\)</span>.</p>
 <p>Our estimators are constructed by first estimating key <em>nuisance parameters</em> describing different aspects of the distribution of <span class="math inline">\(O\)</span>. These nuisance parameters are not directly of interest, but are used as an intermediate step in the estimation procedure. We describe these nuisance quantities mathematically and return to these ideas when we demonstrate how to control their estimation within the <code>drord</code> function.</p>
 <div id="nuisance-parameters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#nuisance-parameters" class="anchor"></a>Nuisance parameters</h2>
 <p>The first nuisance parameter is <span class="math inline">\(P(A | X)\)</span>, the conditional probability of the treatment variable given baseline covariates. This quantity is known exactly in a randomized trial and may not depend at all on <span class="math inline">\(X\)</span> (e.g., if randomization is not stratified by covariates). We use <span class="math inline">\(\hat{\pi}(a | x)\)</span> to denote an estimate of <span class="math inline">\(P(A = a | X = x)\)</span> for <span class="math inline">\(a = 0, 1\)</span> and a given covariate values <span class="math inline">\(x\)</span>. This estimate could be set exactly equal to the known randomization probability, the sample proportion that receive treatment <span class="math inline">\(a\)</span>, or a logistic regression model to adjust for chance imbalances in <span class="math inline">\(X\)</span> across the treatment arms.</p>
-<p>We also require estimates of <span class="math inline">\(\{ P(Y \le j | A = a, X), j = 0, 1, ..., J \}\)</span> for <span class="math inline">\(a = 0, 1\)</span>. We refer to these as treatment-specific conditional distribution functions (CDFs) of the outcome. Our estimators are built on a working proportional odds regression model: for <span class="math inline">\(j = 0, ..., K-1\)</span>, <span class="math inline">\(\mbox{logit}\{P(Y \le j | A = a, X = x)\} = m_{\alpha_a, \beta_a}(j,x) = \alpha_a(j) + \beta_a^\top \beta\)</span>. Importantly, the validity (i.e., consistency, asymptotic normality) of our estimators <strong>does not</strong> rely on this working model being correctly specified. For <span class="math inline">\(a = 0, 1\)</span> our estimates of <span class="math inline">\(\alpha_a, \beta_a\)</span> are chosen by minimizing <span class="math display">\[
-  -\sum_{j=0}^{K-1} \sum_{i=1}^n \frac{I\{A_i = a\}}{\hat{\pi}(A_i | X_i)} \log\left[m_{\alpha,\beta}(j,X_i)^{I(Y_i\le j)}\{1-m_{\alpha,\beta}(j,X_i)\}^{I(Y_i&gt; j)}\right]. \label{eq:empiricalRisk} \ . 
-\]</span> This estimation can be carried out using standard software packages (discussed in detail below) for fitting proportional odds models by including observation-level weights equal for the <span class="math inline">\(i\)</span>-th observation to <span class="math inline">\(\frac{I\{A_i = a\}}{\hat{\pi}(A_i | X_i)}\)</span>. Note that this procedure is repeated in each treatment arm separately.</p>
+<p>We also require estimates of <span class="math inline">\(\{ P(Y \le j | A = a, X), j = 0, 1, ..., J \}\)</span> for <span class="math inline">\(a = 0, 1\)</span>. We refer to these as treatment-specific conditional distribution functions (CDFs) of the outcome. Our estimators are built on a working proportional odds regression model: for <span class="math inline">\(j = 0, ..., K-1\)</span>, <span class="math display">\[
+\mbox{logit}\{P(Y \le j | A = a, X = x)\} = m_{\alpha_a, \beta_a}(j,x) = \alpha_a(j) + \beta_a^\top x \ . 
+\]</span> Importantly, the validity (i.e., consistency, asymptotic normality) of our estimators <strong>does not</strong> rely on this working model being correctly specified. For <span class="math inline">\(a = 0, 1\)</span> our estimates of <span class="math inline">\(\alpha_a, \beta_a\)</span> are chosen by minimizing <span class="math display">\[
+  -\sum_{j=0}^{K-1} \sum_{i=1}^n \frac{I\{A_i = a\}}{\hat{\pi}(A_i | X_i)} \log\left[m_{\alpha,\beta}(j,X_i)^{I(Y_i\le j)}\{1-m_{\alpha,\beta}(j,X_i)\}^{I(Y_i&gt; j)}\right] \ .  \label{eq:empiricalRisk} 
+\]</span> This estimation can be carried out using standard software packages (discussed in detail below) for fitting proportional odds models by including observation-level weights equal for the <span class="math inline">\(i\)</span>-th observation equal to <span class="math inline">\(I\{A_i = a\}/\hat{\pi}(A_i | X_i)\)</span>. Note that this procedure is repeated in each treatment arm separately.</p>
 <p>Finally, we require an estimate for each <span class="math inline">\(x\)</span> of <span class="math inline">\(F_X(x) = P(X \le x)\)</span>, the distribution of baseline covariates. Our estimators use the empirical distribution of this quantity.</p>
 </div>
 <div id="parameters-of-interest" class="section level2">
@@ -185,19 +187,19 @@ Atlanta, Georgia, 30322, U.S.A.<br><a href="mailto:benkeser@emory.edu" class="em
 <a class="sourceLine" id="cb3-2" data-line-number="2">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>]))</a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5771119 0.5310573 0.6231666 
+## 0.5771141 0.5310594 0.6231689 
 ## 
 ## $log_odds
 ##               est   wald_cil     wald_ciu
-## treat1 -1.2440885 -1.5162826 -0.971894388
-## treat0 -0.8926642 -1.1271181 -0.658210387
-## diff   -0.3514242 -0.6939617 -0.008886746
+## treat1 -1.2441017 -1.5162963 -0.971907150
+## treat0 -0.8926670 -1.1271207 -0.658213260
+## diff   -0.3514347 -0.6939725 -0.008897035
 ## 
 ## $weighted_mean
 ##              est   wald_cil  wald_ciu
-## treat1 2.5390788 2.44680292 2.6313546
-## treat0 2.3635162 2.27899302 2.4480394
-## diff   0.1755625 0.05620023 0.2949248</code></pre>
+## treat1 2.5390850 2.44680920 2.6313607
+## treat0 2.3635178 2.27899457 2.4480410
+## diff   0.1755672 0.05620494 0.2949294</code></pre>
 <p>The main function inputs are <code>out</code>, <code>treat</code>, and <code>covar</code>. Note that <code>covar</code> must be input as a <code>data.frame</code> even though in this example it contains only a single covariate. We see that the function returns estimates of each of the three parameters described above. For the log-odds and weighted mean parameters, output is broken down into treatment-specific estimates, as well as the difference. Thus the row labeled <code>treat1</code> in <code>$weighted_mean</code> corresponds to inference about <span class="math inline">\(\sum_{j=0}^K \ j \ w_j \theta_1(j)\)</span>, the weighted mean in the <code>treat=1</code> group. Similarly, the row label <code>treat0</code> in <code>$log_odds</code> corresponds to inference about <span class="math display">\[
 \frac{1}{K} \sum_{j=0}^{K-1} \mbox{log}\left\{\frac{\psi_1(j)}{1 - \psi_1(j)} \right\} \ . 
 \]</span></p>
@@ -228,64 +230,62 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
 <div id="working-model-controls" class="section level2">
 <h2 class="hasAnchor">
 <a href="#working-model-controls" class="anchor"></a>Working model controls</h2>
-<p>In the simple call, we used default working models. The <code>drord</code> documentation indicates that the working model fits can be controlled via the <code>out_form</code> and <code>treat_form</code> models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (<code>out_form = ".")</code>is a main-effects proportional odds model (fit using <code><a href="https://www.rdocumentation.org/packages/MASS/topics/polr">MASS::polr</a></code>). The default for the treatment model is an intercept-only logistic regression model (<code>treat_form = 1</code>), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to <code>drord</code> where we treat <code>age_grp</code> as a <code>factor</code> rather than numeric in the outcome model and include adjustment for <code>age_grp</code> in the propensity model.</p>
+<p>In the simple call, we used default working models. The <code>drord</code> documentation indicates that the working model fits can be controlled via the <code>out_form</code> and <code>treat_form</code> models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (<code>out_form = ".")</code>is a main-effects proportional odds model (fit using <code><a href="https://www.rdocumentation.org/packages/ordinal/topics/clm">ordinal::clm</a></code>). The default for the treatment model is an intercept-only logistic regression model (<code>treat_form = 1</code>), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to <code>drord</code> where we treat <code>age_grp</code> as a <code>factor</code> rather than numeric in the outcome model and include adjustment for <code>age_grp</code> in the propensity model.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">(fit2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">               <span class="dt">out_form =</span> <span class="st">"factor(age_grp)"</span>,</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4">               <span class="dt">treat_form =</span> <span class="st">"factor(age_grp)"</span>))</a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5786443 0.5329536 0.6243350 
+## 0.5786449 0.5329542 0.6243356 
 ## 
 ## $log_odds
-##              est  wald_cil    wald_ciu
-## treat1 -1.263993 -1.526052 -1.00193386
-## treat0 -0.857494 -1.099825 -0.61516331
-## diff   -0.406499 -0.746196 -0.06680199
+##               est   wald_cil    wald_ciu
+## treat1 -1.2639925 -1.5260515 -1.00193340
+## treat0 -0.8574863 -1.0998159 -0.61515684
+## diff   -0.4065061 -0.7462023 -0.06680994
 ## 
 ## $weighted_mean
-##              est   wald_cil wald_ciu
-## treat1 2.5430137 2.45499693 2.631030
-## treat0 2.3543734 2.26601307 2.442734
-## diff   0.1886403 0.06985448 0.307426</code></pre>
+##              est   wald_cil  wald_ciu
+## treat1 2.5430135 2.45499677 2.6310303
+## treat0 2.3543710 2.26601057 2.4427313
+## diff   0.1886426 0.06985681 0.3074284</code></pre>
 <p>By default models are returned in the <code>drord</code> object; this behavior can be suppressed via the <code>return_models</code> option. The fitted working models can be accessed via <code>$out_mod</code> and <code>$treat_mod</code>, which we can use to confirm that the models were fit as expected in <code>fit1</code> and <code>fit2</code>. Note that <code>out_mod</code> is a list of length two, which contains a fitted proportional odds model for each treatment level.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># age_grp treated as numeric in fit1</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">fit1<span class="op">$</span>out_mod<span class="op">$</span>treat1</a></code></pre></div>
-<pre><code>## Call:
-## MASS::polr(formula = stats::as.formula(paste0("factor(out, ordered = TRUE) ~", 
-##     out_form)), data = data.frame(out = out, covar), weights = as.numeric(treat == 
-##     trt_level)/trt_spec_prob_est)
+<pre><code>## formula: out ~ age_grp
+## data:    
+## data.frame(out = out_f, covar)[treat == trt_level, , drop = FALSE]
+## 
+##  link  threshold nobs logLik  AIC    niter max.grad cond.H 
+##  logit flexible  500  -365.89 737.79 6(0)  2.14e-13 1.6e+03
 ## 
 ## Coefficients:
-##    age_grp 
-## -0.6383738 
+## age_grp 
+## -0.6384 
 ## 
-## Intercepts:
-##       1|2       2|3 
-## -5.167414 -4.306041 
-## 
-## Residual Deviance: 731.7883 
-## AIC: 737.7883</code></pre>
+## Threshold coefficients:
+##    1|2    2|3 
+## -5.168 -4.306</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># age_grp treated as factor in fit2</span></a>
 <a class="sourceLine" id="cb11-2" data-line-number="2">fit2<span class="op">$</span>out_mod<span class="op">$</span>treat1</a></code></pre></div>
-<pre><code>## Call:
-## MASS::polr(formula = stats::as.formula(paste0("factor(out, ordered = TRUE) ~", 
-##     out_form)), data = data.frame(out = out, covar), weights = as.numeric(treat == 
-##     trt_level)/trt_spec_prob_est)
+<pre><code>## formula: out ~ factor(age_grp)
+## data:    
+## data.frame(out = out_f, covar)[treat == trt_level, , drop = FALSE]
+## 
+##  link  threshold nobs logLik  AIC    niter max.grad cond.H 
+##  logit flexible  500  -357.95 731.91 20(0) 6.70e-09 1.0e+12
 ## 
 ## Coefficients:
 ## factor(age_grp)2 factor(age_grp)3 factor(age_grp)4 factor(age_grp)5 
-##        0.1746635      -14.3131056      -14.7731188      -15.3756183 
+##       -7.455e-05       -2.027e+01       -2.073e+01       -2.133e+01 
 ## factor(age_grp)6 factor(age_grp)7 
-##      -16.1189508      -16.6569284 
+##       -2.208e+01       -2.261e+01 
 ## 
-## Intercepts:
-##       1|2       2|3 
-## -17.45125 -16.50050 
-## 
-## Residual Deviance: 715.9062 
-## AIC: 731.9062</code></pre>
-<p>Other packages are available for fitting the proportional odds models. While the model is the same in each package, the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the <code>polr</code> fitting routine, one may consider one of the alternative packages. Options are <code>vglm</code> (from the <code>VGAM</code> package), or <code>clm</code> (from the <code>ordinal</code> package). Here we demonstrate this control.</p>
+## Threshold coefficients:
+##    1|2    2|3 
+## -23.41 -22.46</code></pre>
+<p>Other packages are available for fitting the proportional odds models. While the model is the same in each package, the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the <code>ordinal</code> fitting routine, one may consider one of the alternative packages. Options are <code>vglm</code> (from the <code>VGAM</code> package), or <code>polr</code> (from the <code>MASS</code> package). In simulations, we have seen more stable performance from <code>vglm</code> and <code>clm</code>. Here we demonstrate this control.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># use vglm to fit model instead</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2">fit3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
 <a class="sourceLine" id="cb13-3" data-line-number="3">              <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
@@ -320,7 +320,7 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
 <a class="sourceLine" id="cb15-5" data-line-number="5">               <span class="dt">est_dist =</span> <span class="ot">FALSE</span>)) <span class="co"># save time by not computing CIs for CDF/PMF</span></a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est   bca_cil   bca_ciu 
-## 0.5771119 0.5489721 0.6139196</code></pre>
+## 0.5771141 0.5371180 0.6076215</code></pre>
 </div>
 <div id="stratified-estimators" class="section level2">
 <h2 class="hasAnchor">
@@ -377,25 +377,47 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
 <a class="sourceLine" id="cb25-10" data-line-number="10">               <span class="dt">treat_form =</span> <span class="st">"I(age_grp &lt; 5)"</span>))</a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5547436 0.5054174 0.6040699 
+## 0.5726326 0.5233470 0.6219181 
 ## 
 ## $log_odds
-##               est   wald_cil   wald_ciu
-## treat1 -1.1390955 -1.4230477 -0.8551434
-## treat0 -0.9734399 -1.2291569 -0.7177228
-## diff   -0.1656557 -0.5321215  0.2008102
+##               est   wald_cil    wald_ciu
+## treat1 -1.2758014 -1.5669559 -0.98464684
+## treat0 -0.9900505 -1.2522602 -0.72784083
+## diff   -0.2857509 -0.6615436  0.09004186
 ## 
 ## $weighted_mean
-##              est    wald_cil  wald_ciu
-## treat1 2.5011045  2.39928968 2.6029192
-## treat0 2.3919111  2.30241429 2.4814079
-## diff   0.1091933 -0.02084888 0.2392356</code></pre>
+##              est   wald_cil  wald_ciu
+## treat1 2.5509125 2.45347241 2.6483527
+## treat0 2.3955968 2.30551858 2.4856749
+## diff   0.1553158 0.02804006 0.2825915</code></pre>
+</div>
+<div id="risk-difference-for-binary-outcomes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#risk-difference-for-binary-outcomes" class="anchor"></a>Risk difference for binary outcomes</h2>
+<p>Though not the focus of the <code>drord</code> package, it is possible to use <code>drord</code> to compute a doubly robust estimate of the risk difference when the outcome is binary. In this case, the package defaults to estimating the outcome distribution using logistic regression (as implemented in the <code><a href="https://www.rdocumentation.org/packages/stats/topics/glm">stats::glm</a></code> function). We demonstrate in the call below.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># collapse categories to make a binary outcome</span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2">covid19_binary_out &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(covid19<span class="op">$</span>out <span class="op">==</span><span class="st"> </span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb27-4" data-line-number="4"><span class="co"># call drord, only requesting weighted mean with equal </span></a>
+<a class="sourceLine" id="cb27-5" data-line-number="5"><span class="co"># weights; which in this case equals the risk difference</span></a>
+<a class="sourceLine" id="cb27-6" data-line-number="6">(fit8 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19_binary_out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat,</a>
+<a class="sourceLine" id="cb27-7" data-line-number="7">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
+<a class="sourceLine" id="cb27-8" data-line-number="8">               <span class="dt">param =</span> <span class="st">"weighted_mean"</span>,</a>
+<a class="sourceLine" id="cb27-9" data-line-number="9">               <span class="dt">est_dist =</span> <span class="ot">FALSE</span>)) <span class="co"># must be FALSE to run</span></a></code></pre></div>
+<pre><code>## $weighted_mean
+##              est  wald_cil  wald_ciu
+## treat1 0.7108203 0.6549009 0.7667397
+## treat0 0.5214215 0.4622688 0.5805742
+## diff   0.1893988 0.1107782 0.2680193</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># confirm that glm was used for outcome model</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(fit8<span class="op">$</span>out_mod<span class="op">$</span>treat1)</a></code></pre></div>
+<pre><code>## [1] "glm" "lm"</code></pre>
 </div>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
 <pre><code>## R version 3.5.3 (2019-03-11)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS Mojave 10.14.6
@@ -434,7 +456,7 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
 ## [52] crayon_1.3.4</code></pre>
 <div id="refs" class="references">
 <div id="ref-diaz2016enhanced">
-<p>Dı'az, Iván, Elizabeth Colantuoni, and Michael Rosenblum. 2016. “Enhanced Precision in the Analysis of Randomized Trials with Ordinal Outcomes.” <em>Biometrics</em> 72 (2): 422–31.</p>
+<p>Díaz, Iván, Elizabeth Colantuoni, and Michael Rosenblum. 2016. “Enhanced Precision in the Analysis of Randomized Trials with Ordinal Outcomes.” <em>Biometrics</em> 72 (2): 422–31.</p>
 </div>
 <div id="ref-efron1994introduction">
 <p>Efron, Bradley, and Robert J Tibshirani. 1994. <em>An Introduction to the Bootstrap</em>. CRC press.</p>
@@ -466,6 +488,7 @@ Plot of treatment-specific PMF. Black bars are pointwise 95% confidence interval
       <li><a href="#bootstrap-confidence-intervals">Bootstrap confidence intervals</a></li>
       <li><a href="#stratified-estimators">Stratified estimators</a></li>
       <li><a href="#missing-outcome-values">Missing outcome values</a></li>
+      <li><a href="#risk-difference-for-binary-outcomes">Risk difference for binary outcomes</a></li>
       </ul>
 </li>
       <li><a href="#session-info">Session Info</a></li>

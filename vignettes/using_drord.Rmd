@@ -70,7 +70,7 @@ that are useful for analyzing studies with ordinal outcomes.
 
 To solidify ideas, we briefly introduce notation. Let $X$ be a vector 
 of baseline covariates that could include continuous, binary, or categorical components, $A$ be a binary treatment vector (assuming values 1, e.g., for active treatment and 0, e.g., for a 
-control treatment or standard of care), and $Y$ be an ordinal-valued outcome encoded to assume numeric values $j = 0, 1, ..., $K$. We assume that the data consist of $n$ independent copies of the random variable $O = (X,A,Y)$.
+control treatment or standard of care), and $Y$ be an ordinal-valued outcome encoded to assume numeric values $j = 0, 1, ..., K$. We assume that the data consist of $n$ independent copies of the random variable $O = (X,A,Y)$.
 
 Our estimators are constructed by first estimating key *nuisance parameters* describing different aspects of the distribution of $O$. These nuisance parameters are not directly of interest, but are used as an intermediate step in the estimation procedure. We describe these nuisance quantities mathematically and return to these ideas when we demonstrate how to control their estimation within the `drord` function. 
 
@@ -78,11 +78,14 @@ Our estimators are constructed by first estimating key *nuisance parameters* des
 
 The first nuisance parameter is $P(A | X)$, the conditional probability of the treatment variable given baseline covariates. This quantity is known exactly in a randomized trial and may not depend at all on $X$ (e.g., if randomization is not stratified by covariates). We use $\hat{\pi}(a | x)$ to denote an estimate of $P(A = a | X = x)$ for $a = 0, 1$ and a given covariate values $x$. This estimate could be set exactly equal to the known randomization probability, the sample proportion that receive treatment $a$, or a logistic regression model to adjust for chance imbalances in $X$ across the treatment arms. 
 
-We also require estimates of $\{ P(Y \le j | A = a, X), j = 0, 1, ..., J \}$ for $a = 0, 1$. We refer to these as treatment-specific conditional distribution functions (CDFs) of the outcome. Our estimators are built on a working proportional odds regression model: for $j = 0, ..., K-1$, $\mbox{logit}\{P(Y \le j | A = a, X = x)\} = m_{\alpha_a, \beta_a}(j,x) = \alpha_a(j) + \beta_a^\top \beta$. Importantly, the validity (i.e., consistency, asymptotic normality) of our estimators **does not** rely on this working model being correctly specified. For $a = 0, 1$ our estimates of $\alpha_a, \beta_a$ are chosen by minimizing $$
-  -\sum_{j=0}^{K-1} \sum_{i=1}^n \frac{I\{A_i = a\}}{\hat{\pi}(A_i | X_i)} \log\left[m_{\alpha,\beta}(j,X_i)^{I(Y_i\le j)}\{1-m_{\alpha,\beta}(j,X_i)\}^{I(Y_i> j)}\right]. \label{eq:empiricalRisk} \ . 
+We also require estimates of $\{ P(Y \le j | A = a, X), j = 0, 1, ..., J \}$ for $a = 0, 1$. We refer to these as treatment-specific conditional distribution functions (CDFs) of the outcome. Our estimators are built on a working proportional odds regression model: for $j = 0, ..., K-1$, $$
+\mbox{logit}\{P(Y \le j | A = a, X = x)\} = m_{\alpha_a, \beta_a}(j,x) = \alpha_a(j) + \beta_a^\top x \ . 
+$$ 
+Importantly, the validity (i.e., consistency, asymptotic normality) of our estimators **does not** rely on this working model being correctly specified. For $a = 0, 1$ our estimates of $\alpha_a, \beta_a$ are chosen by minimizing $$
+  -\sum_{j=0}^{K-1} \sum_{i=1}^n \frac{I\{A_i = a\}}{\hat{\pi}(A_i | X_i)} \log\left[m_{\alpha,\beta}(j,X_i)^{I(Y_i\le j)}\{1-m_{\alpha,\beta}(j,X_i)\}^{I(Y_i> j)}\right] \ .  \label{eq:empiricalRisk} 
 $$
 This estimation can be carried out using standard software packages (discussed in detail below)
-for fitting proportional odds models by including observation-level weights equal for the $i$-th observation to $\frac{I\{A_i = a\}}{\hat{\pi}(A_i | X_i)}$. Note that this procedure is repeated in each treatment arm separately. 
+for fitting proportional odds models by including observation-level weights equal for the $i$-th observation equal to $I\{A_i = a\}/\hat{\pi}(A_i | X_i)$. Note that this procedure is repeated in each treatment arm separately. 
 
 Finally, we require an estimate for each $x$ of $F_X(x) = P(X \le x)$, the distribution of baseline covariates. Our estimators use the empirical distribution of this quantity. 
 
