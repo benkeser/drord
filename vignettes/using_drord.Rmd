@@ -168,7 +168,7 @@ pmf_plot + ggsci::scale_fill_nejm()
 
 ## Working model controls
 
-In the simple call, we used default working models. The `drord` documentation indicates that the working model fits can be controlled via the `out_form` and `treat_form` models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (`out_form = ".")`is a main-effects proportional odds model (fit using `MASS::polr`). The default for the treatment model is an intercept-only logistic regression model (`treat_form = 1`), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to `drord` where we treat `age_grp` as a `factor` rather than numeric in the outcome model and include adjustment for `age_grp` in the propensity model. 
+In the simple call, we used default working models. The `drord` documentation indicates that the working model fits can be controlled via the `out_form` and `treat_form` models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (`out_form = ".")`is a main-effects proportional odds model (fit using `ordinal::clm`). The default for the treatment model is an intercept-only logistic regression model (`treat_form = 1`), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to `drord` where we treat `age_grp` as a `factor` rather than numeric in the outcome model and include adjustment for `age_grp` in the propensity model. 
 
 ```{r}
 (fit2 <- drord(out = covid19$out, treat = covid19$treat, 
@@ -187,7 +187,7 @@ fit1$out_mod$treat1
 fit2$out_mod$treat1
 ```
 
-Other packages are available for fitting the proportional odds models. While the model is the same in each package, the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the `polr` fitting routine, one may consider one of the alternative packages. Options are `vglm` (from the `VGAM` package), or `clm` (from the `ordinal` package). Here we demonstrate this control.
+Other packages are available for fitting the proportional odds models. While the model is the same in each package, the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the `ordinal` fitting routine, one may consider one of the alternative packages. Options are `vglm` (from the `VGAM` package), or `polr` (from the `MASS` package). In simulations, we have seen more stable performance from `vglm` and `clm`. Here we demonstrate this control.
 
 ```{r}
 # use vglm to fit model instead
@@ -253,6 +253,25 @@ out_with_miss[miss_out] <- NA
 (fit7 <- drord(out = out_with_miss, treat = covid19$treat, 
                covar = covid19[ , "age_grp", drop = FALSE], 
                treat_form = "I(age_grp < 5)"))
+```
+
+## Risk difference for binary outcomes
+
+Though not the focus of the `drord` package, it is possible to use `drord` to compute a doubly robust estimate of the risk difference when the outcome is binary. In this case, the package defaults to estimating the outcome distribution using logistic regression (as implemented in the `stats::glm` function). We demonstrate in the call below. 
+
+```{r}
+# collapse categories to make a binary outcome
+covid19_binary_out <- as.numeric(covid19$out == 3)
+
+# call drord, only requesting weighted mean with equal 
+# weights; which in this case equals the risk difference
+(fit8 <- drord(out = covid19_binary_out, treat = covid19$treat,
+               covar = covid19[ , "age_grp", drop = FALSE],
+               param = "weighted_mean",
+               est_dist = FALSE)) # must be FALSE to run
+
+# confirm that glm was used for outcome model
+class(fit8$out_mod$treat1)
 ```
 
 # Session Info

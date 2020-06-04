@@ -1,6 +1,9 @@
 md:
 	Rscript -e "rmarkdown::render('README.Rmd', output_file = 'README.md')"
 
+vignette:
+	Rscript -e "rmarkdown::render('./vignettes/using_drord.Rmd')"
+
 site:
 	Rscript -e "rmarkdown::render('README.Rmd', output_file = 'README.md')"
 	Rscript -e "pkgdown::build_site()"
