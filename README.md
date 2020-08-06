@@ -123,8 +123,9 @@ cdf_plot <- plot(fit, dist = "cdf",
                  treat_labels = c("Treatment", "Control"),
                  out_labels = c("Death", "Death or intubation"))
 cdf_plot$plot + ggsci::scale_fill_nejm()
-#> NULL
 ```
+
+![](README-unnamed-chunk-3-1.png)<!-- -->
 
 The black bars are pointwise 95% confidence intervals; the gray bars are
 simultaneous 95% confidence intervals.
@@ -137,10 +138,9 @@ pmf_plot <- plot(fit, dist = "pmf",
                  treat_labels = c("Treatment", "Control"),
                  out_labels = c("Death", "Intubation", "None"))
 pmf_plot$plot + ggsci::scale_fill_nejm()                 
-#> NULL
 ```
 
------
+## ![](README-unnamed-chunk-4-1.png)<!-- -->
 
 ## Issues
 
