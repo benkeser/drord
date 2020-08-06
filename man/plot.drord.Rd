@@ -20,6 +20,11 @@ highest level of outcome will be dropped.}
 
 \item{...}{Other arguments (not used)}
 }
+\value{
+A list with named entries \code{plot} (a \code{ggplot2} object) and \code{plot_data},
+the \code{data.frame} from which the plot is made. The latter is included for additional
+modifications to the plot that are desired.
+}
 \description{
 Print the output of a \code{"drord"} object.
 }

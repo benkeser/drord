@@ -122,10 +122,9 @@ distribution or probability mass function of outcomes.
 cdf_plot <- plot(fit, dist = "cdf", 
                  treat_labels = c("Treatment", "Control"),
                  out_labels = c("Death", "Death or intubation"))
-cdf_plot + ggsci::scale_fill_nejm()
+cdf_plot$plot + ggsci::scale_fill_nejm()
+#> NULL
 ```
-
-![](README-unnamed-chunk-3-1.png)<!-- -->
 
 The black bars are pointwise 95% confidence intervals; the gray bars are
 simultaneous 95% confidence intervals.
@@ -137,10 +136,11 @@ A similar plot can be made for the PMF.
 pmf_plot <- plot(fit, dist = "pmf",
                  treat_labels = c("Treatment", "Control"),
                  out_labels = c("Death", "Intubation", "None"))
-pmf_plot + ggsci::scale_fill_nejm()                 
+pmf_plot$plot + ggsci::scale_fill_nejm()                 
+#> NULL
 ```
 
-## ![](README-unnamed-chunk-4-1.png)<!-- -->
+-----
 
 ## Issues
 

@@ -73,6 +73,9 @@ print.drord <- function(x, ci = "bca", ...) {
 #' @param dist Which distribution to plot. Valid options are \code{"cdf"} or \code{"pmf"}.
 #' @param ... Other arguments (not used)
 #' @export
+#' @return A list with named entries \code{plot} (a \code{ggplot2} object) and \code{plot_data},
+#' the \code{data.frame} from which the plot is made. The latter is included for additional
+#' modifications to the plot that are desired. 
 #' @importFrom ggplot2 ggplot aes geom_bar scale_y_continuous geom_errorbar 
 #' @importFrom ggplot2 theme_bw ggtitle position_dodge
 #' @method plot drord
@@ -120,8 +123,8 @@ plot.drord <- function(x,
               ggplot2::geom_errorbar(position = ggplot2::position_dodge(1.1), 
                                      aes(ymin = simul_cil, ymax = simul_ciu),
                                      width = 0.125, colour = "gray50") + 
-              ggplot2::theme_bw()
-  return(bar_plot)
+              ggplot2::theme_bw() 
+  return(list(plot = bar_plot, plot_data = plot_data))
 }
 
 

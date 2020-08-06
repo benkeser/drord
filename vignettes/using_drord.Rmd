@@ -154,7 +154,7 @@ and $\theta_a$. This information can be viewed in the `$cdf` and `$pdf` output, 
 cdf_plot <- plot(fit1, dist = "cdf", 
                  treat_labels = c("Treatment", "Control"),
                  out_labels = c("Death", "Death or intubation"))
-cdf_plot + ggsci::scale_fill_nejm()
+cdf_plot$plot + ggsci::scale_fill_nejm()
 ```
 
 Note that custom labels for treatments and outcome levels are allowed. For the CDF, the the outcome labels should correspond to labels for outcome levels 0, 1, ..., $K-1$ (as the CDF evaluated at $K$ is always equal to 1). 
@@ -166,7 +166,19 @@ A similar plot for the PMF can be obtained.
 pmf_plot <- plot(fit1, dist = "pmf",
                  treat_labels = c("Treatment", "Control"),
                  out_labels = c("Death", "Intubation", "None"))
-pmf_plot + ggsci::scale_fill_nejm()    
+pmf_plot$plot + ggsci::scale_fill_nejm()    
+```
+
+Text can be added to the bars as follow.
+
+```{r pmf-plot-with-text, fig.width = 5, fig.cap="Plot of treatment-specific PMF with text added."}
+pmf_plot$plot + 
+  ggsci::scale_fill_nejm() + 
+  ggplot2::geom_text(ggplot2::aes(y = 0, 
+                     label = sprintf("%1.2f", Proportion)), 
+                     position = ggplot2::position_dodge(0.9),
+                     color = "white", 
+                     vjust = "bottom")
 ```
 
 ## Working model controls
