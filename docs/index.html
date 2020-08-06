@@ -159,20 +159,17 @@ install.packages("drord")
 <a class="sourceLine" id="cb3-2" data-line-number="2">cdf_plot &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(fit, <span class="dt">dist =</span> <span class="st">"cdf"</span>, </a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">                 <span class="dt">treat_labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Treatment"</span>, <span class="st">"Control"</span>),</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">                 <span class="dt">out_labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Death"</span>, <span class="st">"Death or intubation"</span>))</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">cdf_plot <span class="op">+</span><span class="st"> </span>ggsci<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggsci/topics/scale_nejm">scale_fill_nejm</a></span>()</a></code></pre></div>
-<p><img src="README-unnamed-chunk-3-1.png" width="700"></p>
+<a class="sourceLine" id="cb3-5" data-line-number="5">cdf_plot<span class="op">$</span>plot <span class="op">+</span><span class="st"> </span>ggsci<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggsci/topics/scale_nejm">scale_fill_nejm</a></span>()</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; NULL</span></a></code></pre></div>
 <p>The black bars are pointwise 95% confidence intervals; the gray bars are simultaneous 95% confidence intervals.</p>
 <p>A similar plot can be made for the PMF.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># plot of PMF</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">pmf_plot &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(fit, <span class="dt">dist =</span> <span class="st">"pmf"</span>,</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">                 <span class="dt">treat_labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Treatment"</span>, <span class="st">"Control"</span>),</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4">                 <span class="dt">out_labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Death"</span>, <span class="st">"Intubation"</span>, <span class="st">"None"</span>))</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">pmf_plot <span class="op">+</span><span class="st"> </span>ggsci<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggsci/topics/scale_nejm">scale_fill_nejm</a></span>()                 </a></code></pre></div>
-</div>
-<div id="section" class="section level2">
-<h2 class="hasAnchor">
-<a href="#section" class="anchor"></a><img src="README-unnamed-chunk-4-1.png" width="700">
-</h2>
+<a class="sourceLine" id="cb4-5" data-line-number="5">pmf_plot<span class="op">$</span>plot <span class="op">+</span><span class="st"> </span>ggsci<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggsci/topics/scale_nejm">scale_fill_nejm</a></span>()                 </a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; NULL</span></a></code></pre></div>
+<hr>
 </div>
 <div id="issues" class="section level2">
 <h2 class="hasAnchor">
