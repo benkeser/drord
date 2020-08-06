@@ -333,7 +333,7 @@ Plot of treatment-specific PMF with text added.
 <a class="sourceLine" id="cb16-5" data-line-number="5">               <span class="dt">est_dist =</span> <span class="ot">FALSE</span>)) <span class="co"># save time by not computing CIs for CDF/PMF</span></a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est   bca_cil   bca_ciu 
-## 0.5771141 0.5383786 0.6047292</code></pre>
+## 0.5771141 0.5444313 0.6057929</code></pre>
 </div>
 <div id="stratified-estimators" class="section level2">
 <h2 class="hasAnchor">
@@ -390,19 +390,19 @@ Plot of treatment-specific PMF with text added.
 <a class="sourceLine" id="cb26-10" data-line-number="10">               <span class="dt">treat_form =</span> <span class="st">"I(age_grp &lt; 5)"</span>))</a></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5526126 0.5049866 0.6002386 
+## 0.5731436 0.5230507 0.6232365 
 ## 
 ## $log_odds
-##               est   wald_cil   wald_ciu
-## treat1 -1.1737145 -1.4600602 -0.8873688
-## treat0 -1.0353614 -1.2940637 -0.7766591
-## diff   -0.1383531 -0.5052004  0.2284942
+##               est   wald_cil    wald_ciu
+## treat1 -1.1887186 -1.4732638 -0.90417334
+## treat0 -0.9025185 -1.1563256 -0.64871145
+## diff   -0.2862000 -0.6522213  0.07982127
 ## 
 ## $weighted_mean
-##               est    wald_cil  wald_ciu
-## treat1 2.51546925  2.41451916 2.6164193
-## treat0 2.41557334  2.32720575 2.5039409
-## diff   0.09989591 -0.02765953 0.2274514</code></pre>
+##              est  wald_cil wald_ciu
+## treat1 2.5207287 2.4210504 2.620407
+## treat0 2.3624938 2.2719872 2.453000
+## diff   0.1582349 0.0288527 0.287617</code></pre>
 </div>
 <div id="risk-difference-for-binary-outcomes" class="section level2">
 <h2 class="hasAnchor">
