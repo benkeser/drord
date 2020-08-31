@@ -4,9 +4,14 @@
 \alias{plot.drord}
 \title{Print the output of a \code{"drord"} object.}
 \usage{
-\method{plot}{drord}(x, treat_labels = c(1, 0), dist = "pmf",
+\method{plot}{drord}(
+  x,
+  treat_labels = c(1, 0),
+  dist = "pmf",
   out_labels = if (dist == "pmf") {     x$out_levels } else {    
-  x$out_levels[-length(x$out_levels)] }, ...)
+    x$out_levels[-length(x$out_levels)] },
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{"drord"} object.}

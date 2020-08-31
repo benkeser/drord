@@ -4,8 +4,15 @@
 \alias{jack_mannwhitney}
 \title{Compute Mann-Whitney log-odds estimates.}
 \usage{
-jack_mannwhitney(treat, covar, out, treat_form, out_levels, out_form,
-  out_model)
+jack_mannwhitney(
+  treat,
+  covar,
+  out,
+  treat_form,
+  out_levels,
+  out_form,
+  out_model
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Missing

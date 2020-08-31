@@ -4,10 +4,20 @@
 \alias{estimate_ci_wmean}
 \title{Compute confidence interval/s for the weight mean parameters}
 \usage{
-estimate_ci_wmean(out, treat, covar, wmean_est, alpha = 0.05,
-  out_levels = order(unique(out)), out_form = NULL,
-  out_weights = rep(1, length(out_levels)), out_model,
-  treat_form = "1", ci = c("bca", "wald"), nboot = 10000)
+estimate_ci_wmean(
+  out,
+  treat,
+  covar,
+  wmean_est,
+  alpha = 0.05,
+  out_levels = order(unique(out)),
+  out_form = NULL,
+  out_weights = rep(1, length(out_levels)),
+  out_model,
+  treat_form = "1",
+  ci = c("bca", "wald"),
+  nboot = 10000
+)
 }
 \arguments{
 \item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 

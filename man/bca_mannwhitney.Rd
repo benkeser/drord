@@ -5,8 +5,18 @@
 \title{Compute a BCa bootstrap confidence interval for the Mann-Whitney parameter. The code is 
 based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf}
 \usage{
-bca_mannwhitney(treat, covar, out, nboot, treat_form, out_levels, out_form,
-  mannwhitney_est, out_model, alpha = 0.05)
+bca_mannwhitney(
+  treat,
+  covar,
+  out,
+  nboot,
+  treat_form,
+  out_levels,
+  out_form,
+  mannwhitney_est,
+  out_model,
+  alpha = 0.05
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Missing

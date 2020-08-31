@@ -85,8 +85,13 @@ a simulated data set of COVID-19 outcomes in hospitalized patients.
 
 ``` r
 library(drord)
+#> Registered S3 methods overwritten by 'ggplot2':
+#>   method         from 
+#>   [.quosures     rlang
+#>   c.quosures     rlang
+#>   print.quosures rlang
 #> drord: Doubly robust estimators for ordinal outcomes
-#> Version: 1.0.0.9000
+#> Version: 1.0.0
 
 # load data
 data(covid19)

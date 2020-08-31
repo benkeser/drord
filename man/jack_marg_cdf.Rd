@@ -4,8 +4,7 @@
 \alias{jack_marg_cdf}
 \title{Compute jackknife distribution estimates.}
 \usage{
-jack_marg_cdf(treat, covar, out, treat_form, out_levels, out_form,
-  out_model)
+jack_marg_cdf(treat, covar, out, treat_form, out_levels, out_form, out_model)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 

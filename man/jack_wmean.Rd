@@ -4,8 +4,16 @@
 \alias{jack_wmean}
 \title{Compute jackknife weighted mean estimates.}
 \usage{
-jack_wmean(treat, covar, out, treat_form, out_levels, out_form,
-  out_weights, out_model)
+jack_wmean(
+  treat,
+  covar,
+  out,
+  treat_form,
+  out_levels,
+  out_form,
+  out_weights,
+  out_model
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Missing

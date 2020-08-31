@@ -4,9 +4,22 @@
 \alias{estimate_ci_mannwhitney}
 \title{Compute confidence interval/s for the Mann-Whitney parameter}
 \usage{
-estimate_ci_mannwhitney(mannwhitney_est, cdf_est, pmf_est, treat_prob_est,
-  treat_form, out_form, treat, ci, out, alpha, nboot, out_levels, covar,
-  out_model)
+estimate_ci_mannwhitney(
+  mannwhitney_est,
+  cdf_est,
+  pmf_est,
+  treat_prob_est,
+  treat_form,
+  out_form,
+  treat,
+  ci,
+  out,
+  alpha,
+  nboot,
+  out_levels,
+  covar,
+  out_model
+)
 }
 \arguments{
 \item{mannwhitney_est}{The point estimates for log-odds.}

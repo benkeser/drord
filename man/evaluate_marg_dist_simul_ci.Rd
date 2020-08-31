@@ -4,8 +4,12 @@
 \alias{evaluate_marg_dist_simul_ci}
 \title{Evaluate simultaneous confidence interval for marginal PMF or CDF.}
 \usage{
-evaluate_marg_dist_simul_ci(marg_dist_est, marg_dist_eif, alpha,
-  remove_last = FALSE)
+evaluate_marg_dist_simul_ci(
+  marg_dist_est,
+  marg_dist_eif,
+  alpha,
+  remove_last = FALSE
+)
 }
 \arguments{
 \item{marg_dist_est}{The point estimate of the marginal CDF/PMF distribution}

@@ -5,8 +5,18 @@
 \title{Compute a BCa bootstrap confidence interval for the weighted mean. The code is 
 based on the slides found here: http://users.stat.umn.edu/~helwig/notes/bootci-Notes.pdf}
 \usage{
-bca_logodds(treat, covar, out, nboot, treat_form, out_levels, out_form,
-  out_model, logodds_est, alpha = 0.05)
+bca_logodds(
+  treat,
+  covar,
+  out,
+  nboot,
+  treat_form,
+  out_levels,
+  out_form,
+  out_model,
+  logodds_est,
+  alpha = 0.05
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 

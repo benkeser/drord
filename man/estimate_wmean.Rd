@@ -5,8 +5,15 @@
 \title{Compute the estimate of the weighted mean parameter based on 
 estimated PMF in each treatment arm.}
 \usage{
-estimate_wmean(pmf_est, treat, out, out_levels, out_weights,
-  treat_prob_est, return_cov = TRUE)
+estimate_wmean(
+  pmf_est,
+  treat,
+  out,
+  out_levels,
+  out_weights,
+  treat_prob_est,
+  return_cov = TRUE
+)
 }
 \arguments{
 \item{pmf_est}{List of treatment-specific PMF estimates.}

@@ -4,8 +4,15 @@
 \alias{one_boot_mannwhitney}
 \title{Get one bootstrap computation of the Mann-Whitney parameter.}
 \usage{
-one_boot_mannwhitney(treat, covar, out, treat_form, out_levels, out_form,
-  out_model)
+one_boot_mannwhitney(
+  treat,
+  covar,
+  out,
+  treat_form,
+  out_levels,
+  out_form,
+  out_model
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Missing

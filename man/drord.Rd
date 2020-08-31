@@ -5,12 +5,24 @@
 \title{Doubly robust estimates of for evaluating effects 
 of treatments on ordinal outcomes.}
 \usage{
-drord(out, treat, covar, out_levels = sort(unique(out)),
-  out_form = ".", out_weights = rep(1, length(out_levels)),
-  out_model = c("clm", "polr", "vglm"), treat_form = "1",
-  param = c("weighted_mean", "log_odds", "mann_whitney"), ci = "wald",
-  alpha = 0.05, nboot = 10000, return_models = TRUE,
-  est_dist = TRUE, stratify = FALSE, ...)
+drord(
+  out,
+  treat,
+  covar,
+  out_levels = sort(unique(out)),
+  out_form = ".",
+  out_weights = rep(1, length(out_levels)),
+  out_model = c("clm", "polr", "vglm"),
+  treat_form = "1",
+  param = c("weighted_mean", "log_odds", "mann_whitney"),
+  ci = "wald",
+  alpha = 0.05,
+  nboot = 10000,
+  return_models = TRUE,
+  est_dist = TRUE,
+  stratify = FALSE,
+  ...
+)
 }
 \arguments{
 \item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
@@ -114,7 +126,7 @@ probability of treatment weighted estimate. This implies that the estimate is
 nonparametric efficient if the working model contains the truth; however, 
 even if the working model does not contain the truth, the CDF estimates are 
 consistent and asymptotically normal with variance expected to dominate that
-of an unadjusted estimate of the same treatment effect.
+of an unadjusted estimate of the same treatment effect. 
 
 The CDF estimates are subsequently mapped into estimates of each requested 
 parameter for evaluating treatment effects. The double robustness and efficiency 

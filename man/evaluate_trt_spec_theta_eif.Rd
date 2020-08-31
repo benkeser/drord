@@ -4,8 +4,14 @@
 \alias{evaluate_trt_spec_theta_eif}
 \title{get a matrix of eif estimates for the treatment-specific CDF estimates}
 \usage{
-evaluate_trt_spec_theta_eif(trt_spec_cdf_est, trt_spec_prob_est, trt_level,
-  treat, out, out_levels)
+evaluate_trt_spec_theta_eif(
+  trt_spec_cdf_est,
+  trt_spec_prob_est,
+  trt_level,
+  treat,
+  out,
+  out_levels
+)
 }
 \arguments{
 \item{trt_spec_cdf_est}{Estimated conditional CDF for \code{trt_level}.}

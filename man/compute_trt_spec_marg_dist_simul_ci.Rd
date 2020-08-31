@@ -4,8 +4,12 @@
 \alias{compute_trt_spec_marg_dist_simul_ci}
 \title{Compute simultaneous confidence interval for treatment-specific marginal distribution}
 \usage{
-compute_trt_spec_marg_dist_simul_ci(pt_est, trt_spec_marg_dist_eif,
-  remove_last = TRUE, alpha)
+compute_trt_spec_marg_dist_simul_ci(
+  pt_est,
+  trt_spec_marg_dist_eif,
+  remove_last = TRUE,
+  alpha
+)
 }
 \arguments{
 \item{pt_est}{The point estimate of the treatment-specific marginal CDF/PMF}

@@ -5,8 +5,14 @@
 \title{Used to compute treatment-specific BCa intervals for 
 the CDF and PMF}
 \usage{
-compute_trt_spec_bca_intervals(dist = c("cdf", "pmf"), trt = c(1, 0),
-  marg_est, boot_samples, jack_samples, alpha)
+compute_trt_spec_bca_intervals(
+  dist = c("cdf", "pmf"),
+  trt = c(1, 0),
+  marg_est,
+  boot_samples,
+  jack_samples,
+  alpha
+)
 }
 \arguments{
 \item{dist}{Which one? CDF or PMF?}

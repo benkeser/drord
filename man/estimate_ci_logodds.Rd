@@ -4,9 +4,22 @@
 \alias{estimate_ci_logodds}
 \title{Compute confidence interval/s for the log-odds parameters}
 \usage{
-estimate_ci_logodds(logodds_est, cdf_est, out_form, covar, treat_prob_est,
-  treat, treat_form, out, ci, alpha = 0.05, nboot, out_levels, out_model,
-  ...)
+estimate_ci_logodds(
+  logodds_est,
+  cdf_est,
+  out_form,
+  covar,
+  treat_prob_est,
+  treat,
+  treat_form,
+  out,
+  ci,
+  alpha = 0.05,
+  nboot,
+  out_levels,
+  out_model,
+  ...
+)
 }
 \arguments{
 \item{logodds_est}{The point estimates for log-odds.}

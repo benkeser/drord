@@ -4,8 +4,7 @@
 \alias{get_one_logodds}
 \title{Compute one log odds based on a given data set.}
 \usage{
-get_one_logodds(treat, covar, treat_form, out_model, out, out_levels,
-  out_form)
+get_one_logodds(treat, covar, treat_form, out_model, out, out_levels, out_form)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 

@@ -4,8 +4,16 @@
 \alias{get_one_wmean}
 \title{Compute one weighted mean based on a given data set.}
 \usage{
-get_one_wmean(treat, covar, treat_form, out, out_levels, out_form,
-  out_model, out_weights)
+get_one_wmean(
+  treat,
+  covar,
+  treat_form,
+  out,
+  out_levels,
+  out_form,
+  out_model,
+  out_weights
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Missing

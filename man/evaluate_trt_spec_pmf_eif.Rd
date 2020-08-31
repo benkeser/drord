@@ -4,8 +4,14 @@
 \alias{evaluate_trt_spec_pmf_eif}
 \title{Get a matrix of eif estimates for treatment-specific PMF}
 \usage{
-evaluate_trt_spec_pmf_eif(trt_spec_pmf_est, trt_spec_prob_est, trt_level,
-  treat, out, out_levels)
+evaluate_trt_spec_pmf_eif(
+  trt_spec_pmf_est,
+  trt_spec_prob_est,
+  trt_level,
+  treat,
+  out,
+  out_levels
+)
 }
 \arguments{
 \item{trt_spec_pmf_est}{Estimated conditional PMF for \code{trt_level}.}

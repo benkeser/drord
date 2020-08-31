@@ -5,8 +5,7 @@
 \title{Map an estimate of treatment-specific PMF into an estimate of 
 treatment specific conditional mean for each observation.}
 \usage{
-estimate_cond_mean(trt_spec_pmf_est, ordered_out_levels,
-  ordered_out_weights)
+estimate_cond_mean(trt_spec_pmf_est, ordered_out_levels, ordered_out_weights)
 }
 \arguments{
 \item{trt_spec_pmf_est}{The treatment-specific PMF estimates}

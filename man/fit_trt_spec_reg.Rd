@@ -12,8 +12,18 @@ group, then 0's are added in. The function returns a matrix with named columns
 corresponding to each outcome (ordered numerically). The entries 
 represent the estimated covariate-conditional treatment-specific PMF.}
 \usage{
-fit_trt_spec_reg(trt_level, trt_spec_prob_est, out, treat, covar,
-  out_levels, out_form = NULL, out_model, stratify, ...)
+fit_trt_spec_reg(
+  trt_level,
+  trt_spec_prob_est,
+  out,
+  treat,
+  covar,
+  out_levels,
+  out_form = NULL,
+  out_model,
+  stratify,
+  ...
+)
 }
 \arguments{
 \item{trt_level}{Which level of treatment to fit the proportional odds model for}

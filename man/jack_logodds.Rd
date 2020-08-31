@@ -4,8 +4,7 @@
 \alias{jack_logodds}
 \title{Compute jackknife log-odds estimates.}
 \usage{
-jack_logodds(treat, covar, out, treat_form, out_model, out_levels,
-  out_form)
+jack_logodds(treat, covar, out, treat_form, out_model, out_levels, out_form)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 

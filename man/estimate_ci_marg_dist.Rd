@@ -5,9 +5,23 @@
 \title{Compute confidence interval/s for the treatment specific 
 PMF and CDF.}
 \usage{
-estimate_ci_marg_dist(marg_cdf_est, marg_pmf_est, cdf_est, pmf_est, covar,
-  treat_prob_est, treat_form, out_form, treat, ci, out_levels, out_model,
-  out, alpha, nboot)
+estimate_ci_marg_dist(
+  marg_cdf_est,
+  marg_pmf_est,
+  cdf_est,
+  pmf_est,
+  covar,
+  treat_prob_est,
+  treat_form,
+  out_form,
+  treat,
+  ci,
+  out_levels,
+  out_model,
+  out,
+  alpha,
+  nboot
+)
 }
 \arguments{
 \item{marg_cdf_est}{Point estimate of treatment-specific CDF.}

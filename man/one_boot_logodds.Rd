@@ -4,8 +4,15 @@
 \alias{one_boot_logodds}
 \title{Get one bootstrap computation of the log odds parameters.}
 \usage{
-one_boot_logodds(treat, covar, out, treat_form, out_levels, out_form,
-  out_model)
+one_boot_logodds(
+  treat,
+  covar,
+  out,
+  treat_form,
+  out_levels,
+  out_form,
+  out_model
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 

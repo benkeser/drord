@@ -4,8 +4,15 @@
 \alias{one_boot_marg_dist}
 \title{Get one bootstrap computation of the CDF and PMF estimates}
 \usage{
-one_boot_marg_dist(treat, covar, out, treat_form, out_levels, out_form,
-  out_model)
+one_boot_marg_dist(
+  treat,
+  covar,
+  out,
+  treat_form,
+  out_levels,
+  out_form,
+  out_model
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Should only assume 

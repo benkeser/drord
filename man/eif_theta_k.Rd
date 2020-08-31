@@ -5,8 +5,7 @@
 \title{Get EIF estimates for treatment-specific CDF at a particular
 level of the outcome}
 \usage{
-eif_theta_k(k, out, treat, trt_level, trt_spec_prob_est,
-  trt_k_spec_cdf_est)
+eif_theta_k(k, out, treat, trt_level, trt_spec_prob_est, trt_k_spec_cdf_est)
 }
 \arguments{
 \item{k}{The level of the outcome.}

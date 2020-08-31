@@ -5,8 +5,13 @@
 \title{Obtain an estimate of the efficient influence function for the 
 treatment-specific weighted mean parameter}
 \usage{
-estimate_eif_wmean(trt_spec_cond_mean_est, trt_spec_prob_est, trt_level,
-  out, treat)
+estimate_eif_wmean(
+  trt_spec_cond_mean_est,
+  trt_spec_prob_est,
+  trt_level,
+  out,
+  treat
+)
 }
 \arguments{
 \item{trt_spec_cond_mean_est}{Conditional mean for \code{trt_level}}

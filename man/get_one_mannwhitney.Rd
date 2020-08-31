@@ -4,8 +4,15 @@
 \alias{get_one_mannwhitney}
 \title{Compute one estimate of Mann-Whitney parameter based on a given data set.}
 \usage{
-get_one_mannwhitney(treat, covar, treat_form, out, out_levels, out_form,
-  out_model)
+get_one_mannwhitney(
+  treat,
+  covar,
+  treat_form,
+  out,
+  out_levels,
+  out_form,
+  out_model
+)
 }
 \arguments{
 \item{treat}{A \code{numeric} vector containing treatment status. Missing

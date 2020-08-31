@@ -6,8 +6,18 @@
 Essentially this is a wrapper function for \code{fit_trt_spec_reg}, which
 fits the proportion odds model in a given treatment arm.}
 \usage{
-estimate_pmf(out, treat, covar, out_levels, out_form = NULL, out_model,
-  treat_prob_est, stratify = FALSE, return_models = TRUE, ...)
+estimate_pmf(
+  out,
+  treat,
+  covar,
+  out_levels,
+  out_form = NULL,
+  out_model,
+  treat_prob_est,
+  stratify = FALSE,
+  return_models = TRUE,
+  ...
+)
 }
 \arguments{
 \item{out}{A \code{numeric} vector containing the outcomes. Missing outcomes are 
