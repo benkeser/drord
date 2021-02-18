@@ -1,8 +1,10 @@
 #' Get a response from model formula
 #' 
 #' @param formula The model formula
+#' @importFrom stats terms as.formula
 getResponseFromFormula = function(formula, data) {
-    if (attr(terms(as.formula(formula), data = data)    , which = 'response'))
+    if (attr(stats::terms(stats::as.formula(formula), data = data), 
+             which = 'response'))
         return(all.vars(formula)[1])
     else
         return(NULL)
@@ -12,6 +14,7 @@ getResponseFromFormula = function(formula, data) {
 #' 
 #' The outcome in \code{data} (indicated in the \code{form} object) should be an ordered factor.
 #' 
+#' @importFrom stats model.extract model.frame glm
 #' @param form The model formula
 #' @param data The data set used to fit the model 
 #' @param weights Either equal to 1 (no weights) or a vector of length equal to nrow(data)
@@ -28,7 +31,7 @@ POplugin = function(form, data, weights = 1){
 		new_out_name = paste0(new_out_name,"1")
 	}
 
-	outcomes = model.extract(model.frame(form,data),"response") # extract column with outcomes from data
+	outcomes = stats::model.extract(stats::model.frame(form,data),"response") # extract column with outcomes from data
 
 	data_pooled = do.call(rbind,lapply(levels(outcomes),function(lev){ # create pooled dataset to be used when fitting the model
 		if(lev >= min(outcomes) & lev < max(outcomes)){
@@ -43,7 +46,7 @@ POplugin = function(form, data, weights = 1){
 	}))
 
 	glm_fit = suppressWarnings({
-		glm(update(form,formula(paste0(new_out_name,"~.-1+",out_name))), data = data_pooled, family=binomial(),weights=wgts)
+		stats::glm(update(form,formula(paste0(new_out_name,"~.-1+",out_name))), data = data_pooled, family=binomial(),weights=wgts)
 	})
 
 	out = list(glm_fit=glm_fit,data=data,levs=levels(outcomes),out_name=out_name)
@@ -69,7 +72,7 @@ predict.POplugin = function(object,newdata=NULL){
 				newdata[,colnames(newdata)!=out_name,drop=FALSE],
 				lev)
 		colnames(df)[ncol(df)] = out_name
-		predict(object$glm_fit,newdata=df,type="response")
+		stats::predict(object$glm_fit,newdata=df,type="response")
 		})
 	pmf = cbind(cumulative,1) - cbind(0,cumulative)
 	colnames(pmf) = levs
