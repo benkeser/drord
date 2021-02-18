@@ -1,6 +1,6 @@
 Package: drord
 Title: Doubly-Robust Estimators for Ordinal Outcomes
-Version: 1.0.0
+Version: 1.0.0.9000
 Authors@R: c(
     person("David", "Benkeser", email = "benkeser@emory.edu",
            role = c("aut", "cre","cph"),
@@ -26,4 +26,4 @@ BugReports: https://github.com/benkeser/drord/issues
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
