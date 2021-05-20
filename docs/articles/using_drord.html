@@ -839,7 +839,7 @@ Plot of treatment-specific PMF with text added.
 <div id="bootstrap-confidence-intervals" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bootstrap-confidence-intervals" class="anchor"></a>Bootstrap confidence intervals</h2>
-<p>By default, <code>drord</code> will used closed-form inference. While this is generally faster, we may instead prefer to use bootstrap confidence intervals, which should provide more robust behavior when working models are misspecified. Bootstrap intervals can be requested via the <code>ci = "bca"</code>, with option <code>nboot</code> determining the number of bootstrap resamples performed. The bootstrap employed by the package is the bias corrected and accelerated bootstrap <span class="citation">(Efron and Tibshirani 1994)</span>. <strong>In practice, we recommend using many bootstrap samples</strong> (e.g., the package default, <code>nboot = 1e4</code>), so that inference is not dependent on the random seed that is set; however, here we illustrate using a small number of bootstrap samples for fast compilation of this vignette. To increase speed, we also turn off estimation of confidence intervals for the CDF and PMF by setting <code>est_dist = FALSE</code>.</p>
+<p>By default, <code>drord</code> will used closed-form inference. While this is generally faster, we may instead prefer to use bootstrap confidence intervals, which should provide more robust behavior when working models are misspecified. Bootstrap intervals can be requested via the <code>ci = "bca"</code>, with option <code>nboot</code> determining the number of bootstrap resamples performed. The bootstrap employed by the package is the bias corrected and accelerated bootstrap <span class="citation">(Efron and Tibshirani 1994)</span>. <strong>In practice, we recommend using many bootstrap samples</strong> (e.g., <code>nboot = 1e4</code>), so that inference is not dependent on the random seed that is set; however, here we illustrate using a small number of bootstrap samples for fast compilation of this vignette. To increase speed, we also turn off estimation of confidence intervals for the CDF and PMF by setting <code>est_dist = FALSE</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">out</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>, 
                covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
@@ -848,7 +848,7 @@ Plot of treatment-specific PMF with text added.
                est_dist <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="co"># save time by not computing CIs for CDF/PMF</span></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est   bca_cil   bca_ciu 
-## 0.5800689 0.5562334 0.6331968</code></pre>
+## 0.5800689 0.5471615 0.6146912</code></pre>
 </div>
 <div id="stratified-estimators" class="section level2">
 <h2 class="hasAnchor">
@@ -910,19 +910,19 @@ Plot of treatment-specific PMF with text added.
                treat_form <span class="op">=</span> <span class="st">"I(age_grp &lt; 5)"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5746986 0.5242685 0.6251286 
+## 0.5612776 0.5122419 0.6103134 
 ## 
 ## $log_odds
-##               est   wald_cil    wald_ciu
-## treat1 -1.2635719 -1.5570427 -0.97010110
-## treat0 -0.9481107 -1.2082170 -0.68800435
-## diff   -0.3154613 -0.6924009  0.06147834
+##               est   wald_cil   wald_ciu
+## treat1 -1.1955037 -1.4844206 -0.9065868
+## treat0 -1.0008050 -1.2638434 -0.7377667
+## diff   -0.1946987 -0.5698264  0.1804291
 ## 
 ## $weighted_mean
-##             est   wald_cil  wald_ciu
-## treat1 2.545048 2.44660010 2.6434965
-## treat0 2.380465 2.28901944 2.4719112
-## diff   0.164583 0.03523862 0.2939274</code></pre>
+##              est     wald_cil wald_ciu
+## treat1 2.5249679  2.423789789 2.626146
+## treat0 2.4025430  2.311798726 2.493287
+## diff   0.1224249 -0.008130262 0.252980</code></pre>
 </div>
 <div id="risk-difference-for-binary-outcomes" class="section level2">
 <h2 class="hasAnchor">

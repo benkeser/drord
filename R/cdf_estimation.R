@@ -136,7 +136,7 @@ drord <- function(
   param = c("weighted_mean", "log_odds", "mann_whitney"),
   ci = "wald",
   alpha = 0.05, 
-  nboot = 1e4,
+  nboot = 1e3,
   return_models = TRUE, 
   est_dist = TRUE, 
   stratify = FALSE, 

@@ -17,7 +17,7 @@ drord(
   param = c("weighted_mean", "log_odds", "mann_whitney"),
   ci = "wald",
   alpha = 0.05,
-  nboot = 10000,
+  nboot = 1000,
   return_models = TRUE,
   est_dist = TRUE,
   stratify = FALSE,
