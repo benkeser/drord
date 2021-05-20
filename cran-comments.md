@@ -1,7 +1,7 @@
 ## Test environments
 * Local 
-	* R version 3.6.0 (2019-04-26)
-	* Platform: x86_64-apple-darwin15.6.0 (64-bit)
+	* R version 4.0.3
+	* Platform: x86_64-apple-darwin17.0 (64-bit)
 	* Running under: macOS High Sierra 10.13.4
 * Travis-CI
 	* R versions 3.5.3 (2017-01-27), 3.6.2 (2017-01-27), and Under development (unstable) (2020-01-09 r77648), 4.0.0 (2020-04-24)
@@ -25,4 +25,4 @@ All checks reporting OK.
 Nothing to report.
 
 ## Additional Notes
-Initial submission of package
+Minor updates to functions.

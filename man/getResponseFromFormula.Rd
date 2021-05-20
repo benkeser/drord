@@ -8,6 +8,8 @@ getResponseFromFormula(formula, data)
 }
 \arguments{
 \item{formula}{The model formula}
+
+\item{data}{The data frame associated with the model}
 }
 \description{
 Get a response from model formula

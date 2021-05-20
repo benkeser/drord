@@ -1,6 +1,9 @@
+globalVariables("wgts")
+
 #' Get a response from model formula
 #' 
 #' @param formula The model formula
+#' @param data The data frame associated with the model
 #' @importFrom stats terms as.formula
 getResponseFromFormula = function(formula, data) {
     if (attr(stats::terms(stats::as.formula(formula), data = data), 
@@ -19,6 +22,7 @@ getResponseFromFormula = function(formula, data) {
 #' @param data The data set used to fit the model 
 #' @param weights Either equal to 1 (no weights) or a vector of length equal to nrow(data)
 #' @return A list with the fitted glm, the original data, levels of the outcome, and the outcome name
+#' @importFrom stats update formula
 POplugin = function(form, data, weights = 1){
 	# name of outcome from the provided formula
 	out_name = getResponseFromFormula(form, data) 
@@ -46,7 +50,7 @@ POplugin = function(form, data, weights = 1){
 	}))
 
 	glm_fit = suppressWarnings({
-		stats::glm(update(form,formula(paste0(new_out_name,"~.-1+",out_name))), data = data_pooled, family=binomial(),weights=wgts)
+		stats::glm(stats::update(form,stats::formula(paste0(new_out_name,"~.-1+",out_name))), data = data_pooled, family=binomial(),weights=wgts)
 	})
 
 	out = list(glm_fit=glm_fit,data=data,levs=levels(outcomes),out_name=out_name)

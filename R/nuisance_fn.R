@@ -99,7 +99,7 @@ estimate_pmf <- function(
 	                              stratify = stratify),
 	              SIMPLIFY = FALSE)
 	rout <- list(fm = list(treat1 = out[[1]]$fm_treat, treat0 = out[[2]]$fm_treat),
-	             pmf = list(out[[1]]$pmf_treat, out[[2]]$pmf_treat)) #!!! CHECK
+	             pmf = list(out[[1]]$pmf_treat, out[[2]]$pmf_treat)) 
 	return(rout)
 }
 

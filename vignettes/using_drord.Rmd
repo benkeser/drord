@@ -183,7 +183,7 @@ pmf_plot$plot +
 
 ## Working model controls
 
-In the simple call, we used default working models. The `drord` documentation indicates that the working model fits can be controlled via the `out_form` and `treat_form` models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (`out_form = ".")`is a main-effects proportional odds model (fit using `ordinal::clm`). The default for the treatment model is an intercept-only logistic regression model (`treat_form = 1`), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to `drord` where we treat `age_grp` as a `factor` rather than numeric in the outcome model and include adjustment for `age_grp` in the propensity model. 
+In the simple call, we used default working models. The `drord` documentation indicates that the working model fits can be controlled via the `out_form` and `treat_form` models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (`out_form = ".")`is a main-effects pooled logistic regression model for proportional odds. The default for the treatment model is an intercept-only logistic regression model (`treat_form = 1`), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to `drord` where we treat `age_grp` as a `factor` rather than numeric in the outcome model and include adjustment for `age_grp` in the propensity model. 
 
 ```{r}
 (fit2 <- drord(out = covid19$out, treat = covid19$treat, 

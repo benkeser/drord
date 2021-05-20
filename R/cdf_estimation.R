@@ -47,7 +47,8 @@
 #' @param out_form The right-hand side of a regression formula for the working proportional 
 #' odds model. NOTE: THIS FORMULA MUST NOT SUPPRESS THE INTERCEPT. 
 #' @param out_model Which R function should be used to fit the proportional odds 
-#' model. Options are \code{"polr"} (from the \code{MASS} package), 
+#' model. The recommended option is \code{"pooled-logistic"}. Other options available include
+#' \code{"polr"} (from the \code{MASS} package), 
 #' "vglm" (from the \code{VGAM} package), or \code{"clm"} (from the \code{ordinal} package).
 #' @param out_weights A vector of \code{numeric} weights with length equal to the length 
 #' of \code{out_levels}. 
@@ -130,7 +131,7 @@ drord <- function(
   out_levels = sort(unique(out)), # must be in order for this to work!
   out_form = paste0(colnames(covar), collapse = '+'),
   out_weights = rep(1, length(out_levels)),
-  out_model = c("pooled-logistic", "clm", "polr", "vglm"),
+  out_model = "pooled-logistic",
   treat_form = "1",
   param = c("weighted_mean", "log_odds", "mann_whitney"),
   ci = "wald",
@@ -141,6 +142,10 @@ drord <- function(
   stratify = FALSE, 
   ...
 ){
+	# warning for outcome model
+	if(out_model != "pooled-logistic"){
+		warning("The recommended working model for the outcome is the pooled-logistic.")
+	}
 
 	# recode treat for NA outcomes
 	if(any(is.na(out))){
