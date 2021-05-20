@@ -5,20 +5,20 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>
-<code>drord</code>: Doubly robust estimators of ordinal treatment effects • drord</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="&lt;code&gt;drord&lt;/code&gt;: Doubly robust estimators of ordinal treatment effects">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<title>`drord`: Doubly robust estimators of ordinal treatment effects • drord</title>
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="`drord`: Doubly robust estimators of ordinal treatment effects">
+<meta property="og:description" content="drord">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">drord</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -64,8 +64,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/benkeser/drord">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/benkeser/drord/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -78,17 +78,18 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
+
+      </header><script src="using_drord_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>
+      <h1 data-toc-skip>
 <code>drord</code>: Doubly robust estimators of ordinal treatment effects</h1>
                         <h4 class="author"><div class="line-block">David Benkeser<br>
 Emory University<br>
 Department of Biostatistics and Bioinformatics<br>
 1518 Clifton Road, NE<br>
 Mailstop: 002-3AA<br>
-Atlanta, Georgia, 30322, U.S.A.<br><a href="mailto:benkeser@emory.edu">benkeser@emory.edu</a>
+Atlanta, Georgia, 30322, U.S.A.<br><a href="mailto:benkeser@emory.edu" class="email">benkeser@emory.edu</a>
 </div></h4>
             
       
@@ -100,7 +101,7 @@ Atlanta, Georgia, 30322, U.S.A.<br><a href="mailto:benkeser@emory.edu">benkeser@
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      Many treatments are evaluated using randomized trials or observational studies examining effects or associations with ordinal outcomes. In these situations, researchers must carefully select a statistical estimand that reflects an interpretable and clinically relevant treatment effect. Several such estimands have been proposed in the literature. In the context of randomized trials, simple nonparametric estimators are available. These estimators can be improved through adjustment for covariates that are prognostic of the study outcome. The <code>drord</code> package implements covariate-adjusted estimators of several popular estimands for evaluating treatment effects on ordinal outcomes. The estimators use working models for the treatment probability as a function of covariates (i.e., the propensity score) and the outcome distribution as a function of covariates. The latter is based on a proportional odds model. Estimates of these two quantities are combined to provide estimates of treatment effects. The treatment effect estimates are doubly robust, in that they are consistent if one of the two working models contains the truth. The effect estimates are nonparametric efficient if both working models contain the truth. This vignette provides a brief introduction to the <code>drord</code> package, demonstrating several estimators that are available therein.
+      <p>Many treatments are evaluated using randomized trials or observational studies examining effects or associations with ordinal outcomes. In these situations, researchers must carefully select a statistical estimand that reflects an interpretable and clinically relevant treatment effect. Several such estimands have been proposed in the literature. In the context of randomized trials, simple nonparametric estimators are available. These estimators can be improved through adjustment for covariates that are prognostic of the study outcome. The <code>drord</code> package implements covariate-adjusted estimators of several popular estimands for evaluating treatment effects on ordinal outcomes. The estimators use working models for the treatment probability as a function of covariates (i.e., the propensity score) and the outcome distribution as a function of covariates. The latter is based on a proportional odds model. Estimates of these two quantities are combined to provide estimates of treatment effects. The treatment effect estimates are doubly robust, in that they are consistent if one of the two working models contains the truth. The effect estimates are nonparametric efficient if both working models contain the truth. This vignette provides a brief introduction to the <code>drord</code> package, demonstrating several estimators that are available therein.</p>
     </div>
     
 <script type="text/x-mathjax-config">
@@ -158,13 +159,14 @@ Atlanta, Georgia, 30322, U.S.A.<br><a href="mailto:benkeser@emory.edu">benkeser@
 <h2 class="hasAnchor">
 <a href="#covid-19-data" class="anchor"></a>COVID-19 data</h2>
 <p>The main function in this package is the eponymous <code>drord</code> function. We illustrate its usage using the <code>covid19</code> data set included with the package. This is a simulated data set mimicking a randomized COVID-19 treatment trial, where we will illustrate how such a trial could be analyzed while adjusting for patient age. The control arm data were simulated to match the outcomes of a CDC preliminary description of 2,449 cases reported to the CDC from February 12 to March 16, 2020. The data were simulated such that the treatment decreased the probability of intubation, but has no impact on the probability of death. The data can be loaded and viewed as follows.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(drord)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># load data</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(covid19)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co"># look at first 3 rows</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(covid19, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/benkeser/drord">drord</a></span><span class="op">)</span>
+
+<span class="co"># load data</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">covid19</span><span class="op">)</span>
+
+<span class="co"># look at first 3 rows</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">covid19</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##   out age_grp treat
 ## 1   3       3     1
 ## 2   3       6     0
@@ -183,32 +185,34 @@ Atlanta, Georgia, 30322, U.S.A.<br><a href="mailto:benkeser@emory.edu">benkeser@
 <h2 class="hasAnchor">
 <a href="#basic-calls-and-plots" class="anchor"></a>Basic calls and plots</h2>
 <p>We begin with a simple call to <code>drord</code> to familiarize ourselves with its output</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">(fit1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>]))</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">out</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>, 
+               covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5771141 0.5310594 0.6231689 
+## 0.5800689 0.5337929 0.6263449 
 ## 
 ## $log_odds
-##               est   wald_cil     wald_ciu
-## treat1 -1.2441017 -1.5162963 -0.971907150
-## treat0 -0.8926670 -1.1271207 -0.658213260
-## diff   -0.3514347 -0.6939725 -0.008897035
+##               est   wald_cil    wald_ciu
+## treat1 -1.2922742 -1.5719616 -1.01258678
+## treat0 -0.9163279 -1.1533670 -0.67928881
+## diff   -0.3759463 -0.7254384 -0.02645421
 ## 
 ## $weighted_mean
 ##              est   wald_cil  wald_ciu
-## treat1 2.5390850 2.44680920 2.6313607
-## treat0 2.3635178 2.27899457 2.4480410
-## diff   0.1755672 0.05620494 0.2949294</code></pre>
+## treat1 2.5554260 2.46316500 2.6476871
+## treat0 2.3721986 2.28768451 2.4567127
+## diff   0.1832275 0.06389974 0.3025552</code></pre>
 <p>The main function inputs are <code>out</code>, <code>treat</code>, and <code>covar</code>. Note that <code>covar</code> must be input as a <code>data.frame</code> even though in this example it contains only a single covariate. We see that the function returns estimates of each of the three parameters described above. For the log-odds and weighted mean parameters, output is broken down into treatment-specific estimates, as well as the difference. Thus the row labeled <code>treat1</code> in <code>$weighted_mean</code> corresponds to inference about <span class="math inline">\(\sum_{j=0}^K \ j \ w_j \theta_1(j)\)</span>, the weighted mean in the <code>treat=1</code> group. Similarly, the row label <code>treat0</code> in <code>$log_odds</code> corresponds to inference about <span class="math display">\[
 \frac{1}{K} \sum_{j=0}^{K-1} \mbox{log}\left\{\frac{\psi_1(j)}{1 - \psi_1(j)} \right\} \ . 
 \]</span></p>
 <p>In addition to the treatment effect parameters, one can obtain inference about <span class="math inline">\(\psi_a\)</span> and <span class="math inline">\(\theta_a\)</span>. This information can be viewed in the <code>$cdf</code> and <code>$pdf</code> output, respectively, or can be plotted using <code>ggplot2</code> via the <code>plot.drord</code> method.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># plot of CDF</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">cdf_plot &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(fit1, <span class="dt">dist =</span> <span class="st">"cdf"</span>, </a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                 <span class="dt">treat_labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Treatment"</span>, <span class="st">"Control"</span>),</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">                 <span class="dt">out_labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Death"</span>, <span class="st">"Death or intubation"</span>))</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">cdf_plot<span class="op">$</span>plot <span class="op">+</span><span class="st"> </span>ggsci<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggsci/topics/scale_nejm">scale_fill_nejm</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plot of CDF</span>
+<span class="va">cdf_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, dist <span class="op">=</span> <span class="st">"cdf"</span>, 
+                 treat_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Treatment"</span>, <span class="st">"Control"</span><span class="op">)</span>,
+                 out_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Death"</span>, <span class="st">"Death or intubation"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cdf_plot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> <span class="fu">ggsci</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/ggsci/reference/scale_nejm.html">scale_fill_nejm</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="using_drord_files/figure-html/cdf-plot-1.png" alt="Plot of treatment-specific CDF. Black bars are pointwise 95% confidence intervals; gray bars are 95% simultaneous confidence bands." width="384"><p class="caption">
 Plot of treatment-specific CDF. Black bars are pointwise 95% confidence intervals; gray bars are 95% simultaneous confidence bands.
@@ -216,24 +220,26 @@ Plot of treatment-specific CDF. Black bars are pointwise 95% confidence interval
 </div>
 <p>Note that custom labels for treatments and outcome levels are allowed. For the CDF, the the outcome labels should correspond to labels for outcome levels 0, 1, …, <span class="math inline">\(K-1\)</span> (as the CDF evaluated at <span class="math inline">\(K\)</span> is always equal to 1).</p>
 <p>A similar plot for the PMF can be obtained.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># plot of PMF</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">pmf_plot &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(fit1, <span class="dt">dist =</span> <span class="st">"pmf"</span>,</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                 <span class="dt">treat_labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Treatment"</span>, <span class="st">"Control"</span>),</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">                 <span class="dt">out_labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Death"</span>, <span class="st">"Intubation"</span>, <span class="st">"None"</span>))</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">pmf_plot<span class="op">$</span>plot <span class="op">+</span><span class="st"> </span>ggsci<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggsci/topics/scale_nejm">scale_fill_nejm</a></span>()    </a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plot of PMF</span>
+<span class="va">pmf_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, dist <span class="op">=</span> <span class="st">"pmf"</span>,
+                 treat_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Treatment"</span>, <span class="st">"Control"</span><span class="op">)</span>,
+                 out_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Death"</span>, <span class="st">"Intubation"</span>, <span class="st">"None"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">pmf_plot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> <span class="fu">ggsci</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/ggsci/reference/scale_nejm.html">scale_fill_nejm</a></span><span class="op">(</span><span class="op">)</span>    </code></pre></div>
 <div class="figure">
 <img src="using_drord_files/figure-html/pmf-plot-1.png" alt="Plot of treatment-specific PMF. Black bars are pointwise 95% confidence intervals; gray bars are 95% simultaneous confidence bands." width="480"><p class="caption">
 Plot of treatment-specific PMF. Black bars are pointwise 95% confidence intervals; gray bars are 95% simultaneous confidence bands.
 </p>
 </div>
 <p>Text can be added to the bars as follow.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">pmf_plot<span class="op">$</span>plot <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span>ggsci<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggsci/topics/scale_nejm">scale_fill_nejm</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span>(ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> <span class="dv">0</span>, </a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">                     <span class="dt">label =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"%1.2f"</span>, Proportion)), </a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">                     <span class="dt">position =</span> ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html">position_dodge</a></span>(<span class="fl">0.9</span>),</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">                     <span class="dt">color =</span> <span class="st">"white"</span>, </a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">                     <span class="dt">vjust =</span> <span class="st">"bottom"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pmf_plot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> 
+  <span class="fu">ggsci</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/ggsci/reference/scale_nejm.html">scale_fill_nejm</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0</span>, 
+                     label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%1.2f"</span>, <span class="va">Proportion</span><span class="op">)</span><span class="op">)</span>, 
+                     position <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html">position_dodge</a></span><span class="op">(</span><span class="fl">0.9</span><span class="op">)</span>,
+                     color <span class="op">=</span> <span class="st">"white"</span>, 
+                     vjust <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="using_drord_files/figure-html/pmf-plot-with-text-1.png" alt="Plot of treatment-specific PMF with text added." width="480"><p class="caption">
 Plot of treatment-specific PMF with text added.
@@ -243,69 +249,577 @@ Plot of treatment-specific PMF with text added.
 <div id="working-model-controls" class="section level2">
 <h2 class="hasAnchor">
 <a href="#working-model-controls" class="anchor"></a>Working model controls</h2>
-<p>In the simple call, we used default working models. The <code>drord</code> documentation indicates that the working model fits can be controlled via the <code>out_form</code> and <code>treat_form</code> models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (<code>out_form = ".")</code>is a main-effects proportional odds model (fit using <code><a href="https://www.rdocumentation.org/packages/ordinal/topics/clm">ordinal::clm</a></code>). The default for the treatment model is an intercept-only logistic regression model (<code>treat_form = 1</code>), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to <code>drord</code> where we treat <code>age_grp</code> as a <code>factor</code> rather than numeric in the outcome model and include adjustment for <code>age_grp</code> in the propensity model.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">(fit2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">               <span class="dt">out_form =</span> <span class="st">"factor(age_grp)"</span>,</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">               <span class="dt">treat_form =</span> <span class="st">"factor(age_grp)"</span>))</a></code></pre></div>
+<p>In the simple call, we used default working models. The <code>drord</code> documentation indicates that the working model fits can be controlled via the <code>out_form</code> and <code>treat_form</code> models. These options include the right-hand-side of a regression formula for estimation of their respective nuisance parameters. The default for the outcome model (<code>out_form = ".")</code>is a main-effects pooled logistic regression model for proportional odds. The default for the treatment model is an intercept-only logistic regression model (<code>treat_form = 1</code>), i.e., the sample proportion of individuals in each treatment arm. Here, we illustrate another call to <code>drord</code> where we treat <code>age_grp</code> as a <code>factor</code> rather than numeric in the outcome model and include adjustment for <code>age_grp</code> in the propensity model.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">out</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>, 
+               covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
+               out_form <span class="op">=</span> <span class="st">"factor(age_grp)"</span>,
+               treat_form <span class="op">=</span> <span class="st">"factor(age_grp)"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5786449 0.5329542 0.6243356 
+## 0.5795097 0.5337040 0.6253155 
 ## 
 ## $log_odds
 ##               est   wald_cil    wald_ciu
-## treat1 -1.2639925 -1.5260515 -1.00193340
-## treat0 -0.8574863 -1.0998159 -0.61515684
-## diff   -0.4065061 -0.7462023 -0.06680994
+## treat1 -1.3037590 -1.5715576 -1.03596052
+## treat0 -0.8903684 -1.1365746 -0.64416223
+## diff   -0.4133906 -0.7594801 -0.06730116
 ## 
 ## $weighted_mean
 ##              est   wald_cil  wald_ciu
-## treat1 2.5430135 2.45499677 2.6310303
-## treat0 2.3543710 2.26601057 2.4427313
-## diff   0.1886426 0.06985681 0.3074284</code></pre>
+## treat1 2.5563878 2.46842001 2.6443556
+## treat0 2.3665194 2.27816560 2.4548732
+## diff   0.1898684 0.07113711 0.3085997</code></pre>
 <p>By default models are returned in the <code>drord</code> object; this behavior can be suppressed via the <code>return_models</code> option. The fitted working models can be accessed via <code>$out_mod</code> and <code>$treat_mod</code>, which we can use to confirm that the models were fit as expected in <code>fit1</code> and <code>fit2</code>. Note that <code>out_mod</code> is a list of length two, which contains a fitted proportional odds model for each treatment level.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># age_grp treated as numeric in fit1</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">fit1<span class="op">$</span>out_mod<span class="op">$</span>treat1</a></code></pre></div>
-<pre><code>## formula: out ~ age_grp
-## data:    
-## data.frame(out = out_f, covar)[treat == trt_level, , drop = FALSE]
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># age_grp treated as numeric in fit1</span>
+<span class="va">fit1</span><span class="op">$</span><span class="va">out_mod</span><span class="op">$</span><span class="va">treat1</span></code></pre></div>
+<pre><code>## $glm_fit
 ## 
-##  link  threshold nobs logLik  AIC    niter max.grad cond.H 
-##  logit flexible  500  -365.89 737.79 6(0)  2.14e-13 1.6e+03
-## 
-## Coefficients:
-## age_grp 
-## -0.6384 
-## 
-## Threshold coefficients:
-##    1|2    2|3 
-## -5.168 -4.306</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># age_grp treated as factor in fit2</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">fit2<span class="op">$</span>out_mod<span class="op">$</span>treat1</a></code></pre></div>
-<pre><code>## formula: out ~ factor(age_grp)
-## data:    
-## data.frame(out = out_f, covar)[treat == trt_level, , drop = FALSE]
-## 
-##  link  threshold nobs logLik  AIC    niter max.grad cond.H 
-##  logit flexible  500  -357.95 731.91 20(0) 6.70e-09 1.0e+12
+## Call:  stats::glm(formula = stats::update(form, stats::formula(paste0(new_out_name, 
+##     "~.-1+", out_name))), family = binomial(), data = data_pooled, 
+##     weights = wgts)
 ## 
 ## Coefficients:
-## factor(age_grp)2 factor(age_grp)3 factor(age_grp)4 factor(age_grp)5 
-##       -7.455e-05       -2.027e+01       -2.073e+01       -2.133e+01 
-## factor(age_grp)6 factor(age_grp)7 
-##       -2.208e+01       -2.261e+01 
+## age_grp     out1     out2  
+##   0.696   -5.570   -4.693  
 ## 
-## Threshold coefficients:
-##    1|2    2|3 
-## -23.41 -22.46</code></pre>
-<p>Other packages are available for fitting the proportional odds models. While the model is the same in each package, the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the <code>ordinal</code> fitting routine, one may consider one of the alternative packages. Options are <code>vglm</code> (from the <code>VGAM</code> package), or <code>polr</code> (from the <code>MASS</code> package). In simulations, we have seen more stable performance from <code>vglm</code> and <code>clm</code>. Here we demonstrate this control.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># use vglm to fit model instead</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">fit3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">              <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">              <span class="dt">out_model =</span> <span class="st">"vglm"</span>)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co"># view model output</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">fit3<span class="op">$</span>out_mod<span class="op">$</span>treat1</a></code></pre></div>
+## Degrees of Freedom: 482 Total (i.e. Null);  479 Residual
+## Null Deviance:       1386 
+## Residual Deviance: 910.5     AIC: 883.7
+## 
+## $data
+##     out age_grp
+## 1     3       3
+## 5     1       6
+## 9     3       4
+## 10    3       3
+## 12    3       3
+## 14    2       6
+## 15    3       7
+## 17    3       4
+## 18    3       3
+## 20    3       7
+## 24    3       6
+## 27    1       6
+## 28    3       3
+## 32    3       4
+## 34    3       4
+## 35    3       2
+## 37    3       2
+## 39    2       5
+## 41    2       7
+## 44    3       5
+## 45    3       3
+## 46    3       3
+## 47    2       3
+## 50    3       4
+## 52    3       4
+## 55    3       5
+## 58    3       3
+## 59    3       7
+## 60    3       3
+## 61    1       6
+## 62    3       7
+## 63    3       5
+## 66    3       7
+## 67    3       3
+## 69    3       7
+## 75    3       7
+## 79    3       6
+## 81    3       5
+## 82    2       5
+## 83    3       2
+## 90    3       3
+## 95    3       4
+## 97    3       3
+## 98    1       7
+## 99    3       7
+## 108   3       6
+## 109   3       6
+## 111   2       5
+## 114   3       7
+## 116   3       7
+## 117   3       3
+## 119   3       7
+## 122   3       3
+## 124   2       7
+## 127   3       4
+## 129   1       4
+## 131   3       7
+## 132   2       6
+## 135   3       2
+## 137   3       5
+## 140   2       4
+## 142   3       7
+## 144   3       5
+## 145   3       6
+## 150   3       6
+## 153   3       7
+## 162   3       5
+## 163   3       4
+## 165   3       6
+## 166   3       6
+## 169   2       5
+## 175   1       7
+## 176   3       3
+## 181   3       1
+## 183   1       7
+## 184   3       6
+## 185   3       7
+## 187   1       7
+## 188   3       4
+## 189   3       7
+## 190   3       5
+## 192   3       1
+## 194   2       6
+## 195   3       7
+## 198   3       3
+## 201   3       6
+## 203   2       6
+## 206   1       7
+## 207   2       7
+## 208   1       7
+## 209   3       5
+## 210   3       3
+## 213   1       7
+## 215   3       4
+## 216   3       6
+## 218   3       4
+## 219   3       5
+## 222   3       7
+## 223   1       7
+## 224   1       7
+## 225   3       6
+## 226   3       4
+## 227   3       7
+## 230   3       6
+## 233   3       3
+## 234   1       6
+## 235   3       6
+## 236   3       3
+## 238   3       5
+## 241   3       5
+## 243   3       3
+## 244   3       7
+## 247   1       7
+## 249   3       6
+## 250   2       6
+## 251   2       6
+## 254   1       7
+## 257   1       7
+## 260   1       6
+## 261   3       7
+## 263   3       6
+## 264   3       2
+## 267   2       5
+## 268   3       3
+## 270   1       7
+## 272   3       7
+## 273   3       7
+## 274   1       7
+## 275   1       7
+## 276   3       4
+## 278   1       7
+## 279   2       5
+## 280   1       6
+## 281   3       3
+## 285   3       3
+## 294   3       4
+## 295   3       7
+## 296   1       7
+## 298   3       5
+## 299   2       6
+## 300   3       6
+## 302   3       3
+## 306   3       4
+## 307   3       4
+## 310   2       7
+## 311   1       7
+## 312   2       6
+## 313   3       4
+## 316   3       7
+## 318   2       7
+## 319   3       4
+## 322   3       5
+## 323   3       4
+## 324   3       2
+## 332   3       7
+## 337   3       5
+## 338   3       7
+## 341   3       5
+## 342   3       6
+## 343   3       7
+## 344   3       7
+## 346   3       7
+## 351   3       1
+## 352   3       6
+## 354   3       5
+## 355   3       2
+## 356   2       6
+## 358   3       3
+## 362   2       7
+## 365   3       4
+## 370   1       7
+## 372   3       2
+## 373   3       6
+## 374   3       5
+## 376   2       6
+## 377   1       5
+## 378   3       4
+## 380   3       5
+## 382   3       1
+## 383   3       4
+## 384   3       7
+## 385   1       7
+## 387   3       7
+## 389   3       2
+## 392   3       1
+## 393   3       3
+## 397   3       6
+## 399   3       5
+## 400   3       3
+## 401   3       3
+## 402   3       5
+## 403   3       4
+## 404   3       3
+## 406   3       6
+## 413   3       4
+## 414   3       2
+## 416   3       4
+## 417   1       7
+## 421   2       3
+## 422   1       6
+## 423   3       5
+## 424   3       6
+## 426   3       6
+## 427   1       7
+## 430   2       7
+## 432   3       2
+## 438   1       7
+## 439   3       3
+## 444   3       3
+## 445   1       3
+## 447   3       6
+## 449   3       6
+## 452   3       7
+## 453   3       7
+## 454   2       4
+## 457   3       2
+## 461   1       6
+## 462   3       3
+## 463   2       6
+## 464   1       7
+## 465   3       3
+## 468   3       3
+## 472   1       7
+## 473   3       6
+## 474   2       4
+## 477   2       4
+## 479   3       7
+## 480   2       3
+## 481   3       4
+## 482   3       7
+## 484   3       6
+## 485   1       6
+## 486   1       7
+## 490   3       7
+## 491   3       7
+## 493   1       7
+## 495   3       3
+## 496   2       5
+## 497   1       7
+## 499   3       7
+## 500   1       7
+## 
+## $levs
+## [1] "1" "2" "3"
+## 
+## $out_name
+## [1] "out"
+## 
+## attr(,"class")
+## [1] "POplugin"</code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># age_grp treated as factor in fit2</span>
+<span class="va">fit2</span><span class="op">$</span><span class="va">out_mod</span><span class="op">$</span><span class="va">treat1</span></code></pre></div>
+<pre><code>## $glm_fit
+## 
+## Call:  stats::glm(formula = stats::update(form, stats::formula(paste0(new_out_name, 
+##     "~.-1+", out_name))), family = binomial(), data = data_pooled, 
+##     weights = wgts)
+## 
+## Coefficients:
+## factor(age_grp)1  factor(age_grp)2  factor(age_grp)3  factor(age_grp)4  
+##         -18.3822          -18.5538           -3.2663           -2.8477  
+## factor(age_grp)5  factor(age_grp)6  factor(age_grp)7              out2  
+##          -2.3014           -1.3696           -0.7694            0.9703  
+## 
+## Degrees of Freedom: 482 Total (i.e. Null);  474 Residual
+## Null Deviance:       1386 
+## Residual Deviance: 873.7     AIC: 935.5
+## 
+## $data
+##     out age_grp
+## 1     3       3
+## 5     1       6
+## 9     3       4
+## 10    3       3
+## 12    3       3
+## 14    2       6
+## 15    3       7
+## 17    3       4
+## 18    3       3
+## 20    3       7
+## 24    3       6
+## 27    1       6
+## 28    3       3
+## 32    3       4
+## 34    3       4
+## 35    3       2
+## 37    3       2
+## 39    2       5
+## 41    2       7
+## 44    3       5
+## 45    3       3
+## 46    3       3
+## 47    2       3
+## 50    3       4
+## 52    3       4
+## 55    3       5
+## 58    3       3
+## 59    3       7
+## 60    3       3
+## 61    1       6
+## 62    3       7
+## 63    3       5
+## 66    3       7
+## 67    3       3
+## 69    3       7
+## 75    3       7
+## 79    3       6
+## 81    3       5
+## 82    2       5
+## 83    3       2
+## 90    3       3
+## 95    3       4
+## 97    3       3
+## 98    1       7
+## 99    3       7
+## 108   3       6
+## 109   3       6
+## 111   2       5
+## 114   3       7
+## 116   3       7
+## 117   3       3
+## 119   3       7
+## 122   3       3
+## 124   2       7
+## 127   3       4
+## 129   1       4
+## 131   3       7
+## 132   2       6
+## 135   3       2
+## 137   3       5
+## 140   2       4
+## 142   3       7
+## 144   3       5
+## 145   3       6
+## 150   3       6
+## 153   3       7
+## 162   3       5
+## 163   3       4
+## 165   3       6
+## 166   3       6
+## 169   2       5
+## 175   1       7
+## 176   3       3
+## 181   3       1
+## 183   1       7
+## 184   3       6
+## 185   3       7
+## 187   1       7
+## 188   3       4
+## 189   3       7
+## 190   3       5
+## 192   3       1
+## 194   2       6
+## 195   3       7
+## 198   3       3
+## 201   3       6
+## 203   2       6
+## 206   1       7
+## 207   2       7
+## 208   1       7
+## 209   3       5
+## 210   3       3
+## 213   1       7
+## 215   3       4
+## 216   3       6
+## 218   3       4
+## 219   3       5
+## 222   3       7
+## 223   1       7
+## 224   1       7
+## 225   3       6
+## 226   3       4
+## 227   3       7
+## 230   3       6
+## 233   3       3
+## 234   1       6
+## 235   3       6
+## 236   3       3
+## 238   3       5
+## 241   3       5
+## 243   3       3
+## 244   3       7
+## 247   1       7
+## 249   3       6
+## 250   2       6
+## 251   2       6
+## 254   1       7
+## 257   1       7
+## 260   1       6
+## 261   3       7
+## 263   3       6
+## 264   3       2
+## 267   2       5
+## 268   3       3
+## 270   1       7
+## 272   3       7
+## 273   3       7
+## 274   1       7
+## 275   1       7
+## 276   3       4
+## 278   1       7
+## 279   2       5
+## 280   1       6
+## 281   3       3
+## 285   3       3
+## 294   3       4
+## 295   3       7
+## 296   1       7
+## 298   3       5
+## 299   2       6
+## 300   3       6
+## 302   3       3
+## 306   3       4
+## 307   3       4
+## 310   2       7
+## 311   1       7
+## 312   2       6
+## 313   3       4
+## 316   3       7
+## 318   2       7
+## 319   3       4
+## 322   3       5
+## 323   3       4
+## 324   3       2
+## 332   3       7
+## 337   3       5
+## 338   3       7
+## 341   3       5
+## 342   3       6
+## 343   3       7
+## 344   3       7
+## 346   3       7
+## 351   3       1
+## 352   3       6
+## 354   3       5
+## 355   3       2
+## 356   2       6
+## 358   3       3
+## 362   2       7
+## 365   3       4
+## 370   1       7
+## 372   3       2
+## 373   3       6
+## 374   3       5
+## 376   2       6
+## 377   1       5
+## 378   3       4
+## 380   3       5
+## 382   3       1
+## 383   3       4
+## 384   3       7
+## 385   1       7
+## 387   3       7
+## 389   3       2
+## 392   3       1
+## 393   3       3
+## 397   3       6
+## 399   3       5
+## 400   3       3
+## 401   3       3
+## 402   3       5
+## 403   3       4
+## 404   3       3
+## 406   3       6
+## 413   3       4
+## 414   3       2
+## 416   3       4
+## 417   1       7
+## 421   2       3
+## 422   1       6
+## 423   3       5
+## 424   3       6
+## 426   3       6
+## 427   1       7
+## 430   2       7
+## 432   3       2
+## 438   1       7
+## 439   3       3
+## 444   3       3
+## 445   1       3
+## 447   3       6
+## 449   3       6
+## 452   3       7
+## 453   3       7
+## 454   2       4
+## 457   3       2
+## 461   1       6
+## 462   3       3
+## 463   2       6
+## 464   1       7
+## 465   3       3
+## 468   3       3
+## 472   1       7
+## 473   3       6
+## 474   2       4
+## 477   2       4
+## 479   3       7
+## 480   2       3
+## 481   3       4
+## 482   3       7
+## 484   3       6
+## 485   1       6
+## 486   1       7
+## 490   3       7
+## 491   3       7
+## 493   1       7
+## 495   3       3
+## 496   2       5
+## 497   1       7
+## 499   3       7
+## 500   1       7
+## 
+## $levs
+## [1] "1" "2" "3"
+## 
+## $out_name
+## [1] "out"
+## 
+## attr(,"class")
+## [1] "POplugin"</code></pre>
+<p>Other packages are available for fitting the proportional odds models, though for technical reasons, these approaches are not generally recommended. Each of the three proportional odds implementations that are available are based on the same model, but the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the <code>ordinal</code> fitting routine, one may consider one of the alternative packages. Options are <code>vglm</code> (from the <code>VGAM</code> package), or <code>polr</code> (from the <code>MASS</code> package). In simulations, we have seen more stable performance from <code>vglm</code> and <code>clm</code>. Here we demonstrate this control.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># use vglm to fit model instead</span>
+<span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">out</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>, 
+              covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
+              out_model <span class="op">=</span> <span class="st">"vglm"</span><span class="op">)</span>
+
+<span class="co"># view model output</span>
+<span class="va">fit3</span><span class="op">$</span><span class="va">out_mod</span><span class="op">$</span><span class="va">treat1</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## VGAM::vglm(formula = stats::as.formula(paste0("factor(out, ordered = TRUE) ~", 
@@ -326,23 +840,25 @@ Plot of treatment-specific PMF with text added.
 <h2 class="hasAnchor">
 <a href="#bootstrap-confidence-intervals" class="anchor"></a>Bootstrap confidence intervals</h2>
 <p>By default, <code>drord</code> will used closed-form inference. While this is generally faster, we may instead prefer to use bootstrap confidence intervals, which should provide more robust behavior when working models are misspecified. Bootstrap intervals can be requested via the <code>ci = "bca"</code>, with option <code>nboot</code> determining the number of bootstrap resamples performed. The bootstrap employed by the package is the bias corrected and accelerated bootstrap <span class="citation">(Efron and Tibshirani 1994)</span>. <strong>In practice, we recommend using many bootstrap samples</strong> (e.g., the package default, <code>nboot = 1e4</code>), so that inference is not dependent on the random seed that is set; however, here we illustrate using a small number of bootstrap samples for fast compilation of this vignette. To increase speed, we also turn off estimation of confidence intervals for the CDF and PMF by setting <code>est_dist = FALSE</code>.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">(fit4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">               <span class="dt">ci =</span> <span class="st">"bca"</span>, <span class="dt">nboot =</span> <span class="dv">20</span>, <span class="co"># use more bootstrap samples in practice!!!</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">               <span class="dt">param =</span> <span class="st">"mann_whitney"</span>, <span class="co"># only compute mann-whitney estimator</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">               <span class="dt">est_dist =</span> <span class="ot">FALSE</span>)) <span class="co"># save time by not computing CIs for CDF/PMF</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">out</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>, 
+               covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
+               ci <span class="op">=</span> <span class="st">"bca"</span>, nboot <span class="op">=</span> <span class="fl">20</span>, <span class="co"># use more bootstrap samples in practice!!!</span>
+               param <span class="op">=</span> <span class="st">"mann_whitney"</span>, <span class="co"># only compute mann-whitney estimator</span>
+               est_dist <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="co"># save time by not computing CIs for CDF/PMF</span></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est   bca_cil   bca_ciu 
-## 0.5771141 0.5395477 0.6000221</code></pre>
+## 0.5800689 0.5562334 0.6331968</code></pre>
 </div>
 <div id="stratified-estimators" class="section level2">
 <h2 class="hasAnchor">
 <a href="#stratified-estimators" class="anchor"></a>Stratified estimators</h2>
 <p>An alternative approach in settings with low-dimensional covariates is to use fully stratified estimators. That is, we take our estimate of <span class="math inline">\(P(Y \le j | A = a, X = x)\)</span> to be the empirical proportion of the sample with <span class="math inline">\(A = a\)</span> and <span class="math inline">\(X = x\)</span> observed to have <span class="math inline">\(Y \le j\)</span>. This is the nonparametric maximum likelihood estimator. The estimator is nonparametric efficient under no assumptions; however, this estimator can only be computed when <span class="math inline">\(X\)</span> contains only discrete components. Moreover, it will exhibit unstable finite-sample behavior if only few observations are observed with <span class="math inline">\(A = a\)</span> and <span class="math inline">\(X = x\)</span>. Thus, our implementation of this estimator is restricted to univariate <span class="math inline">\(X\)</span>. If, in reality, <span class="math inline">\(X\)</span> contains e.g., 2 binary components, then a univariate covariate could be constructed with one level for each of the cells in the 2x2 table. We leave this sort of pre-processing to the user.</p>
 <p>Here we illustrate the stratified estimator in action.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">(fit5 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">               <span class="dt">stratify =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">fit5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">out</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>, 
+               covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
+               stratify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
 ## 0.5795097 0.5335462 0.6254733 
@@ -359,85 +875,92 @@ Plot of treatment-specific PMF with text added.
 ## treat0 2.3665194 2.28201897 2.4510198
 ## diff   0.1898684 0.07065993 0.3090769</code></pre>
 <p>In general, <code>out_form</code> is ignored if <code>stratify = TRUE</code>; the exception is if <code>out_form = "1"</code>, then it is assumed that one wishes to obtain a covariate-<em>unadjusted</em> estimate of the treatment effects.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">(fit6 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19<span class="op">$</span>out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">               <span class="dt">stratify =</span> <span class="ot">TRUE</span>, <span class="dt">out_form =</span> <span class="st">"1"</span>,</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">               <span class="dt">param =</span> <span class="st">"weighted_mean"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">fit6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">out</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>, 
+               covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
+               stratify <span class="op">=</span> <span class="cn">TRUE</span>, out_form <span class="op">=</span> <span class="st">"1"</span>,
+               param <span class="op">=</span> <span class="st">"weighted_mean"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $weighted_mean
 ##              est    wald_cil  wald_ciu
 ## treat1 2.5269710 2.429936910 2.6240050
 ## treat0 2.3938224 2.306190947 2.4814538
 ## diff   0.1331486 0.002401185 0.2638959</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># compare to sample means</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">(samp_mean_treat1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(covid19<span class="op">$</span>out[covid19<span class="op">$</span>treat <span class="op">==</span><span class="st"> </span><span class="dv">1</span>]))</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># compare to sample means</span>
+<span class="op">(</span><span class="va">samp_mean_treat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">covid19</span><span class="op">$</span><span class="va">out</span><span class="op">[</span><span class="va">covid19</span><span class="op">$</span><span class="va">treat</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2.526971</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">(samp_mean_treat0 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(covid19<span class="op">$</span>out[covid19<span class="op">$</span>treat <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]))</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">samp_mean_treat0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">covid19</span><span class="op">$</span><span class="va">out</span><span class="op">[</span><span class="va">covid19</span><span class="op">$</span><span class="va">treat</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2.393822</code></pre>
 </div>
 <div id="missing-outcome-values" class="section level2">
 <h2 class="hasAnchor">
 <a href="#missing-outcome-values" class="anchor"></a>Missing outcome values</h2>
 <p>Missing outcome values are permitted in <code>drord</code>. To implement this approach, the function simply applies the methods as described above, but with <code>treat</code> recoded as 0 to indicate that an observation had <code>treat = 0</code> and had their outcome measured, 1 to indicate an observation that had <code>treat = 1</code> and had their outcome measured, and -1 to indicate that the outcome is missing. The propensity score estimation thus includes two components, one for the probability that the re-coded <code>treat = 1</code> given <code>covar</code>, the other for the probability that the re-coded <code>treat = 0</code> given <code>covar</code>. In the example below, we introduce some missingness into the outcome based on <code>age_grp</code> and call <code>drord</code>.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># missingness probability</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2">miss_out_prob &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Logistic">plogis</a></span>(<span class="op">-</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(covid19<span class="op">$</span>age_grp <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3">miss_out &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Binomial">rbinom</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(covid19), <span class="dv">1</span>, miss_out_prob) <span class="op">==</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb26-4" data-line-number="4">out_with_miss &lt;-<span class="st"> </span>covid19<span class="op">$</span>out</a>
-<a class="sourceLine" id="cb26-5" data-line-number="5">out_with_miss[miss_out] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
-<a class="sourceLine" id="cb26-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="co"># correctly model missingness</span></a>
-<a class="sourceLine" id="cb26-8" data-line-number="8">(fit7 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> out_with_miss, <span class="dt">treat =</span> covid19<span class="op">$</span>treat, </a>
-<a class="sourceLine" id="cb26-9" data-line-number="9">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>], </a>
-<a class="sourceLine" id="cb26-10" data-line-number="10">               <span class="dt">treat_form =</span> <span class="st">"I(age_grp &lt; 5)"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># missingness probability</span>
+<span class="va">miss_out_prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">covid19</span><span class="op">$</span><span class="va">age_grp</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+<span class="va">miss_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">covid19</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">miss_out_prob</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>
+<span class="va">out_with_miss</span> <span class="op">&lt;-</span> <span class="va">covid19</span><span class="op">$</span><span class="va">out</span>
+<span class="va">out_with_miss</span><span class="op">[</span><span class="va">miss_out</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+
+<span class="co"># correctly model missingness</span>
+<span class="op">(</span><span class="va">fit7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">out_with_miss</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>, 
+               covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, 
+               treat_form <span class="op">=</span> <span class="st">"I(age_grp &lt; 5)"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $mann_whitney
 ##       est  wald_cil  wald_ciu 
-## 0.5787609 0.5291247 0.6283972 
+## 0.5746986 0.5242685 0.6251286 
 ## 
 ## $log_odds
 ##               est   wald_cil    wald_ciu
-## treat1 -1.2613301 -1.5487634 -0.97389679
-## treat0 -0.8534632 -1.1055824 -0.60134397
-## diff   -0.4078669 -0.7737985 -0.04193534
+## treat1 -1.2635719 -1.5570427 -0.97010110
+## treat0 -0.9481107 -1.2082170 -0.68800435
+## diff   -0.3154613 -0.6924009  0.06147834
 ## 
 ## $weighted_mean
 ##             est   wald_cil  wald_ciu
-## treat1 2.540413 2.44447249 2.6363534
-## treat0 2.351285 2.25841749 2.4441524
-## diff   0.189128 0.06128287 0.3169731</code></pre>
+## treat1 2.545048 2.44660010 2.6434965
+## treat0 2.380465 2.28901944 2.4719112
+## diff   0.164583 0.03523862 0.2939274</code></pre>
 </div>
 <div id="risk-difference-for-binary-outcomes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#risk-difference-for-binary-outcomes" class="anchor"></a>Risk difference for binary outcomes</h2>
-<p>Though not the focus of the <code>drord</code> package, it is possible to use <code>drord</code> to compute a doubly robust estimate of the risk difference when the outcome is binary. In this case, the package defaults to estimating the outcome distribution using logistic regression (as implemented in the <code><a href="https://www.rdocumentation.org/packages/stats/topics/glm">stats::glm</a></code> function). We demonstrate in the call below.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># collapse categories to make a binary outcome</span></a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">covid19_binary_out &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(covid19<span class="op">$</span>out <span class="op">==</span><span class="st"> </span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb28-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb28-4" data-line-number="4"><span class="co"># call drord, only requesting weighted mean with equal </span></a>
-<a class="sourceLine" id="cb28-5" data-line-number="5"><span class="co"># weights; which in this case equals the risk difference</span></a>
-<a class="sourceLine" id="cb28-6" data-line-number="6">(fit8 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/drord.html">drord</a></span>(<span class="dt">out =</span> covid19_binary_out, <span class="dt">treat =</span> covid19<span class="op">$</span>treat,</a>
-<a class="sourceLine" id="cb28-7" data-line-number="7">               <span class="dt">covar =</span> covid19[ , <span class="st">"age_grp"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],</a>
-<a class="sourceLine" id="cb28-8" data-line-number="8">               <span class="dt">param =</span> <span class="st">"weighted_mean"</span>,</a>
-<a class="sourceLine" id="cb28-9" data-line-number="9">               <span class="dt">est_dist =</span> <span class="ot">FALSE</span>)) <span class="co"># must be FALSE to run</span></a></code></pre></div>
+<p>Though not the focus of the <code>drord</code> package, it is possible to use <code>drord</code> to compute a doubly robust estimate of the risk difference when the outcome is binary. In this case, the package defaults to estimating the outcome distribution using logistic regression (as implemented in the <code><a href="https://rdrr.io/r/stats/glm.html">stats::glm</a></code> function). We demonstrate in the call below.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># collapse categories to make a binary outcome</span>
+<span class="va">covid19_binary_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">covid19</span><span class="op">$</span><span class="va">out</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
+
+<span class="co"># call drord, only requesting weighted mean with equal </span>
+<span class="co"># weights; which in this case equals the risk difference</span>
+<span class="op">(</span><span class="va">fit8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drord.html">drord</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">covid19_binary_out</span>, treat <span class="op">=</span> <span class="va">covid19</span><span class="op">$</span><span class="va">treat</span>,
+               covar <span class="op">=</span> <span class="va">covid19</span><span class="op">[</span> , <span class="st">"age_grp"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
+               param <span class="op">=</span> <span class="st">"weighted_mean"</span>,
+               est_dist <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="co"># must be FALSE to run</span></code></pre></div>
 <pre><code>## $weighted_mean
 ##              est  wald_cil  wald_ciu
 ## treat1 0.7108203 0.6549009 0.7667397
 ## treat0 0.5214215 0.4622688 0.5805742
 ## diff   0.1893988 0.1107782 0.2680193</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># confirm that glm was used for outcome model</span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(fit8<span class="op">$</span>out_mod<span class="op">$</span>treat1)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># confirm that glm was used for outcome model</span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">fit8</span><span class="op">$</span><span class="va">out_mod</span><span class="op">$</span><span class="va">treat1</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "glm" "lm"</code></pre>
 </div>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
-<pre><code>## R version 3.6.0 (2019-04-26)
-## Platform: x86_64-apple-darwin15.6.0 (64-bit)
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## R version 4.0.3 (2020-10-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS High Sierra 10.13.4
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -446,70 +969,52 @@ Plot of treatment-specific PMF with text added.
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] drord_1.0.0
+## [1] drord_1.0.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.3          highr_0.8           compiler_3.6.0     
-##  [4] pillar_1.4.0        plyr_1.8.4          tools_3.6.0        
-##  [7] digest_0.6.23       lattice_0.20-38     evaluate_0.13      
-## [10] memoise_1.1.0       tibble_2.1.1        gtable_0.3.0       
-## [13] ucminf_1.1-4        pkgconfig_2.0.2     rlang_0.4.2        
-## [16] Matrix_1.2-17       ggsci_2.9           yaml_2.2.0         
-## [19] pkgdown_1.3.0       xfun_0.7            stringr_1.4.0      
-## [22] dplyr_0.8.1         roxygen2_7.0.2      xml2_1.2.2         
-## [25] knitr_1.23          desc_1.2.0          fs_1.3.1           
-## [28] tidyselect_0.2.5    stats4_3.6.0        rprojroot_1.3-2    
-## [31] grid_3.6.0          glue_1.3.1          R6_2.4.1           
-## [34] VGAM_1.1-3          rmarkdown_1.12      purrr_0.3.3        
-## [37] ggplot2_3.1.1       magrittr_1.5        backports_1.1.5    
-## [40] scales_1.0.0        htmltools_0.3.6     MASS_7.3-51.4      
-## [43] splines_3.6.0       assertthat_0.2.1    colorspace_1.4-1   
-## [46] numDeriv_2016.8-1.1 labeling_0.3        stringi_1.4.4      
-## [49] ordinal_2019.12-10  lazyeval_0.2.2      munsell_0.5.0      
-## [52] crayon_1.3.4</code></pre>
-<div id="refs" class="references">
-<div id="ref-diaz2016enhanced">
-<p>Díaz, Iván, Elizabeth Colantuoni, and Michael Rosenblum. 2016. “Enhanced Precision in the Analysis of Randomized Trials with Ordinal Outcomes.” <em>Biometrics</em> 72 (2). Wiley Online Library: 422–31.</p>
+##  [1] tidyselect_1.1.0     xfun_0.21            bslib_0.2.4.9000    
+##  [4] purrr_0.3.4          lattice_0.20-41      splines_4.0.3       
+##  [7] colorspace_2.0-0     vctrs_0.3.6          generics_0.1.0      
+## [10] htmltools_0.5.1.9000 stats4_4.0.3         yaml_2.2.1          
+## [13] utf8_1.1.4           rlang_0.4.10         pkgdown_1.6.1       
+## [16] jquerylib_0.1.3      pillar_1.5.0         glue_1.4.2          
+## [19] DBI_1.1.1            lifecycle_1.0.0      stringr_1.4.0       
+## [22] munsell_0.5.0        gtable_0.3.0         ggsci_2.9           
+## [25] ragg_1.1.2           VGAM_1.1-5           memoise_2.0.0       
+## [28] evaluate_0.14        labeling_0.4.2       knitr_1.31          
+## [31] fastmap_1.1.0        fansi_0.4.2          highr_0.8           
+## [34] scales_1.1.1         cachem_1.0.4         desc_1.2.0          
+## [37] jsonlite_1.7.2       farver_2.1.0         systemfonts_1.0.1   
+## [40] fs_1.5.0             textshaping_0.3.4    ggplot2_3.3.3       
+## [43] digest_0.6.27        stringi_1.5.3        dplyr_1.0.4         
+## [46] ordinal_2019.12-10   numDeriv_2016.8-1.1  grid_4.0.3          
+## [49] rprojroot_2.0.2      tools_4.0.3          magrittr_2.0.1      
+## [52] sass_0.3.1.9000      tibble_3.1.0         ucminf_1.1-4        
+## [55] crayon_1.4.1         pkgconfig_2.0.3      MASS_7.3-53.1       
+## [58] ellipsis_0.3.1       Matrix_1.3-2         assertthat_0.2.1    
+## [61] rmarkdown_2.7        R6_2.5.0             compiler_4.0.3</code></pre>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-diaz2016enhanced" class="csl-entry">
+Díaz, Iván, Elizabeth Colantuoni, and Michael Rosenblum. 2016. <span>“Enhanced Precision in the Analysis of Randomized Trials with Ordinal Outcomes.”</span> <em>Biometrics</em> 72 (2): 422–31.
 </div>
-<div id="ref-efron1994introduction">
-<p>Efron, Bradley, and Robert J Tibshirani. 1994. <em>An Introduction to the Bootstrap</em>. CRC press.</p>
+<div id="ref-efron1994introduction" class="csl-entry">
+Efron, Bradley, and Robert J Tibshirani. 1994. <em>An Introduction to the Bootstrap</em>. CRC press.
 </div>
-<div id="ref-vermeulen2015increasing">
-<p>Vermeulen, Karel, Olivier Thas, and Stijn Vansteelandt. 2015. “Increasing the Power of the Mann-Whitney Test in Randomized Experiments Through Flexible Covariate Adjustment.” <em>Statistics in Medicine</em> 34 (6). Wiley Online Library: 1012–30.</p>
+<div id="ref-vermeulen2015increasing" class="csl-entry">
+Vermeulen, Karel, Olivier Thas, and Stijn Vansteelandt. 2015. <span>“Increasing the Power of the Mann-Whitney Test in Randomized Experiments Through Flexible Covariate Adjustment.”</span> <em>Statistics in Medicine</em> 34 (6): 1012–30.
 </div>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#introduction">Introduction </a></li>
-      <li>
-<a href="#estimators">Estimators</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#nuisance-parameters">Nuisance parameters</a></li>
-      <li><a href="#parameters-of-interest">Parameters of interest</a></li>
-      </ul>
-</li>
-      <li>
-<a href="#using-the-drord-function">Using the <code>drord</code> function</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#covid-19-data">COVID-19 data</a></li>
-      <li><a href="#basic-calls-and-plots">Basic calls and plots</a></li>
-      <li><a href="#working-model-controls">Working model controls</a></li>
-      <li><a href="#bootstrap-confidence-intervals">Bootstrap confidence intervals</a></li>
-      <li><a href="#stratified-estimators">Stratified estimators</a></li>
-      <li><a href="#missing-outcome-values">Missing outcome values</a></li>
-      <li><a href="#risk-difference-for-binary-outcomes">Risk difference for binary outcomes</a></li>
-      </ul>
-</li>
-      <li><a href="#session-info">Session Info</a></li>
-      </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
+
 
 
       <footer><div class="copyright">
@@ -517,12 +1022,14 @@ Plot of treatment-specific PMF with text added.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

@@ -33,7 +33,7 @@ preamble: >
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{drord: Doubly robust estimators of ordinal treatment effects}
+  %\VignetteIndexEntry{`drord`: Doubly robust estimators of ordinal treatment effects}
   %\VignetteEncoding{UTF-8}
 bibliography: refs.bib
 ---
@@ -202,7 +202,7 @@ fit1$out_mod$treat1
 fit2$out_mod$treat1
 ```
 
-Other packages are available for fitting the proportional odds models. While the model is the same in each package, the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the `ordinal` fitting routine, one may consider one of the alternative packages. Options are `vglm` (from the `VGAM` package), or `polr` (from the `MASS` package). In simulations, we have seen more stable performance from `vglm` and `clm`. Here we demonstrate this control.
+Other packages are available for fitting the proportional odds models, though for technical reasons, these approaches are not generally recommended. Each of the three proportional odds implementations that are available are based on the same model, but the numerical routines for estimating model parameters are different. Thus, if warnings or errors appear in the `ordinal` fitting routine, one may consider one of the alternative packages. Options are `vglm` (from the `VGAM` package), or `polr` (from the `MASS` package). In simulations, we have seen more stable performance from `vglm` and `clm`. Here we demonstrate this control.
 
 ```{r}
 # use vglm to fit model instead

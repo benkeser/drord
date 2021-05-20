@@ -9,21 +9,29 @@
 <title>Doubly robust estimates of for evaluating effects 
 of treatments on ordinal outcomes. — drord • drord</title>
 
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -31,9 +39,9 @@ of treatments on ordinal outcomes. — drord • drord</title>
 
 
 
+
 <meta property="og:title" content="Doubly robust estimates of for evaluating effects 
 of treatments on ordinal outcomes. — drord" />
-
 <meta property="og:description" content="The available parameters for evaluating treatment efficacy are:
 Difference in (weighted) means: The outcome levels are treated
 numerically, with each level possibly assigned a weight. The difference
@@ -43,8 +51,9 @@ level 1 versus 0) of the cumulative probability for each level of the outcome.
 Mann-Whitney: The probability that a randomly-selected individual 
 receiving treatment 1 will have a larger outcome value than a randomly selected
 individual receiving treatment 0 (with ties assigned weight 1/2).
+
 " />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -58,9 +67,10 @@ individual receiving treatment 0 (with ties assigned weight 1/2).
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -74,7 +84,7 @@ individual receiving treatment 0 (with ties assigned weight 1/2).
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">drord</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -82,7 +92,7 @@ individual receiving treatment 0 (with ties assigned weight 1/2).
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -105,11 +115,10 @@ individual receiving treatment 0 (with ties assigned weight 1/2).
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/benkeser/drord">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/benkeser/drord/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,6 +129,7 @@ individual receiving treatment 0 (with ties assigned weight 1/2).
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -132,7 +142,6 @@ of treatments on ordinal outcomes.</h1>
     </div>
 
     <div class="ref-description">
-    
     <p>The available parameters for evaluating treatment efficacy are:</p><ul>
 <li><p>Difference in (weighted) means: The outcome levels are treated
 numerically, with each level possibly assigned a weight. The difference
@@ -143,16 +152,28 @@ level 1 versus 0) of the cumulative probability for each level of the outcome.</
 receiving treatment 1 will have a larger outcome value than a randomly selected
 individual receiving treatment 0 (with ties assigned weight 1/2).</p></li>
 </ul>
-    
+
     </div>
 
-    <pre class="usage"><span class='fu'>drord</span>(<span class='no'>out</span>, <span class='no'>treat</span>, <span class='no'>covar</span>, <span class='kw'>out_levels</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(<span class='no'>out</span>)),
-  <span class='kw'>out_form</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>out_weights</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>1</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>out_levels</span>)),
-  <span class='kw'>out_model</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"clm"</span>, <span class='st'>"polr"</span>, <span class='st'>"vglm"</span>), <span class='kw'>treat_form</span> <span class='kw'>=</span> <span class='st'>"1"</span>,
-  <span class='kw'>param</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"weighted_mean"</span>, <span class='st'>"log_odds"</span>, <span class='st'>"mann_whitney"</span>), <span class='kw'>ci</span> <span class='kw'>=</span> <span class='st'>"wald"</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>10000</span>, <span class='kw'>return_models</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>est_dist</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stratify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>drord</span><span class='op'>(</span>
+  <span class='va'>out</span>,
+  <span class='va'>treat</span>,
+  <span class='va'>covar</span>,
+  out_levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>)</span><span class='op'>)</span>,
+  out_form <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>covar</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>"+"</span><span class='op'>)</span>,
+  out_weights <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>out_levels</span><span class='op'>)</span><span class='op'>)</span>,
+  out_model <span class='op'>=</span> <span class='st'>"pooled-logistic"</span>,
+  treat_form <span class='op'>=</span> <span class='st'>"1"</span>,
+  param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"weighted_mean"</span>, <span class='st'>"log_odds"</span>, <span class='st'>"mann_whitney"</span><span class='op'>)</span>,
+  ci <span class='op'>=</span> <span class='st'>"wald"</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
+  nboot <span class='op'>=</span> <span class='fl'>10000</span>,
+  return_models <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  est_dist <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  stratify <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -192,7 +213,8 @@ of <code>out_levels</code>.</p></td>
     <tr>
       <th>out_model</th>
       <td><p>Which R function should be used to fit the proportional odds 
-model. Options are <code>"polr"</code> (from the <code>MASS</code> package), 
+model. The recommended option is <code>"pooled-logistic"</code>. Other options available include
+<code>"polr"</code> (from the <code>MASS</code> package), 
 "vglm" (from the <code>VGAM</code> package), or <code>"clm"</code> (from the <code>ordinal</code> package).</p></td>
     </tr>
     <tr>
@@ -243,11 +265,11 @@ the empirical CDF of each treatment arm is estimated stratifying by levels of
       <td><p>Other options (not currently used).</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>drord</code>. In addition to information related to 
-how <code>drord</code> was called, the output contains the following:</p><dl class='dl-horizontal'>
+how <code>drord</code> was called, the output contains the following:</p><dl>
   <dt>log_odds</dt><dd><p>inference pertaining to the log-odds parameter. <code>NULL</code> if 
 					 this parameter not requested in call to <code>drord</code>.</p></dd>
   <dt>mann_whitney</dt><dd><p>inference pertaining to the Mann-Whitney parameter. <code>NULL</code> if 
@@ -265,9 +287,9 @@ how <code>drord</code> was called, the output contains the following:</p><dl cla
   <dt>out_mod</dt><dd><p>the proportional odds model fit in each treatment arm. named entries 
 					in list indicate the corresponding treatment arm. 
 					<code>NULL</code> if <code>return_models = FALSE</code> or <code>stratify = TRUE</code>.</p></dd>
+
 </dl>
 
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>In each case, estimates are constructed by obtaining a doubly robust 
@@ -288,52 +310,44 @@ intervals and hypothesis tests can be carried out in closed form using Wald-styl
 intervals and tests or using a nonparametric corrected and accelerated bootstrap 
 (BCa). Inference for the CDF and probability mass function is also returned and 
 can be used for subsequent visualizations (see <code>plot.drord</code>).</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>covid19</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>covid19</span><span class='op'>)</span>
 
 <span class='co'># get estimates of all parameters based on main-effects </span>
 <span class='co'># proportional odds model and intercept-only propensity model</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
-             <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>])
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'>drord</span><span class='op'>(</span>out <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>$</span><span class='va'>out</span>, treat <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>$</span><span class='va'>treat</span>, 
+             covar <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>[</span>, <span class='st'>"age_grp"</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'># get estimates of all parameters based on proportional odds and</span>
 <span class='co'># propensity model that treats age_grp as categorical</span>
-<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
-              <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
-                                 <span class='kw'>out_form</span> <span class='kw'>=</span> <span class='st'>"factor(age_grp)"</span>,
-                                 <span class='kw'>treat_form</span> <span class='kw'>=</span> <span class='st'>"factor(age_grp)"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: (1) Hessian is numerically singular: parameters are not uniquely determined </span>
-#&gt; <span class='warning'>In addition: Absolute convergence criterion was met, but relative criterion was not met</span></div><div class='output co'>#&gt; <span class='warning'>Warning: (1) Hessian is numerically singular: parameters are not uniquely determined </span>
-#&gt; <span class='warning'>In addition: Absolute convergence criterion was met, but relative criterion was not met</span></div><div class='input'>
+<span class='va'>fit2</span> <span class='op'>&lt;-</span> <span class='fu'>drord</span><span class='op'>(</span>out <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>$</span><span class='va'>out</span>, treat <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>$</span><span class='va'>treat</span>, 
+              covar <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>[</span>, <span class='st'>"age_grp"</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>,
+         out_form <span class='op'>=</span> <span class='st'>"factor(age_grp)"</span>,
+         treat_form <span class='op'>=</span> <span class='st'>"factor(age_grp)"</span><span class='op'>)</span>
+
 <span class='co'># obtain estimator stratified by age group </span>
-<span class='no'>fit3</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
-              <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
-                                 <span class='kw'>stratify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>fit3</span> <span class='op'>&lt;-</span> <span class='fu'>drord</span><span class='op'>(</span>out <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>$</span><span class='va'>out</span>, treat <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>$</span><span class='va'>treat</span>, 
+              covar <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>[</span>, <span class='st'>"age_grp"</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>,
+         stratify <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># demonstration with missing outcome data</span>
-<span class='no'>covid19</span>$<span class='no'>out</span>[<span class='fl'>1</span>:<span class='fl'>5</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
+<span class='va'>covid19</span><span class='op'>$</span><span class='va'>out</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
 
 <span class='co'># propensity model should now adjust for covariates to address</span>
 <span class='co'># the potential for informative missingness</span>
-<span class='no'>fit4</span> <span class='kw'>&lt;-</span> <span class='fu'>drord</span>(<span class='kw'>out</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>out</span>, <span class='kw'>treat</span> <span class='kw'>=</span> <span class='no'>covid19</span>$<span class='no'>treat</span>,
-              <span class='kw'>covar</span> <span class='kw'>=</span> <span class='no'>covid19</span>[, <span class='st'>"age_grp"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
-                                 <span class='kw'>treat_form</span> <span class='kw'>=</span> <span class='st'>"age_grp"</span>)</div></pre>
+<span class='va'>fit4</span> <span class='op'>&lt;-</span> <span class='fu'>drord</span><span class='op'>(</span>out <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>$</span><span class='va'>out</span>, treat <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>$</span><span class='va'>treat</span>, 
+              covar <span class='op'>=</span> <span class='va'>covid19</span><span class='op'>[</span>, <span class='st'>"age_grp"</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>,
+         treat_form <span class='op'>=</span> <span class='st'>"age_grp"</span><span class='op'>)</span>
+</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -341,13 +355,16 @@ can be used for subsequent visualizations (see <code>plot.drord</code>).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
