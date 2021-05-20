@@ -21,7 +21,7 @@ license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://openso
 **Author:** [David
 Benkeser](https://www.sph.emory.edu/faculty/profile/#!dbenkes)
 
------
+------------------------------------------------------------------------
 
 ## Description
 
@@ -40,22 +40,22 @@ are fit in each treatment arm separately. Estimates based on these two
 working models are combined to quantify the effects of the treatment on
 the ordinal outcome in three different ways:
 
-  - Difference in (weighted) means: The outcome levels are treated
+-   Difference in (weighted) means: The outcome levels are treated
     numerically, with each level possibly assigned a weight. The effect
     is defined as the difference in average outcomes.
-  - Log odds ratio: The comparison describes the average log-odds
+-   Log odds ratio: The comparison describes the average log-odds
     (treatment level 1 versus 0) of the cumulative probability for each
-    level of the outcome. See [Diaz et al.
-    (2016)](https://doi.org/10.1111/biom.12450) for further discussion
-    of this parameter.
-  - Mann-Whitney: The probability that a randomly-selected individual
+    level of the outcome. See [Diaz et
+    al. (2016)](https://doi.org/10.1111/biom.12450) for further
+    discussion of this parameter.
+-   Mann-Whitney: The probability that a randomly-selected individual
     receiving treatment 1 will have a larger outcome value than a
     randomly selected individual receiving treatment 0 (with ties
-    assigned weight 1/2). See [Vermeulen et al.
-    (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6386)
+    assigned weight 1/2). See [Vermeulen et
+    al. (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6386)
     for further discussion.
 
------
+------------------------------------------------------------------------
 
 ## Installation
 
@@ -76,7 +76,7 @@ A developmental release may be installed from GitHub via
 devtools::install_github("benkeser/drord")
 ```
 
------
+------------------------------------------------------------------------
 
 ## Usage
 
@@ -85,11 +85,6 @@ a simulated data set of COVID-19 outcomes in hospitalized patients.
 
 ``` r
 library(drord)
-#> Registered S3 methods overwritten by 'ggplot2':
-#>   method         from 
-#>   [.quosures     rlang
-#>   c.quosures     rlang
-#>   print.quosures rlang
 #> drord: Doubly robust estimators for ordinal outcomes
 #> Version: 1.0.0
 
@@ -100,23 +95,26 @@ data(covid19)
 fit <- drord(out = covid19$out, 
              covar = covid19[ , "age_grp", drop = FALSE],
              treat = covid19$treat)
+#> Warning in eval(family$initialize): non-integer #successes in a binomial glm!
+
+#> Warning in eval(family$initialize): non-integer #successes in a binomial glm!
 # look at estimates
 fit
 #> $mann_whitney
 #>       est  wald_cil  wald_ciu 
-#> 0.5771141 0.5310594 0.6231689 
+#> 0.5800689 0.5337929 0.6263449 
 #> 
 #> $log_odds
-#>               est   wald_cil     wald_ciu
-#> treat1 -1.2441017 -1.5162963 -0.971907150
-#> treat0 -0.8926670 -1.1271207 -0.658213260
-#> diff   -0.3514347 -0.6939725 -0.008897035
+#>               est   wald_cil    wald_ciu
+#> treat1 -1.2922742 -1.5719616 -1.01258678
+#> treat0 -0.9163279 -1.1533670 -0.67928881
+#> diff   -0.3759463 -0.7254384 -0.02645421
 #> 
 #> $weighted_mean
 #>              est   wald_cil  wald_ciu
-#> treat1 2.5390850 2.44680920 2.6313607
-#> treat0 2.3635178 2.27899457 2.4480410
-#> diff   0.1755672 0.05620494 0.2949294
+#> treat1 2.5554260 2.46316500 2.6476871
+#> treat0 2.3721986 2.28768451 2.4567127
+#> diff   0.1832275 0.06389974 0.3025552
 ```
 
 There is a `plot` method included to visualize either the cumulative
@@ -152,7 +150,7 @@ pmf_plot$plot + ggsci::scale_fill_nejm()
 If you encounter any bugs or have any specific feature requests, please
 [file an issue](https://github.com/benkeser/drord/issues).
 
------
+------------------------------------------------------------------------
 
 ## Citation
 
@@ -161,17 +159,16 @@ After using the `drord` R package, please cite both of the following:
     @Manual{drordpackage,
       title = {drord: Doubly-Robust Estimators for Ordinal Outcomes},
       author = {David Benkeser},
-      note = {R package version 1.0.0},
-      doi = {TBA}
-    }
-    
-    @article{benkeserdiazluedtke2020,
-      title = {Improving Precision and Power in Randomized Trials for COVID-19 Treatments Using Covariate Adjustment, for Ordinal or Time to Event Outcomes},
-      doi = {10.1101/2020.04.19.20069922},
-      journal = {medRxiv: The Preprint Server for Health Sciences.}
+      note = {R package version 1.0.1}
     }
 
------
+    @article{benkeserdiazluedtke2020,
+      title = {Improving Precision and Power in Randomized Trials for COVID-19 Treatments Using Covariate Adjustment, for Ordinal or Time to Event Outcomes},
+      journal = {Biometrics},
+      doi = {https://doi.org/10.1111/biom.13377}
+    }
+
+------------------------------------------------------------------------
 
 ## License
 
@@ -182,19 +179,19 @@ The contents of this repository are distributed under the MIT license.
 See below for details:
 
     The MIT License (MIT)
-    
+
     Copyright (c) 2020- David Benkeser
-    
+
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
-    
+
     The above copyright notice and this permission notice shall be included in all
     copies or substantial portions of the Software.
-    
+
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
