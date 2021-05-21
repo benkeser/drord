@@ -1,13 +1,13 @@
 Package: drord
 Title: Doubly-Robust Estimators for Ordinal Outcomes
-Version: 1.0.1
+Version: 1.0.1.9000
 Authors@R: c(
     person("David", "Benkeser", email = "benkeser@emory.edu",
            role = c("aut", "cre","cph"),
            comment = c(ORCID = "0000-0002-1019-8343"))
     )
 Description: Efficient covariate-adjusted estimators of quantities that are useful for 
-    establishing the effects of treatments on ordinal outcomes.
+    establishing the effects of treatments on ordinal outcomes (Benkeser, Diaz, Luedtke 2020 <doi:10.1111/biom.13377>)
 Depends:
     R (>= 3.5.0)
 Imports:
